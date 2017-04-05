@@ -1,0 +1,14 @@
+{
+    "name": "root/PwGram",
+    "require": {
+        "silex/silex": "~2.0",
+        "twig/twig": "^2.3",
+        "symfony/asset": "^3.2",
+        "symfony/twig-bridge": "^3.2"
+    },
+    "autoload":{
+      "psr-4":{
+       "PwGram\\":"src/"
+      }
+    }
+}
