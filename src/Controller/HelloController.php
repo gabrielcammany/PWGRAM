@@ -21,7 +21,7 @@ class HelloController{
         $response->headers->set('Content-Type','text/html');
         $response->setContent($content);*/
 
-        return $app['hello']('samu');
+        return $app['home'](' Samuel');
     }
     public function addAction(Application $app,$num1,$num2){
         return "the result is: ".$app['calc']->add($num1,$num2);
