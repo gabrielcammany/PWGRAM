@@ -21,3 +21,6 @@ $app->register(new Silex\Provider\AssetServiceProvider(),array(
 $app->register(new PwGram\Providers\HelloServiceProvider(),array(
     'hello.default_name' => 'Samuel',
 ));
+$app->register(new PwGram\Providers\HomeServiceProvider(),array(
+    'home.default_name' => 'Samuel',
+));
