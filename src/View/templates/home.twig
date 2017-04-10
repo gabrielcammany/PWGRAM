@@ -1,6 +1,11 @@
 {% extends "base.twig" %}
-
+{% block header %}
+    {{ parent() }}
+    {% endblock %}
 {% block title %}Home{% endblock %}
+{% block styles %}
+    {{ parent() }}
+{% endblock %}
 {% block content %}
     <nav class="navbar navbar-transparent navbar-fixed-top navbar-color-on-scroll">
         <div class="container">
@@ -177,6 +182,7 @@
         </div>
 
     </div>
+
     <div class="modal fade login" id="loginModal">
         <div class="modal-dialog login animated">
             <div class="modal-content">
