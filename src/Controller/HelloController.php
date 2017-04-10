@@ -26,4 +26,5 @@ class HelloController{
     public function addAction(Application $app,$num1,$num2){
         return "the result is: ".$app['calc']->add($num1,$num2);
     }
+
 }

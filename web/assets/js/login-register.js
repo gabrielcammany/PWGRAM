@@ -6,6 +6,10 @@
  * Web script: http://creative-tim.com
  * 
  */
+
+$(function () {
+    $('#loginModal').modal('hide');
+});
 function showRegisterForm(){
     $('.loginBox').fadeOut('fast',function(){
         $('.registerBox').fadeIn('fast');
@@ -68,4 +72,8 @@ function shakeModal(){
     }, 1000 ); 
 }
 
+$('#login_home').click(function (e) {
+    e.preventDefault();
+    openLoginModal();
+});
    

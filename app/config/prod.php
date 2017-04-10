@@ -24,3 +24,4 @@ $app->register(new PwGram\Providers\HelloServiceProvider(),array(
 $app->register(new PwGram\Providers\HomeServiceProvider(),array(
     'home.default_name' => 'Samuel',
 ));
+
