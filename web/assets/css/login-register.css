@@ -229,3 +229,19 @@
     border-color: #00A4E4;
     color:  #00A4E4;
 }
+
+#imageSelector{
+    margin: 20px;
+    float: left;
+}
+
+#iamgeLabel{
+    margin-right: 5px;
+    text-align: center;
+    display: inline-block;
+}
+
+#btnselectimage{
+    display: inline-block;
+}
+

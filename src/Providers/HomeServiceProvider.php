@@ -20,9 +20,8 @@ class HomeServiceProvider implements ServiceProviderInterface
 
             return $app['twig']->render('home.twig',array(
                 'user' => $name,
-                'app' => [
-                    'name'=> $app['app.name']
-                ]
+                'app' => $app['app.name']
+
             ));
         });
     }
