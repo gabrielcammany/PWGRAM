@@ -58,9 +58,38 @@ function loginAjax(){
             }
         });
     */
-
+    if(validaEmail($('#email').val())&&validaUsername($('#username').val())&&validatePassword($('#password').val())){
+        console.log('Todo OK!');
+    }else{
+        shakeModal();
+    }
 /*   Simulate error message from the server   */
-     shakeModal();
+     //shakeModal();
+}
+function registerAjax(){
+    if(validaEmail($('#email_reg').val())&&validaUsername($('#username').val())&&validatePasswordRegistration($('#password_reg').val(),$('#password_confirmation').val())&&validateDate($('#date').val())){
+        console.log('Todo OK!');
+        var reg = new Object();
+
+        reg.email = $('#email').val();
+        reg.pass = $('#password_reg').val();
+        reg.date = $('#date').val();
+        reg.confirm_pass = $('#password_confirmation').val();
+        reg.username = $('#username').val();
+        reg.username = $('#username').val();
+        var stringData = JSON.stringify(reg);
+        $.ajax({
+            type: 'POST',
+            url: '/model/SignUp.php',
+            data: {myData: stringData},
+            success: function ($response) {
+                console.log($response);
+
+            }
+        });
+    }else{
+        shakeModalRegistration();
+    }
 }
 
 function shakeModal(){
@@ -71,9 +100,116 @@ function shakeModal(){
                 $('#loginModal .modal-dialog').removeClass('shake'); 
     }, 1000 ); 
 }
+function shakeModalRegistration(){
+    $('#loginModal .modal-dialog').addClass('shake');
+    $('.error').addClass('alert alert-danger').html("Invalid information combination");
+    $('input[type="password"]').val('');
+    setTimeout( function(){
+        $('#loginModal .modal-dialog').removeClass('shake');
+    }, 1000 );
+}
 
 $('#login_home').click(function (e) {
     e.preventDefault();
     openLoginModal();
 });
-   
+
+function validaEmail($v1){
+    console.log($v1);
+    var usernameRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if(usernameRegex.test($v1)){
+        return true;
+    }else{
+        console.log('error email');
+        return false;
+    }
+
+    return false;
+}
+
+function validaUsername($v1){
+    var usernameRegex = /^[a-zA-Z0-9]+([-_\.][a-zA-Z0-9]+)*[a-zA-Z0-9]$/;
+    if(usernameRegex.test($v1)){
+        return true;
+    }else{
+        console.log('error username');
+        return false;
+    }
+
+}
+function validatePassword($v1){
+
+    if ($v1.length < 6) {
+        return false;
+    }
+    if ($v1.search(/[a-z]/i) < 0) {
+        return false;
+    }
+    if ($v1.search(/[A-Z]/i) < 0) {
+        return false;
+    }
+    if ($v1.search(/[0-9]/) < 0) {
+        return false;
+    }
+    return true;
+}
+function validateDate(dateString){
+    var regEx = /(\d{4})[-\/](\d{2})[-\/](\d{2})/
+    if(regEx.test(dateString)){
+        return true;
+    }else{
+
+        console.log('error Date');
+        return false;
+    }
+}
+
+
+function validatePasswordRegistration($v1,$v2){
+
+    if($v1!=$v2){
+
+        console.log('error password');
+        return false;
+    }
+    if ($v1.length < 6) {
+        console.log('error password');
+
+        return false;
+    }
+    if ($v1.search(/[a-z]/i) < 0) {
+        console.log('error password');
+
+        return false;
+    }
+    if ($v1.search(/[A-Z]/i) < 0) {
+        console.log('error password');
+
+        return false;
+    }
+
+    if ($v1.search(/[0-9]/) < 0) {
+        console.log('error password');
+
+        return false;
+    }
+    return true;
+}
+function readURL(input) {
+    console.log('adios tete');
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+            console.log('adios tete2');
+            $('#perfil_reg').attr('src', e.target.result);
+        }
+
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+$("#btnSelectImage").change(function(){
+    console.log('hola tete');
+    readURL(this);
+});
