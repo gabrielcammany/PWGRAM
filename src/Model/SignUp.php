@@ -6,12 +6,19 @@
  * Time: 13:42
  */
 
-namespace PwGram\Model\Services;
+namespace PwGram\Model\registerUser;
 
 
 class SignUp
 {
-public function registerUser(){
+    private $request;
+
+    public function __construct($request)
+    {
+
+    }
+
+    public function registerUser(){
 echo"hemos llegado al registro!";
         $email ="";
         $date ="";

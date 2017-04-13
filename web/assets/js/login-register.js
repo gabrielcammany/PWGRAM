@@ -66,7 +66,9 @@ function loginAjax(){
 /*   Simulate error message from the server   */
      //shakeModal();
 }
-function registerAjax(){
+$('#registerUser').click(function(e){
+    e.preventDefault()
+    console.log("Hola");
     if(validaEmail($('#email_reg').val())&&validaUsername($('#username').val())&&validatePasswordRegistration($('#password_reg').val(),$('#password_confirmation').val())&&validateDate($('#date').val())){
         console.log('Todo OK!');
         var reg = new Object();
@@ -77,20 +79,22 @@ function registerAjax(){
         reg.confirm_pass = $('#password_confirmation').val();
         reg.username = $('#username').val();
         reg.username = $('#username').val();
-        var stringData = JSON.stringify(reg);
+        //var stringData = JSON.stringify(reg);
         $.ajax({
             type: 'POST',
-            url: '/SignUp',
-            data: {myData: stringData},
+            url: '/signup',
+            data: $('#infoRegistro').serialize(),
+            dataType: 'json',
             success: function ($response) {
-                console.log($response);
+                console.log("ha sido success");
 
             }
         });
     }else{
         shakeModalRegistration();
     }
-}
+
+});
 
 function shakeModal(){
     $('#loginModal .modal-dialog').addClass('shake');

@@ -6,15 +6,18 @@
  * Time: 1:48
  */
 
-namespace SilexApp\Controller;
+namespace PwGram\Controller;
 
 
 use Illuminate\Contracts\Console\Application;
 use Illuminate\Support\Facades\Request;
+use PwGram\Model;
 
 class RegistrationController
 {
-   public function registerUser(Application $app,$data){
-    return $app['addClient'];
+
+    public function registrationController(){
+        $signUp = new SignUp();
+        return
    }
 }

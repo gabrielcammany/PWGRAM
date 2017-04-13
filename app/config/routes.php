@@ -12,4 +12,4 @@ $app->get('/hello/{name}',function($name) use ($app){
 });*/
 $app->get('','PwGram\\Controller\\HelloController::indexAction');
 $app->get('add/{num1}/{num2}','PwGram\\Controller\\HelloController::addAction');
-$app->get('/SignUp','PwGram\\Model\\RegistrationController::registerUser');
+$app->post('/signup','PwGram\\Controller\\RegistrationController::registrationController');
