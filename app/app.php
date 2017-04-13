@@ -3,8 +3,8 @@
     $app = new Application();
     $app = new Silex\Application();
     $app ['app.name'] = 'PwGram';
-    $app['calc']= function(){{
-        //return new \SilexApp\Model\Services\Calculator();
+    $app['addClient']= function(){{
+        return new \PwGram\Model\Services\registerUser();
     }};
 
     //var_dump( $app['calc']);

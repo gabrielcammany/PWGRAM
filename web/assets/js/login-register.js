@@ -80,7 +80,7 @@ function registerAjax(){
         var stringData = JSON.stringify(reg);
         $.ajax({
             type: 'POST',
-            url: '/model/SignUp.php',
+            url: '/SignUp',
             data: {myData: stringData},
             success: function ($response) {
                 console.log($response);
@@ -195,6 +195,10 @@ function validatePasswordRegistration($v1,$v2){
     }
     return true;
 }
+
+/*
+    Funció encarregada de llegir la url introduida per l'usuari i carregar la foto de perfil seleccionada
+*/
 function readURL(input) {
     console.log('adios tete');
     if (input.files && input.files[0]) {
@@ -208,7 +212,10 @@ function readURL(input) {
         reader.readAsDataURL(input.files[0]);
     }
 }
-
+/*
+Funció que espera a que el usuari realitzi algun canvi en el input per poder cridar a la funció encarregada
+de realitzar el canvi de la imatge de defecte per la seleccionada.
+ */
 $("#btnSelectImage").change(function(){
     console.log('hola tete');
     readURL(this);

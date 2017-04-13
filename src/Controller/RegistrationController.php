@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Request;
 
 class RegistrationController
 {
-   public function registerUser(Application $app,Request $request){
-    echo "llega a registro!\n";
+   public function registerUser(Application $app,$data){
+    return $app['addClient'];
    }
 }

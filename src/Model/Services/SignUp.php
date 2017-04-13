@@ -3,10 +3,16 @@
  * Created by PhpStorm.
  * User: Xps_Sam
  * Date: 12/04/2017
- * Time: 13:13
+ * Time: 13:42
  */
-    if($_SESSION['idUser']==0) {
 
+namespace PwGram\Model\Services;
+
+
+class SignUp
+{
+public function registerUser(){
+echo"hemos llegado al registro!";
         $email ="";
         $date ="";
         $pass= "";
@@ -58,7 +64,5 @@
             echo 0;
         }
 
-    }else{
-
-        echo 2;
-    }
+}
+}
