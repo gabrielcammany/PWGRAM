@@ -17,7 +17,7 @@ class RegistrationController
 {
 
     public function registrationController(){
-        echo "LLEGO AL CONTROLLER";
+        //echo "LLEGO AL CONTROLLER";
         $signUp = new SignUp($_POST);
         return $signUp->registerUser();
    }

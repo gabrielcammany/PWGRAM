@@ -86,7 +86,7 @@ $('#registerUser').click(function(e){
             url: '/SignUp',
             data: stringData,
             success: function ($response) {
-                console.log("ha sido success");
+                console.log($response);
 
             }
         });

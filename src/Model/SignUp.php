@@ -19,15 +19,16 @@ class SignUp
     }
 
     public function registerUser(){
-    echo"hemos llegado al registro!";
-        $email ="";
+        $success = array();
+        // echo"hemos llegado al registro!";
+        $email = $this->request['email'];
         $date ="";
         $pass= "";
         $pass="";
         $confirm_pass="";
         $username="";
 
-        if(isset($_POST['myData'])){
+        /*if(isset($_POST['myData'])){
             $json = json_decode($_POST['myData']);
             $i = 0;
 
@@ -55,21 +56,23 @@ class SignUp
                     // echo $key . '=>' . $value . '<br />';
                     $i++;
                 }
-            }
+            }*/
 
-
-            $db = new PDO('mysql:host=localhost;dbname=pwgram', "homestead", "secret");
+            $db = new \PDO('mysql:host=localhost;dbname=pwgram', "homestead", "secret");
+           // $db = new PDO('mysql:host=localhost;dbname=pwgram', "homestead", "secret");
             $stmt = $db->prepare('INSERT INTO user(email,password,birthdate,username,active) values(?,?,?,?,0)');
-            $stmt->bindParam(1, $email, PDO::PARAM_STR);
-            $stmt->bindParam(2, $pass, PDO::PARAM_STR);
-            $stmt->bindParam(3, $date, PDO::PARAM_STR);
-            $stmt->bindParam(4, $username, PDO::PARAM_STR);
+            $stmt->bindParam(1, $email, \PDO::PARAM_STR);
+            $stmt->bindParam(2, $pass, \PDO::PARAM_STR);
+            $stmt->bindParam(3, $date, \PDO::PARAM_STR);
+            $stmt->bindParam(4, $username, \PDO::PARAM_STR);
             $stmt->execute();
-            echo 1;
-
-        } else {
+          //  echo 1;
+            $success['resp'] = 1;
+        /*} else {
+            $suceess['resp'] = 0;
             echo 0;
-        }
+        }*/
+            echo json_encode($success);
 
 }
 }
