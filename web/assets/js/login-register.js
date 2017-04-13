@@ -79,12 +79,12 @@ $('#registerUser').click(function(e){
         reg.confirm_pass = $('#password_confirmation').val();
         reg.username = $('#username').val();
         reg.username = $('#username').val();
-        //var stringData = JSON.stringify(reg);
+        var stringData = JSON.stringify(reg);
+        console.log("LLEGOO ANTES AJAX");
         $.ajax({
             type: 'POST',
             url: '/SignUp',
-            data: $('#infoRegistro').serialize(),
-            dataType: 'json',
+            data: stringData,
             success: function ($response) {
                 console.log("ha sido success");
 
