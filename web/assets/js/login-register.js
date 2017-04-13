@@ -82,7 +82,7 @@ $('#registerUser').click(function(e){
         //var stringData = JSON.stringify(reg);
         $.ajax({
             type: 'POST',
-            url: '/signup',
+            url: '/SignUp',
             data: $('#infoRegistro').serialize(),
             dataType: 'json',
             success: function ($response) {

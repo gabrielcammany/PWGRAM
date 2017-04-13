@@ -15,11 +15,11 @@ class SignUp
 
     public function __construct($request)
     {
-
+        $this->request = $request;
     }
 
     public function registerUser(){
-echo"hemos llegado al registro!";
+    echo"hemos llegado al registro!";
         $email ="";
         $date ="";
         $pass= "";
