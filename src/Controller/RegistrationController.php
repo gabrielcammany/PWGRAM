@@ -9,16 +9,14 @@
 namespace PwGram\Controller;
 
 
-use Illuminate\Contracts\Console\Application;
-use Illuminate\Support\Facades\Request;
 use PwGram\Model;
 
 class RegistrationController
 {
 
     public function registrationController(){
-        //echo "LLEGO AL CONTROLLER";
-        $signUp = new SignUp($_POST);
-        return $signUp->registerUser();
+        echo "LLEGO AL CONTROLLER";
+        //$signUp = new SignUp($_POST);
+        //return $signUp->registerUser();
    }
 }
