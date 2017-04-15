@@ -2,11 +2,11 @@
 
 CREATE TABLE IF NOT EXISTS `user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `username` int(11) NOT NULL,
-  `email` int(11) NOT NULL,
+  `username` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
   `birthdate` date NOT NULL,
   `password` varchar(255) NOT NULL,
-  `img_path` varchar(255) NOT NULL,
+  `img_path` varchar(255) NOT NULL DEFAULT "../assets/img/default/default_user.png",
   `active` tinyint(4) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;

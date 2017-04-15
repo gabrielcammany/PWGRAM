@@ -7,6 +7,10 @@
  * 
  */
 
+var status =0;
+
+var img_path=" ";
+
 $(function () {
     $('#loginModal').modal('hide');
 });
@@ -67,30 +71,30 @@ function loginAjax(){
      //shakeModal();
 }
 $('#registerUser').click(function(e){
-    e.preventDefault()
-    console.log("Hola");
+    e.preventDefault();
     if(validaEmail($('#email_reg').val())&&validaUsername($('#username').val())&&validatePasswordRegistration($('#password_reg').val(),$('#password_confirmation').val())&&validateDate($('#date').val())){
-        console.log('Todo OK!');
-        var reg = new Object();
 
-        reg.email = $('#email').val();
+        var reg = {};
+        reg.email = $('#email_reg').val();
         reg.pass = $('#password_reg').val();
         reg.date = $('#date').val();
         reg.confirm_pass = $('#password_confirmation').val();
         reg.username = $('#username').val();
-        reg.username = $('#username').val();
+        reg.img = img_path;
         var stringData = JSON.stringify(reg);
-        console.log("LLEGOO ANTES AJAX");
+        //console.log("LLEGOO ANTES AJAX");
         $.ajax({
-            type: 'POST',
-            url: '/SignUp',
-            data: stringData,
+            type: 'post',
+            url: '/signup',
+            data: {myData:stringData},
             success: function ($response) {
-                console.log($response);
 
+                error_modal($response);
+                shakeModalRegistration();
             }
         });
     }else{
+        error_modal(''+status+'');
         shakeModalRegistration();
     }
 
@@ -99,15 +103,14 @@ $('#registerUser').click(function(e){
 function shakeModal(){
     $('#loginModal .modal-dialog').addClass('shake');
              $('.error').addClass('alert alert-danger').html("Invalid email/password combination");
-             $('input[type="password"]').val('');
+            // $('input[type="password"]').val('');
              setTimeout( function(){ 
                 $('#loginModal .modal-dialog').removeClass('shake'); 
     }, 1000 ); 
 }
 function shakeModalRegistration(){
     $('#loginModal .modal-dialog').addClass('shake');
-    $('.error').addClass('alert alert-danger').html("Invalid information combination");
-    $('input[type="password"]').val('');
+    //$('.error').addClass('alert alert-danger').html("Invalid information combination");
     setTimeout( function(){
         $('#loginModal .modal-dialog').removeClass('shake');
     }, 1000 );
@@ -119,12 +122,11 @@ $('#login_home').click(function (e) {
 });
 
 function validaEmail($v1){
-    console.log($v1);
     var usernameRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     if(usernameRegex.test($v1)){
         return true;
     }else{
-        console.log('error email');
+        status=3;
         return false;
     }
 
@@ -136,7 +138,7 @@ function validaUsername($v1){
     if(usernameRegex.test($v1)){
         return true;
     }else{
-        console.log('error username');
+        status=5;
         return false;
     }
 
@@ -144,15 +146,19 @@ function validaUsername($v1){
 function validatePassword($v1){
 
     if ($v1.length < 6) {
+        status=7;
         return false;
     }
     if ($v1.search(/[a-z]/i) < 0) {
+        status=7;
         return false;
     }
     if ($v1.search(/[A-Z]/i) < 0) {
+        status=7;
         return false;
     }
     if ($v1.search(/[0-9]/) < 0) {
+        status=7;
         return false;
     }
     return true;
@@ -163,7 +169,7 @@ function validateDate(dateString){
         return true;
     }else{
 
-        console.log('error Date');
+        status=5;
         return false;
     }
 }
@@ -172,32 +178,64 @@ function validateDate(dateString){
 function validatePasswordRegistration($v1,$v2){
 
     if($v1!=$v2){
-
-        console.log('error password');
+        status=6;
         return false;
     }
     if ($v1.length < 6) {
-        console.log('error password');
+        status=7;
 
         return false;
     }
     if ($v1.search(/[a-z]/i) < 0) {
-        console.log('error password');
+        status=7;
 
         return false;
     }
     if ($v1.search(/[A-Z]/i) < 0) {
-        console.log('error password');
+        status=7;
 
         return false;
     }
 
     if ($v1.search(/[0-9]/) < 0) {
-        console.log('error password');
+        status=7;
 
         return false;
     }
     return true;
+}
+
+function error_modal( $response){
+    switch($response){
+        case '1':
+            swal({
+                title: "Registrado",
+                type: "success",
+                timer:2000,
+                showConfirmButton: false
+            });
+            break;
+        case '2':
+            $('.error').addClass('alert alert-danger').html("Usuario existente");
+            break;
+        case '3':
+            $('.error').addClass('alert alert-danger').html("Formato de email incorrecto");
+            break;
+        case '4':
+            $('.error').addClass('alert alert-danger').html("Formato del nombre de usuario");
+            break;
+        case '5':
+            $('.error').addClass('alert alert-danger').html("Formato de fecha incorrecto");
+            break;
+        case '6':
+            $('.error').addClass('alert alert-danger').html("Los password no son iguales");
+            break;
+        case '7':
+            $('.error').addClass('alert alert-danger').html("Formato de password incorrecto");
+            break;
+        case '8':
+            $('.error').addClass('alert alert-danger').html("Imagen no subida");
+    }
 }
 
 /*
@@ -209,8 +247,8 @@ function readURL(input) {
         var reader = new FileReader();
 
         reader.onload = function (e) {
-            console.log('adios tete2');
             $('#perfil_reg').attr('src', e.target.result);
+            img_path=e.target.result;
         }
 
         reader.readAsDataURL(input.files[0]);
@@ -221,6 +259,5 @@ Funció que espera a que el usuari realitzi algun canvi en el input per poder cr
 de realitzar el canvi de la imatge de defecte per la seleccionada.
  */
 $("#btnSelectImage").change(function(){
-    console.log('hola tete');
     readURL(this);
 });

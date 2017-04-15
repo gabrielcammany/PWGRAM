@@ -8,6 +8,7 @@
 
 {% block styles %}
     {{ parent() }}
+
     {% endblock %}
 
 {% block header %}
@@ -140,7 +141,7 @@
                                  <!--<form method="post" html="{:multipart=>true}" data-remote="true" action="/" accept-charset="UTF-8" enctype="multipart/form-data">-->
                                 <form html="{:multipart=>true}" accept-charset="UTF-8" id="infoRegistro" method="post" action="/SignUp">
                                     <div id="imageSelector">
-                                        <img id="perfil_reg" src="../assets/img/default/default_user.png" class="img-circle img-responsive img-raised">
+                                        <img id="perfil_reg" name="image" src="../assets/img/default/default_user.png" class="img-circle img-responsive img-raised">
                                         <!-- <img id="perfil_reg" src="#" class="img-circle img-responsive img-raised">-->
                                         <input type="file" name="imageProfile" class="btn btn-group-justified" id="btnSelectImage">
                                     </div>

@@ -9,14 +9,19 @@
 namespace PwGram\Controller;
 
 
-use PwGram\Model;
+use PwGram\Model\SignUp;
+use Silex\Application;
+use Symfony\Component\HttpFoundation\Request;
+//use PwGram\Model;
+
 
 class RegistrationController
 {
 
-    public function registrationController(){
-        echo "LLEGO AL CONTROLLER";
-        //$signUp = new SignUp($_POST);
-        //return $signUp->registerUser();
+    public function registrationController(Application $app, Request $request){
+        //echo "LLEGO AL CONTROLLER";
+        $signUp = new SignUp($request);
+
+        return $signUp->registerUser();
    }
 }
