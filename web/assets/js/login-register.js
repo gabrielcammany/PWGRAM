@@ -9,7 +9,8 @@
 
 var status =0;
 
-var img_path=" ";
+var img_path=0;
+var user_logged= new Object();
 
 $(function () {
     $('#loginModal').modal('hide');
@@ -51,25 +52,51 @@ function openRegisterModal(){
     }, 230);
     
 }
+function log_in( email, username, password){
+    var reg = {};
+    reg.email = email;
+    reg.username = username;
+    reg.pass = password;
+    var stringData = JSON.stringify(reg);
+    $.ajax({
+        type: 'post',
+        url: '/signin',
+        data: {myData:stringData},
+        success: function ($response) {
+            user_logged=JSON.parse($response);
+            console.log($response);
+            status =10;
+            console.log('##'+status);
+            return 10;
+        }
+    });
+}
+$('#login_submit').click(function (e){
+    e.preventDefault();
+    if((validaEmail($('#email').val())||validaUsername($('#email').val()))&&validatePassword($('#password').val())){
 
-function loginAjax(){
-    /*   Remove this comments when moving to server
-    $.post( "/login", function( data ) {
-            if(data == 1){
-                window.location.replace("/home");            
-            } else {
-                 shakeModal(); 
-            }
-        });
-    */
-    if(validaEmail($('#email').val())&&validaUsername($('#username').val())&&validatePassword($('#password').val())){
-        console.log('Todo OK!');
+        if(validaEmail($('#email').val())){
+            status = log_in($('#email').val(),' ',$('#password').val());
+        }else{
+            status = log_in(' ',$('#email').val(),$('#password').val());
+        }
+        console.log('$$'+status);
+        if(status==10){
+            console.log('hola tete '+status);
+            status_modal(''+status+'');
+            $('#login_home').hide();
+            $('#loginModal').hide();
+            $('#img_profile').attr('src',$json_response.img_path);
+            $('.user_profile').show();
+        }
+        status_modal(''+status+'');
+        shakeModal();
     }else{
+        status_modal(''+status+'');
         shakeModal();
     }
-/*   Simulate error message from the server   */
-     //shakeModal();
-}
+});
+
 $('#registerUser').click(function(e){
     e.preventDefault();
     if(validaEmail($('#email_reg').val())&&validaUsername($('#username').val())&&validatePasswordRegistration($('#password_reg').val(),$('#password_confirmation').val())&&validateDate($('#date').val())){
@@ -80,7 +107,9 @@ $('#registerUser').click(function(e){
         reg.date = $('#date').val();
         reg.confirm_pass = $('#password_confirmation').val();
         reg.username = $('#username').val();
-        reg.img = img_path;
+        if(img_path)reg.img = 1;
+        if(!img_path)reg.img = 0;
+        //console.log('--> '+reg.img+'\n');
         var stringData = JSON.stringify(reg);
         //console.log("LLEGOO ANTES AJAX");
         $.ajax({
@@ -88,13 +117,14 @@ $('#registerUser').click(function(e){
             url: '/signup',
             data: {myData:stringData},
             success: function ($response) {
-
-                error_modal($response);
-                shakeModalRegistration();
+                //Determinar resposta server
+                status_modal($response);
+                //Evitar que es fasci shake quan es registra.
+                if($response!=1)shakeModalRegistration();
             }
         });
     }else{
-        error_modal(''+status+'');
+        status_modal(''+status+'');
         shakeModalRegistration();
     }
 
@@ -102,8 +132,6 @@ $('#registerUser').click(function(e){
 
 function shakeModal(){
     $('#loginModal .modal-dialog').addClass('shake');
-             $('.error').addClass('alert alert-danger').html("Invalid email/password combination");
-            // $('input[type="password"]').val('');
              setTimeout( function(){ 
                 $('#loginModal .modal-dialog').removeClass('shake'); 
     }, 1000 ); 
@@ -130,7 +158,6 @@ function validaEmail($v1){
         return false;
     }
 
-    return false;
 }
 
 function validaUsername($v1){
@@ -204,8 +231,10 @@ function validatePasswordRegistration($v1,$v2){
     }
     return true;
 }
-
-function error_modal( $response){
+/*
+    Funcio que ens permetra tenir un codi d'errors igual per el client com per el servidor.
+ */
+function status_modal( $response){
     switch($response){
         case '1':
             swal({
@@ -214,6 +243,7 @@ function error_modal( $response){
                 timer:2000,
                 showConfirmButton: false
             });
+            log_in(' ',$('#username').val(),$('#password_reg').val())
             break;
         case '2':
             $('.error').addClass('alert alert-danger').html("Usuario existente");
@@ -235,6 +265,18 @@ function error_modal( $response){
             break;
         case '8':
             $('.error').addClass('alert alert-danger').html("Imagen no subida");
+            break;
+
+        case '10':
+            swal({
+                title: "Logged",
+                type: "success",
+                timer:2000,
+                showConfirmButton: false
+            });
+            break;
+        default:
+            $('.error').addClass('alert alert-danger').html("Error desconocido");
     }
 }
 
@@ -242,16 +284,27 @@ function error_modal( $response){
     Funció encarregada de llegir la url introduida per l'usuari i carregar la foto de perfil seleccionada
 */
 function readURL(input) {
-    console.log('adios tete');
+
     if (input.files && input.files[0]) {
         var reader = new FileReader();
 
+        reader.readAsDataURL(input.files[0]);
         reader.onload = function (e) {
             $('#perfil_reg').attr('src', e.target.result);
-            img_path=e.target.result;
+            /*
+            Enviamos la imagen desde el cliente al servidor con un nombre provisional y solo cambiaremos el nombre
+            al registrar al usuario.
+             */
+            $.ajax({
+                type: 'POST',
+                url: '/upload',
+                data: {myData:$('#perfil_reg').attr('src')},
+                success: function ($response) {
+                    console.log('**'+$response);
+                }
+            });
         }
 
-        reader.readAsDataURL(input.files[0]);
     }
 }
 /*
@@ -260,4 +313,5 @@ de realitzar el canvi de la imatge de defecte per la seleccionada.
  */
 $("#btnSelectImage").change(function(){
     readURL(this);
+    img_path=1;
 });

@@ -10,6 +10,7 @@ namespace PwGram\Controller;
 
 
 use PwGram\Model\SignUp;
+use PwGram\Model\upload;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 //use PwGram\Model;
@@ -24,4 +25,10 @@ class RegistrationController
 
         return $signUp->registerUser();
    }
+    public function uploadImage(Request $request){
+        //echo "LLEGO AL CONTROLLER";
+        $upload = new upload($request);
+
+        return $upload->saveImage();
+    }
 }

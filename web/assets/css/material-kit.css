@@ -3694,6 +3694,9 @@ h2.title {
   width: 100%;
   margin-bottom: 30px;
 }
+.main_profile{
+ display:none;
+}
 
 .signup-page .wrapper > .header {
   min-height: 100vh;

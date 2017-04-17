@@ -23,21 +23,9 @@ class SignUp
 
     public function registerUser(){
 
-        $success = array();
-        // echo"hemos llegado al registro!\n";
-       /* $email = $this->request['email'];
-        $date ="";
-        $pass= "";
-        $pass="";
-        $confirm_pass="";
-        $username="";
-*/
-      // echo "pre data\n";
         if(isset($_POST['myData'])) {
-           // echo "post data\n".$_POST['myData']."\n";
             $json = json_decode($_POST['myData']);
             $i = 0;
-
             foreach ($json as $key => $value) {
                 if (!is_array($value)) {
                     switch ($i) {
@@ -61,7 +49,6 @@ class SignUp
                         case 5:
                             $img = $value;
                     }
-                    // echo $key . '=>' . $value . '<br />';
                     $i++;
                 }
             }
@@ -69,37 +56,31 @@ class SignUp
             $vResult = $this->validation_user($db,$username);
             if(!$vResult){
                 if($this->validaEmail($email)&&$this->validateDate($date)&&$this->validatePasswordRegistration($pass,$confirm_pass)){
-                    if($this->uploadFile($img)) {
+                    //if($this->uploadFile($img)) {
 
-
-                        $stmt = $db->prepare('INSERT INTO user(email,password,birthdate,username,active) values(?,?,?,?,0)');
+                    $img_path='assets/img/uploads/user_'.$username.'.jpg';
+                    if($img==1){
+                        $valid_path = rename('assets/img/uploads/preview.jpg',$img_path);
+                    }else{
+                        $valid_path = copy('assets/img/default/default_user.png',$img_path);
+                    }
+                    if($valid_path){
+                        $stmt = $db->prepare('INSERT INTO user(email,password,birthdate,username,img_path,active) values(?,?,?,?,?,0)');
                         $stmt->bindParam(1, $email, \PDO::PARAM_STR);
                         $stmt->bindParam(2, $pass, \PDO::PARAM_STR);
                         $stmt->bindParam(3, $date, \PDO::PARAM_STR);
                         $stmt->bindParam(4, $username, \PDO::PARAM_STR);
+                        $stmt->bindParam(5, $img_path, \PDO::PARAM_STR);
                         $stmt->execute();
                         $this->status = 1;
+                    }else{
+                        $this->status=8;
                     }
                 }
             }
             return $this->status;
         }
     }
-
-    function uploadFile($img){
-        //$name = preg_replace("/[^A-Z0-9._-]/i", "_", $img["name"]);
-        echo $img;
-        $success = move_uploaded_file(
-            $img,
-            __DIR__ . '/img/uploads/' . 'lolo'
-        );
-        if (!$success) {
-            $this->status=8;
-            return false;
-        }
-        return true;
-    }
-
     function validation_user($db,$v1){
         $stmt = $db->prepare('SELECT * FROM user WHERE username=?');
         $stmt->bindParam(1,$v1,\PDO::PARAM_STR);

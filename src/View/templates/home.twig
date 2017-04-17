@@ -23,19 +23,19 @@
         <div class="main main-raised">
             <div class="profile-content">
                 <div class="container">
-                    <div class="row">
-                        <div class="profile">
-                            <div class="avatar">
-                                <img src="../assets/img/default/default_user.png" alt="Circle Image" class="img-circle img-responsive img-raised">
+                        <div class=" row main_profile">
+                            <div class="profile user_profile">
+                                <div class="avatar ">
+                                    <img id="img_profile" src="../assets/img/default/default_user.png" alt="Circle Image" class="img-circle img-responsive img-raised">
+                                </div>
+                                <div class="name user_profile">
+                                    <h3 class="title">Samuel Tavares</h3>
+                                </div>
                             </div>
-                            <div class="name">
-                                <h3 class="title">Samuel Tavares</h3>
+                            <div class="description text-center user_profile">
+                                <p>An artist of considerable range, Chet Faker — the name taken by Melbourne-raised, Brooklyn-based Nick Murphy — writes, performs and records all of his own music, giving it a warm, intimate feel with a solid groove structure. </p>
                             </div>
                         </div>
-                    </div>
-                    <div class="description text-center">
-                        <p>An artist of considerable range, Chet Faker — the name taken by Melbourne-raised, Brooklyn-based Nick Murphy — writes, performs and records all of his own music, giving it a warm, intimate feel with a solid groove structure. </p>
-                    </div>
 
                     <div class="row">
                         <div class="col-md-6 col-md-offset-3">
@@ -130,7 +130,7 @@
                                 <form method="post" action="/login" accept-charset="UTF-8">
                                     <input id="email" class="form-control" type="text" placeholder="Email" name="email">
                                     <input id="password" class="form-control" type="password" placeholder="Password" name="password">
-                                    <input class="btn btn-default btn-login" type="button" value="Login" onclick="loginAjax()">
+                                    <input class="btn btn-default btn-login" type="button" value="Login" id="login_submit">
                                 </form>
                             </div>
                         </div>
@@ -139,11 +139,13 @@
                         <div class="content registerBox" style="display:none;">
                             <div class="form">
                                  <!--<form method="post" html="{:multipart=>true}" data-remote="true" action="/" accept-charset="UTF-8" enctype="multipart/form-data">-->
-                                <form html="{:multipart=>true}" accept-charset="UTF-8" id="infoRegistro" method="post" action="/SignUp">
-                                    <div id="imageSelector">
-                                        <img id="perfil_reg" name="image" src="../assets/img/default/default_user.png" class="img-circle img-responsive img-raised">
+                                <form html="{:multipart=>true}" accept-charset="UTF-8" id="infoRegistro">
+                                    <div id="imageSelector" enctype="multipart/form-data" method="post" >
+
+                                        <img id="perfil_reg" name="imageProfile" src="../assets/img/default/default_user.png" class="img-circle img-responsive img-raised">
                                         <!-- <img id="perfil_reg" src="#" class="img-circle img-responsive img-raised">-->
-                                        <input type="file" name="imageProfile" class="btn btn-group-justified" id="btnSelectImage">
+                                        <input type="file" name="image" class="btn btn-group-justified" id="btnSelectImage">
+
                                     </div>
                                     <input id="username" class="form-control" type="text" placeholder="Username" name="username">
                                     <input id="email_reg" class="form-control" type="text" placeholder="Email" name="email">
@@ -180,4 +182,5 @@
 
 {% block scripts %}
     {{ parent() }}
+    <script src="{{ asset('/home.js','js') }}"></script>
 {% endblock %}
