@@ -15,7 +15,6 @@ use Symfony\Component\HttpFoundation\Request;
 class LoginController
 {
     public function loginController(Application $app, Request $request){
-        //echo "LLEGO AL CONTROLLER";
         $login = new SignIn($request);
 
         return $login->signIn();

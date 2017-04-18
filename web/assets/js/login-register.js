@@ -57,26 +57,26 @@ function log_in( email, username, password){
     reg.email = email;
     reg.username = username;
     reg.pass = password;
-    var stringData = JSON.stringify(reg);
+    var stringData = JSON.stringify(reg)
+    console.log(email);
+    console.log(username);
+    console.log(password);
     $.ajax({
         type: 'post',
         url: '/signin',
         data: {myData:stringData},
         success: function ($response) {
+            $response = JSON.parse($response);
             console.log($response);
-            try{
-
+            /*try{
                 user_logged=JSON.parse($response);
-            }
-
-            catch(e){
+            }catch(e){
                 status=$response;
 
             }
             status=$response;
-
             if($response[0]=='{'){
-                console.log('hola tete '+status);
+               // console.log('hola tete '+status);
                 status=10;
                 status_modal(''+status+'');
                 $('#login_home').hide();
@@ -87,7 +87,8 @@ function log_in( email, username, password){
                 //Forzamos k la primera letra sea mayuscula
                 user_logged.username = user_logged.username.charAt(0).toUpperCase()+user_logged.username.slice(1);
                 $('h3').html(user_logged.username);
-            }
+            }*/
+            status = $response.status;
             status_modal(''+status+'');
             shakeModal();
             return 10;
@@ -97,7 +98,6 @@ function log_in( email, username, password){
 $('#login_submit').click(function (e){
     e.preventDefault();
     if((validaEmail($('#email').val())||validaUsername($('#email').val()))&&validatePassword($('#password').val())){
-
         if(validaEmail($('#email').val())){
             log_in($('#email').val(),' ',$('#password').val());
         }else{
@@ -112,7 +112,7 @@ $('#login_submit').click(function (e){
 
 $('#registerUser').click(function(e){
     e.preventDefault();
-    if(validaEmail($('#email_reg').val())&&validaUsername($('#username').val())&&validatePasswordRegistration($('#password_reg').val(),$('#password_confirmation').val())&&validateDate($('#date').val())){
+    if(validaUsername($('#username').val())&&validaEmail($('#email_reg').val())&&validateDate($('#date').val())&&validatePasswordRegistration($('#password_reg').val(),$('#password_confirmation').val())){
 
         var reg = {};
         reg.email = $('#email_reg').val();
@@ -163,9 +163,9 @@ $('#login_home').click(function (e) {
     openLoginModal();
 });
 
-function validaEmail($v1){
+function validaEmail(v1){
     var usernameRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    if(usernameRegex.test($v1)){
+    if(usernameRegex.test(v1)){
         return true;
     }else{
         status=3;
@@ -174,39 +174,47 @@ function validaEmail($v1){
 
 }
 
-function validaUsername($v1){
+function validaUsername(v1){
     var usernameRegex = /^[a-zA-Z0-9]+([-_\.][a-zA-Z0-9]+)*[a-zA-Z0-9]$/;
-    if(usernameRegex.test($v1)){
-        return true;
-    }else{
-        status=5;
-        return false;
+    if(!validaEmail(v1)) {
+        if (usernameRegex.test(v1) && v1.length <= 20) {
+            return true;
+        } else {
+            status = 4;
+            return false;
+        }
     }
 
 }
-function validatePassword($v1){
+function validatePassword(v1){
 
-    if ($v1.length < 6) {
+    if (v1.length < 6) {
         status=7;
         return false;
     }
-    if ($v1.search(/[a-z]/i) < 0) {
+    if (v1.search(/[a-z]/i) < 0) {
         status=7;
         return false;
     }
-    if ($v1.search(/[A-Z]/i) < 0) {
+    if (v1.search(/[A-Z]/i) < 0) {
         status=7;
         return false;
     }
-    if ($v1.search(/[0-9]/) < 0) {
+    if (v1.search(/[0-9]/) < 0) {
         status=7;
         return false;
     }
     return true;
 }
+
+
 function validateDate(dateString){
-    var regEx = /(\d{4})[-\/](\d{2})[-\/](\d{2})/
-    if(regEx.test(dateString)){
+    var regEx = /(\d{4})[-\/](\d{2})[-\/](\d{2})/;
+    var n = new Date();
+    var year = n.getFullYear();
+    var array_date = dateString.split("/");
+
+    if(regEx.test(dateString) && array_date[0] <= year && array_date[1] <= 12 && array_date[2] <= daysInMonth(array_date[1],array_date[0])){
         return true;
     }else{
 
@@ -215,6 +223,9 @@ function validateDate(dateString){
     }
 }
 
+function daysInMonth(month,year){
+    return new Date(year,month,0).getDate();
+}
 
 function validatePasswordRegistration($v1,$v2){
 

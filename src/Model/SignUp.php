@@ -52,9 +52,12 @@ class SignUp
                     $i++;
                 }
             }
+
             $db = new \PDO('mysql:host=localhost;dbname=pwgram', "homestead", "secret");
             $vResult = $this->validation_user($db,$username);
+
             if(!$vResult){
+
                 if($this->validaEmail($email)&&$this->validateDate($date)&&$this->validatePasswordRegistration($pass,$confirm_pass)){
                     //if($this->uploadFile($img)) {
 
@@ -73,6 +76,7 @@ class SignUp
                         $stmt->bindParam(5, $img_path, \PDO::PARAM_STR);
                         $stmt->execute();
                         $this->status = 1;
+
                     }else{
                         $this->status=8;
                     }
@@ -81,6 +85,9 @@ class SignUp
             return $this->status;
         }
     }
+
+
+
     function validation_user($db,$v1){
         $stmt = $db->prepare('SELECT * FROM user WHERE username=?');
         $stmt->bindParam(1,$v1,\PDO::PARAM_STR);
@@ -90,7 +97,7 @@ class SignUp
 
             return 0;
         }
-        $this->status = 2;//el usuario no existe
+        $this->status = 2;//el usuario si existe
         return 1;
 
     }

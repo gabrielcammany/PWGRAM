@@ -25,6 +25,7 @@ class RegistrationController
 
         return $signUp->registerUser();
    }
+
     public function uploadImage(Request $request){
         //echo "LLEGO AL CONTROLLER";
         $upload = new upload($request);
