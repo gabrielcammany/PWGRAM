@@ -56,7 +56,7 @@ class SignIn
                 $stmt->execute();
                 $result = $stmt->fetch(\PDO::FETCH_ASSOC);
                 if(sizeof($result['id'])== 0) {
-                    return 11;//No se encuentra el respectivo usuario
+                    return 11;//No se encuentra el respectivo email o contraseña
                 }else{
                     /*
                      * Actualizamos el estado del usuario
@@ -81,7 +81,7 @@ class SignIn
                 $stmt->execute();
                 $result = $stmt->fetch(\PDO::FETCH_ASSOC);
                 if(sizeof($result['id'])== 0) {
-                    return 11;//No se encuentra el respectivo usuario
+                    return 12;//No se encuentra el respectivo username o contraseña
                 }else{
                     $stmt = $db->prepare('UPDATE user SET active="1" WHERE username=?');
                     $stmt->bindParam(1,$username,\PDO::PARAM_STR);

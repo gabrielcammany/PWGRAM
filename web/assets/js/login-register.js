@@ -63,10 +63,33 @@ function log_in( email, username, password){
         url: '/signin',
         data: {myData:stringData},
         success: function ($response) {
-            user_logged=JSON.parse($response);
             console.log($response);
-            status =10;
-            console.log('##'+status);
+            try{
+
+                user_logged=JSON.parse($response);
+            }
+
+            catch(e){
+                status=$response;
+
+            }
+            status=$response;
+
+            if($response[0]=='{'){
+                console.log('hola tete '+status);
+                status=10;
+                status_modal(''+status+'');
+                $('#login_home').hide();
+                $('#close_modal').click();
+
+                $('.main_profile').css('display','block');
+                $('#img_profile').attr('src',user_logged.img_path);
+                //Forzamos k la primera letra sea mayuscula
+                user_logged.username = user_logged.username.charAt(0).toUpperCase()+user_logged.username.slice(1);
+                $('h3').html(user_logged.username);
+            }
+            status_modal(''+status+'');
+            shakeModal();
             return 10;
         }
     });
@@ -76,21 +99,11 @@ $('#login_submit').click(function (e){
     if((validaEmail($('#email').val())||validaUsername($('#email').val()))&&validatePassword($('#password').val())){
 
         if(validaEmail($('#email').val())){
-            status = log_in($('#email').val(),' ',$('#password').val());
+            log_in($('#email').val(),' ',$('#password').val());
         }else{
-            status = log_in(' ',$('#email').val(),$('#password').val());
+            log_in(' ',$('#email').val(),$('#password').val());
         }
-        console.log('$$'+status);
-        if(status==10){
-            console.log('hola tete '+status);
-            status_modal(''+status+'');
-            $('#login_home').hide();
-            $('#loginModal').hide();
-            $('#img_profile').attr('src',$json_response.img_path);
-            $('.user_profile').show();
-        }
-        status_modal(''+status+'');
-        shakeModal();
+
     }else{
         status_modal(''+status+'');
         shakeModal();
@@ -106,6 +119,7 @@ $('#registerUser').click(function(e){
         reg.pass = $('#password_reg').val();
         reg.date = $('#date').val();
         reg.confirm_pass = $('#password_confirmation').val();
+        $('#password').append('<h3>hola tete</h3>')
         reg.username = $('#username').val();
         if(img_path)reg.img = 1;
         if(!img_path)reg.img = 0;
@@ -275,6 +289,11 @@ function status_modal( $response){
                 showConfirmButton: false
             });
             break;
+        case'11':
+            $('.error').addClass('alert alert-danger').html("Email o contrasena incorrecta");
+            break;
+        case'12':
+            $('.error').addClass('alert alert-danger').html("Username o contrasena incorrecta");
         default:
             $('.error').addClass('alert alert-danger').html("Error desconocido");
     }
