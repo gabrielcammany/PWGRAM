@@ -11,8 +11,10 @@ $app->get('/hello/{name}',function($name) use ($app){
     ));
 });*/
 $app->get('','PwGram\\Controller\\HelloController::indexAction');
-$app->get('/samu','PwGram\\Controller\\HelloController::indexAction');
-$app->get('/manel','PwGram\\Controller\\HelloController::indexAction');
+$app->get('/samu','PwGram\\Controller\\HelloController::indexSamu');
+$app->get('/samu/edit_profile','PwGram\\Controller\\EditController::editProfile');
+$app->get('/manel','PwGram\\Controller\\HelloController::indexManu');
+$app->get('/manel/add_image','PwGram\\Controller\\ImageController::addImage');
 $app->get('add/{num1}/{num2}','PwGram\\Controller\\HelloController::addAction');
 $app->post('/signup','PwGram\\Controller\\RegistrationController::registrationController');
 $app->post('/signin','PwGram\\Controller\\LoginController::loginController');
