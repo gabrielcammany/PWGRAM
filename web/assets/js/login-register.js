@@ -66,28 +66,9 @@ function log_in( email, username, password){
         url: '/signin',
         data: {myData:stringData},
         success: function ($response) {
-            $response = JSON.parse($response);
             console.log($response);
-            /*try{
-                user_logged=JSON.parse($response);
-            }catch(e){
-                status=$response;
-
-            }
-            status=$response;
-            if($response[0]=='{'){
-               // console.log('hola tete '+status);
-                status=10;
-                status_modal(''+status+'');
-                $('#login_home').hide();
-                $('#close_modal').click();
-
-                $('.main_profile').css('display','block');
-                $('#img_profile').attr('src',user_logged.img_path);
-                //Forzamos k la primera letra sea mayuscula
-                user_logged.username = user_logged.username.charAt(0).toUpperCase()+user_logged.username.slice(1);
-                $('h3').html(user_logged.username);
-            }*/
+            $response = JSON.parse($response);
+            user_logged = $response;
             status = $response.status;
             status_modal(''+status+'');
             shakeModal();
@@ -95,6 +76,7 @@ function log_in( email, username, password){
         }
     });
 }
+
 $('#login_submit').click(function (e){
     e.preventDefault();
     if((validaEmail($('#email').val())||validaUsername($('#email').val()))&&validatePassword($('#password').val())){
@@ -299,6 +281,14 @@ function status_modal( $response){
                 timer:2000,
                 showConfirmButton: false
             });
+
+            $('#login_home').hide();
+            $('#close_modal').click();
+
+            $('.main_profile').css('display','block');
+            $('#img_profile').attr('src',user_logged.img_path);
+            $('h3').html(user_logged.username);
+
             break;
         case'11':
             $('.error').addClass('alert alert-danger').html("Email o contrasena incorrecta");

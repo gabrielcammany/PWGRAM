@@ -1,5 +1,8 @@
 <?php
-ini_set('display_errors',1);
+ini_set('display_errors',On);
+/*error_reporting(-1);
+ini_set('display_errors', 'On');
+set_error_handler("var_dump");*/
 require_once  __DIR__.'/../vendor/autoload.php';
 $app=require __DIR__.'/../app/app.php';
 $app['debug']=true;

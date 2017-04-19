@@ -75,6 +75,8 @@ class SignUp
                         $stmt->bindParam(4, $username, \PDO::PARAM_STR);
                         $stmt->bindParam(5, $img_path, \PDO::PARAM_STR);
                         $stmt->execute();
+
+
                         $this->status = 1;
 
                     }else{
