@@ -23,6 +23,18 @@ class HelloController{
 
         return $app['home']('Samuel');
     }
+    public function indexSamu(Application $app,Request $request){
+        $content=$app['twig']->render('home_samu.twig');
+
+        return $content;
+    }
+    public function indexManu(Application $app,Request $request){
+
+        $content=$app['twig']->render('home_manu.twig');
+
+        return $content;
+    }
+
     public function addAction(Application $app,$num1,$num2){
         return "the result is: ".$app['calc']->add($num1,$num2);
     }

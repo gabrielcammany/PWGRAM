@@ -74,7 +74,7 @@ class SignIn
             $subject = "Registro en PwGram";
             $message = "Esto funciona?";*/
             //$result["mail"] = mail($to,$subject,$message);
-            $this->sendEmail();
+            //$this->sendEmail();
         }
         $result["status"] = $this->status;
         return json_encode($result);
@@ -174,32 +174,33 @@ class SignIn
     }
 
     public function sendEmail(){
-//Create a new PHPMailer instance
-        $mail = new \PHPMailer();
-        $mail->isSendmail();
+                //Create a new PHPMailer instance
+                $mail = new PHPMailer();
+                $mail->isSendmail();
 
-        $mail->From = "from@yourdomain.com";
-        $mail->FromName = "Full Name";
+                $mail->From = "from@yourdomain.com";
+                $mail->FromName = "Full Name";
 
-//To address and name
-        $mail->addAddress("lenam96mmg@gmail.com", "Recepient Name");
-       // $mail->addAddress("recepient1@example.com"); //Recipient name is optional
+        //To address and name
+                $mail->addAddress("lenam96mmg@gmail.com", "Recepient Name");
+               // $mail->addAddress("recepient1@example.com"); //Recipient name is optional
 
-//Address to which recipient will reply
-        $mail->addReplyTo("reply@yourdomain.com", "Reply");
+        //Address to which recipient will reply
+                $mail->addReplyTo("reply@yourdomain.com", "Reply");
 
-//CC and BCC
-       /* $mail->addCC("cc@example.com");
-        $mail->addBCC("bcc@example.com");
-*/
+        //CC and BCC
+               /* $mail->addCC("cc@example.com");
+                $mail->addBCC("bcc@example.com");
+                */
+    }
 //Send HTML or Plain Text email
-        $mail->isHTML(true);
+       /* $mail->isHTML(true);
 
         $mail->Subject = "Subject Text";
         $mail->Body = "<i>Mail body in HTML</i>";
         $mail->AltBody = "This is the plain text version of the email content";
-        /*// Set PHPMailer to use the sendmail transport
-        $mail->isSendmail();
+        // Set PHPMailer to use the sendmail transport
+       /* $mail->isSendmail();
 //Set who the message is to be sent from
         $mail->setFrom('pwgram@grup4.com', 'PwGram');
 //Set an alternative reply-to address
@@ -216,11 +217,11 @@ class SignIn
      //Attach an image file
         // $mail->addAttachment('images/phpmailer_mini.png');*/
      //send the message, check for errors
-        if (!$mail->send()) {
+       /* if (!$mail->send()) {
             echo "Mailer Error: " . $mail->ErrorInfo;
         } else {
             echo "Message sent!";
         }
-    }
+    }*/
 }
 

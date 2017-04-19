@@ -11,6 +11,8 @@ $app->get('/hello/{name}',function($name) use ($app){
     ));
 });*/
 $app->get('','PwGram\\Controller\\HelloController::indexAction');
+$app->get('/samu','PwGram\\Controller\\HelloController::indexAction');
+$app->get('/manel','PwGram\\Controller\\HelloController::indexAction');
 $app->get('add/{num1}/{num2}','PwGram\\Controller\\HelloController::addAction');
 $app->post('/signup','PwGram\\Controller\\RegistrationController::registrationController');
 $app->post('/signin','PwGram\\Controller\\LoginController::loginController');
