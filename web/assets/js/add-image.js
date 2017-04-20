@@ -3,18 +3,23 @@
  */
 $('#addImage').click(function (e) {
    e.preventDefault();
-   console.log($('#add_image').val());
+  /* console.log($('#add_image').attr('src'));
    console.log($('#titleImage').val());
-   console.log($('#private').val());
-   console.log($('#public').val());
+   console.log($('#private').is(":checked"));
+   console.log($('#public').is(":checked"));*/
    var object={};
-   object.image=$('#add_image').val();
+   object.image=$('#add_image').attr('src');
+   object.title=$('#titleImage').val();
+   object.private = $('#private').is(":checked");
+   object.public = $('#public').is(":checked");
+    var stringData = JSON.stringify(object);
 
     $.ajax({
         type: 'POST',
-        url: '/upload',
-        data: {myData:$('#add_image').attr('src'),$('#titleImage').val(),},
+        url: '/uploadNewImage',
+        data: {myData:stringData},
         success: function ($response) {
+            //$response = JSON.parse($response);
             console.log('**'+$response);
         }
     });
@@ -45,3 +50,6 @@ function readURL(input) {
 
     }
 }
+$("#btnSelectImage").change(function(){
+    readURL(this);
+});

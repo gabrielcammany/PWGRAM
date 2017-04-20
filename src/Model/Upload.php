@@ -40,4 +40,19 @@ class upload
 
         return $output_file;
     }
+
+    public function addNewImage(){
+        $success = array();
+
+        if(!empty($_POST['myData'])){
+           //echo $_POST['myData'];
+            $data = json_decode($_POST['myData']);
+            echo $data;
+            /*$img = $data["image"];
+            $title = $data.["title"];
+            $private = $data["private"];
+            $public = $data["public"];*/
+        }
+        return 1;
+    }
 }
