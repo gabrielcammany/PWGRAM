@@ -1,107 +1,28 @@
-/*
- *
- * login-register modal
- * Autor: Creative Tim
- * Web-autor: creative.tim
- * Web script: http://creative-tim.com
- * 
+/**
+ * Created by Xps_Sam on 19/04/2017.
  */
 
-var status =0;
-
-var img_path=0;
-var user_logged= new Object();
-
-$(function () {
-    $('#loginModal').modal('hide');
-});
-function showRegisterForm(){
-    $('.loginBox').fadeOut('fast',function(){
-        $('.registerBox').fadeIn('fast');
-        $('.login-footer').fadeOut('fast',function(){
-            $('.register-footer').fadeIn('fast');
-        });
-        $('.modal-title').html('Register with');
-    }); 
-    $('.error').removeClass('alert alert-danger').html('');
-       
-}
-function showLoginForm(){
-    $('#loginModal .registerBox').fadeOut('fast',function(){
-        $('.loginBox').fadeIn('fast');
-        $('.register-footer').fadeOut('fast',function(){
-            $('.login-footer').fadeIn('fast');    
-        });
-        
-        $('.modal-title').html('Login with');
-    });       
-     $('.error').removeClass('alert alert-danger').html(''); 
-}
-
-function openLoginModal(){
-    showLoginForm();
-    setTimeout(function(){
-        $('#loginModal').modal('show');    
-    }, 230);
-    
-}
-function openRegisterModal(){
-    showRegisterForm();
-    setTimeout(function(){
-        $('#loginModal').modal('show');    
-    }, 230);
-    
-}
-function log_in( email, username, password){
-    var reg = {};
-    reg.email = email;
-    reg.username = username;
-    reg.pass = password;
-    var stringData = JSON.stringify(reg)
-    console.log(email);
-    console.log(username);
-    console.log(password);
-    $.ajax({
-        type: 'post',
-        url: '/signin',
-        data: {myData:stringData},
-        success: function ($response) {
-            console.log($response);
-            $response = JSON.parse($response);
-            user_logged = $response;
-            status = $response.status;
-            status_modal(''+status+'');
-            shakeModal();
-            return 10;
-        }
-    });
-}
-
-$('#login_submit').click(function (e){
-    e.preventDefault();
-    if((validaEmail($('#email').val())||validaUsername($('#email').val()))&&validatePassword($('#password').val())){
-        if(validaEmail($('#email').val())){
-            log_in($('#email').val(),' ',$('#password').val());
-        }else{
-            log_in(' ',$('#email').val(),$('#password').val());
-        }
-
-    }else{
-        status_modal(''+status+'');
-        shakeModal();
-    }
+var user_info;
+$(function() {
+    user_info = JSON.parse(localStorage.getItem('user'));
+    $('#perfil_reg').attr('src','../'+user_info.img_path);
+    $('#email_reg').attr('value',user_info.email);
+    $('#username').attr('value',user_info.username);
+    $('#date').attr('value',user_info.birthdate);
+    $('#password_reg').attr('value',user_info.password);
+    $('#password_confirmation').attr('value',user_info.password);
 });
 
-$('#registerUser').click(function(e){
+$('#update_info').click(function (e) {
     e.preventDefault();
+
     if(validaUsername($('#username').val())&&validaEmail($('#email_reg').val())&&validateDate($('#date').val())&&validatePasswordRegistration($('#password_reg').val(),$('#password_confirmation').val())){
-
+        console.log('@@ ');
         var reg = {};
         reg.email = $('#email_reg').val();
         reg.pass = $('#password_reg').val();
         reg.date = $('#date').val();
         reg.confirm_pass = $('#password_confirmation').val();
-        $('#password').append('<h3>hola tete</h3>')
         reg.username = $('#username').val();
         if(img_path)reg.img = 1;
         if(!img_path)reg.img = 0;
@@ -110,8 +31,8 @@ $('#registerUser').click(function(e){
         //console.log("LLEGOO ANTES AJAX");
         $.ajax({
             type: 'post',
-            url: '/signup',
-            data: {myData:stringData},
+            url: '/update',
+            data: {myData:stringData,oldUser:user_info.username},
             success: function ($response) {
                 //Determinar resposta server
                 status_modal($response);
@@ -123,29 +44,11 @@ $('#registerUser').click(function(e){
         status_modal(''+status+'');
         shakeModalRegistration();
     }
-
 });
 
-function shakeModal(){
-    $('#loginModal .modal-dialog').addClass('shake');
-             setTimeout( function(){ 
-                $('#loginModal .modal-dialog').removeClass('shake'); 
-    }, 1000 ); 
-}
-function shakeModalRegistration(){
-    $('#loginModal .modal-dialog').addClass('shake');
-    //$('.error').addClass('alert alert-danger').html("Invalid information combination");
-    setTimeout( function(){
-        $('#loginModal .modal-dialog').removeClass('shake');
-    }, 1000 );
-}
-
-$('#login_home').click(function (e) {
-    e.preventDefault();
-    openLoginModal();
-});
 
 function validaEmail(v1){
+    console.log('## '+v1);
     var usernameRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     if(usernameRegex.test(v1)){
         return true;
@@ -158,14 +61,15 @@ function validaEmail(v1){
 
 function validaUsername(v1){
     var usernameRegex = /^[a-zA-Z0-9]+([-_\.][a-zA-Z0-9]+)*[a-zA-Z0-9]$/;
-    if(!validaEmail(v1)) {
+    //if(!validaEmail(v1)) {
+
         if (usernameRegex.test(v1) && v1.length <= 20) {
             return true;
         } else {
             status = 4;
             return false;
         }
-    }
+    //}
 
 }
 function validatePassword(v1){
@@ -199,7 +103,6 @@ function validateDate(dateString){
     if(regEx.test(dateString) && array_date[0] <= year && array_date[1] <= 12 && array_date[2] <= daysInMonth(array_date[1],array_date[0])){
         return true;
     }else{
-
         status=5;
         return false;
     }
@@ -239,9 +142,10 @@ function validatePasswordRegistration($v1,$v2){
     return true;
 }
 /*
-    Funcio que ens permetra tenir un codi d'errors igual per el client com per el servidor.
+ Funcio que ens permetra tenir un codi d'errors igual per el client com per el servidor.
  */
 function status_modal( $response){
+    console.log('ERROR--> '+$response);
     switch($response){
         case '1':
             swal({
@@ -301,8 +205,8 @@ function status_modal( $response){
 }
 
 /*
-    Funció encarregada de llegir la url introduida per l'usuari i carregar la foto de perfil seleccionada
-*/
+ Funció encarregada de llegir la url introduida per l'usuari i carregar la foto de perfil seleccionada
+ */
 function readURL(input) {
 
     if (input.files && input.files[0]) {
@@ -312,8 +216,8 @@ function readURL(input) {
         reader.onload = function (e) {
             $('#perfil_reg').attr('src', e.target.result);
             /*
-            Enviamos la imagen desde el cliente al servidor con un nombre provisional y solo cambiaremos el nombre
-            al registrar al usuario.
+             Enviamos la imagen desde el cliente al servidor con un nombre provisional y solo cambiaremos el nombre
+             al registrar al usuario.
              */
             $.ajax({
                 type: 'POST',
@@ -328,12 +232,10 @@ function readURL(input) {
     }
 }
 /*
-Funció que espera a que el usuari realitzi algun canvi en el input per poder cridar a la funció encarregada
-de realitzar el canvi de la imatge de defecte per la seleccionada.
+ Funció que espera a que el usuari realitzi algun canvi en el input per poder cridar a la funció encarregada
+ de realitzar el canvi de la imatge de defecte per la seleccionada.
  */
 $("#btnSelectImage").change(function(){
     readURL(this);
     img_path=1;
 });
-
-
