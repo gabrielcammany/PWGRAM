@@ -55,3 +55,9 @@ $("#btnSelectImage").change(function(){
     readURL(this);
     img_path=1;
 });
+
+
+
+$('.image_rounded').on('over',function(){
+
+});
