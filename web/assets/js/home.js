@@ -1,11 +1,7 @@
 /**
  * Created by Xps_Sam on 17/04/2017.
  */
-$('#edit_profile').on('click',function (e) {
-    e.preventDefault();
-    openEditModal();
 
-});
 
 function showEditForm(){
     $('#edit_modal .editBox').fadeOut('fast',function(){
