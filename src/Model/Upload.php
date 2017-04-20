@@ -8,6 +8,7 @@
 
 namespace PwGram\Model;
 
+use PDO;
 
 class upload
 {
@@ -43,16 +44,57 @@ class upload
 
     public function addNewImage(){
         $success = array();
+        if(isset($_POST['myData'])){
+            $data = json_decode($_POST['myData'],true);
+            $img = $data['image'];
+            $title = $data['title'];
+            $private = $data['private'];
+            $public = $data['public'];
 
-        if(!empty($_POST['myData'])){
-           //echo $_POST['myData'];
-            $data = json_decode($_POST['myData']);
-            echo $data;
-            /*$img = $data["image"];
-            $title = $data.["title"];
-            $private = $data["private"];
-            $public = $data["public"];*/
+            if($private){
+                $tinyint = 1;
+            }else{
+                $tinyint = 0;
+            }
+
+            if($this->validateImage($img) && $this->validateTitle($title)) {
+                $img = $this->base64_to_jpeg($img, 'preview.jpg');
+                $img_path = 'assets/img/uploads/user_' . $title . '_' . '.jpg';
+                rename('preview.jpg', 'assets/img/uploads/preview.jpg');
+                rename('assets/img/uploads/preview.jpg', $img_path);
+
+                //date_default_timezone_set('Europe/Spain');
+                $date = date('Y/m/d H:i:s');
+
+                $db = new PDO('mysql:host=localhost;dbname=pwgram', "homestead", "secret");
+                $stmt = $db->prepare('INSERT INTO image (user_id,title,img_path,visits,private,created_at) VALUES (1,?,?,0,?,?)');
+                $stmt->bindParam(1, $title, \PDO::PARAM_STR);
+                $stmt->bindParam(2, $img_path, \PDO::PARAM_STR);
+                $stmt->bindParam(3, $tinyint, \PDO::PARAM_STR);
+                $stmt->bindParam(4, $date, \PDO::PARAM_STR);
+                $error = $stmt->execute();
+                $this->status = 3;
+
+            }
         }
-        return 1;
+        return $this->status;
+    }
+
+    public function validateTitle($v1){
+        if(!empty($v1)){
+            return true;
+        }else{
+            $this->status = 1;
+            return false;
+        }
+    }
+
+    public function validateImage($v1){
+        if(strcmp($v1,"../assets/img/default/default_user.png") == 0){
+            $this->status = 2;
+            return false;
+        }else{
+            return true;
+        }
     }
 }
