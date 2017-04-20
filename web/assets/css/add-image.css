@@ -1,0 +1,31 @@
+
+#formAddImage{
+    align-content: center;
+    margin: auto;
+    vertical-align: middle;
+    border-color: #00b0ff;
+}
+.nav-align-center{
+    margin: 20px;
+}
+
+#imageSelector{
+    align-content: center;
+    vertical-align: middle;
+    width: 400px;
+    height: 300px;
+}
+
+
+
+img{
+    width: auto;
+    height: auto;
+    max-height: 300px;
+    max-width: 400px;
+    display: block;
+}
+
+form{
+    align-content: center;
+}

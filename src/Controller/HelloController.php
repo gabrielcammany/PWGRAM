@@ -40,7 +40,7 @@ class HelloController{
     }
     public function indexManu(Application $app,Request $request){
         $name=$request->query->get('name');
-        $content=$app['twig']->render('home_samu.twig', array(
+        $content=$app['twig']->render('home_manu.twig', array(
             'user'=> $name,
             'app' => [
                 'name'=>$app['app.name']
