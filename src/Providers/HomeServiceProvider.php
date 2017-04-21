@@ -14,12 +14,10 @@ use Pimple\ServiceProviderInterface;
 class HomeServiceProvider implements ServiceProviderInterface
 {
     public function register(Container $app){
-        $app['home']= $app->protect(function ($name) use ($app){
-            $default =  $app['hello.default_name'] ? $app['hello.default_name']:'';
-            $name = $name ?: $default;
+        $app['home']= $app->protect(function () use ($app){
+
 
             return $app['twig']->render('home.twig',array(
-                'user' => $name,
                 'app' => $app['app.name']
 
             ));

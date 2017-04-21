@@ -101,7 +101,7 @@ $('#registerUser').click(function(e){
         reg.pass = $('#password_reg').val();
         reg.date = $('#date').val();
         reg.confirm_pass = $('#password_confirmation').val();
-        $('#password').append('<h3>hola tete</h3>')
+       // $('#password').append('<h3>hola tete</h3>')
         reg.username = $('#username').val();
         if(img_path)reg.img = 1;
         if(!img_path)reg.img = 0;

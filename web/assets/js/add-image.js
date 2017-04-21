@@ -7,23 +7,26 @@ $('#addImage').click(function (e) {
    console.log($('#titleImage').val());
    console.log($('#private').is(":checked"));
    console.log($('#public').is(":checked"));*/
-   var object={};
-   object.image=$('#add_image').attr('src');
-   object.title=$('#titleImage').val();
-   object.private = $('#private').is(":checked");
-   object.public = $('#public').is(":checked");
-    var stringData = JSON.stringify(object);
+  if(validateImage($('#add_image').attr('src'))&&validateTitle($('#titleImage').val())) {
+      var object = {};
+      object.image = $('#add_image').attr('src');
+      object.title = $('#titleImage').val();
+      object.private = $('#private').is(":checked");
+      object.public = $('#public').is(":checked");
+      var stringData = JSON.stringify(object);
 
-    $.ajax({
-        type: 'POST',
-        url: '/uploadNewImage',
-        data: {myData:stringData},
-        success: function ($response) {
-            //$response = JSON.parse($response);
-            console.log('**'+$response);
-        }
-    });
+      $.ajax({
+          type: 'post',
+          url: '/uploadNewImage',
+          data: {myData: stringData},
+          success: function ($response) {
+              //$response = JSON.parse($response);
+              console.log('**' + $response);
+              status_modal($response);
 
+          }
+      });
+  }
 });
 
 function readURL(input) {
@@ -53,3 +56,50 @@ function readURL(input) {
 $("#btnSelectImage").change(function(){
     readURL(this);
 });
+
+function validateTitle(v1) {
+    if(!v1){
+        $('.error').addClass('alert alert-danger').html("Titulo vacio!");
+        return false;
+    }else{
+        return true;
+    }
+}
+
+function validateImage(v1) {
+    if(v1.localeCompare("../assets/img/default/default_user.png") == 0){
+        $('.error').addClass('alert alert-danger').html("Selecciona una imagen");
+
+        return false;
+    }else{
+        return true;
+    }
+}
+
+function status_modal( $response){
+    switch($response){
+        case '1':
+            $('.error').addClass('alert alert-danger').html("Titulo vacio!");
+            break;
+        case '2':
+            $('.error').addClass('alert alert-danger').html("Selecciona una imagen!");
+            break;
+        case '3':
+            console.log("LLEGO AL 3");
+            swal({
+                title: "Imagen Añadida",
+                type: "success",
+                timer:2000,
+                showConfirmButton: true
+            });
+            /*$.ajax({
+                type: 'GET',
+                url: '/manel',
+                data: ""
+            });*/
+            window.location.href = "/";
+            break;
+        default:
+            $('.error').addClass('alert alert-danger').html("Error desconocido");
+    }
+}

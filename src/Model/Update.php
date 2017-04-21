@@ -84,7 +84,7 @@ class Update
         return $this->status;
     }
 
-    function validation_user($db,$v1){
+    public function validation_user($db,$v1){
         $stmt = $db->prepare('SELECT * FROM user WHERE username=?');
         $stmt->bindParam(1,$v1,\PDO::PARAM_STR);
         $stmt->execute();

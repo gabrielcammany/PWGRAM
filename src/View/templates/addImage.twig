@@ -57,8 +57,9 @@
                                     <div id="titulo-newImage">
                                         <h1>Add new image</h1>
                                     </div>
+                                    <div class="error"></div>
                                     <section id="formAddImage">
-                                        <form enctype="multipart/form-data" method="post">
+                                        <form enctype="multipart/form-data" method="post" id="formNewImage">
 
                                             <section id="imageSelector"  class="form-group" >
                                                 <img id="add_image" name="newImage" src="../assets/img/default/default_user.png" class="img-container img-responsive img-raised">
@@ -66,8 +67,8 @@
                                             </section>
 
                                             <input id="titleImage" class="form-control" type="text" placeholder="Title" name="title-image">
-                                            <input id="public" type="radio" name="type" value="public" checked> Public<br>
-                                            <input id="private" type="radio" name="type" value="private"> Private<br>
+                                            <input id="public" type="radio" name="public" value="public" checked> Public<br>
+                                            <input id="private" type="radio" name="private" value="private"> Private<br>
                                             <input class="btn btn-default btn-register" type="submit" value="Upload Image" name="newImage" id="addImage">
 
 
