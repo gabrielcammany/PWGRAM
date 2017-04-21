@@ -44,12 +44,15 @@ class upload
 
     public function addNewImage(){
         $success = array();
+       // echo ($_POST['myData']);
         if(isset($_POST['myData'])){
             $data = json_decode($_POST['myData'],true);
             $img = $data['image'];
             $title = $data['title'];
             $private = $data['private'];
             $public = $data['public'];
+            $username = $data['username'];
+            $id = $data['userID'];
 
             if($private){
                 $tinyint = 1;
@@ -59,7 +62,7 @@ class upload
 
             if($this->validateImage($img) && $this->validateTitle($title)) {
                 $img = $this->base64_to_jpeg($img, 'preview.jpg');
-                $img_path = 'assets/img/uploads/user_' . $title . '_' . '.jpg';
+                $img_path = 'assets/img/uploads/user_' . $title . '_' .$username.'_'.'.jpg';
                 rename('preview.jpg', 'assets/img/uploads/preview.jpg');
                 rename('assets/img/uploads/preview.jpg', $img_path);
 
@@ -67,11 +70,12 @@ class upload
                 $date = date('Y/m/d H:i:s');
 
                 $db = new PDO('mysql:host=localhost;dbname=pwgram', "homestead", "secret");
-                $stmt = $db->prepare('INSERT INTO image (user_id,title,img_path,visits,private,created_at) VALUES (1,?,?,0,?,?)');
-                $stmt->bindParam(1, $title, \PDO::PARAM_STR);
-                $stmt->bindParam(2, $img_path, \PDO::PARAM_STR);
-                $stmt->bindParam(3, $tinyint, \PDO::PARAM_STR);
-                $stmt->bindParam(4, $date, \PDO::PARAM_STR);
+                $stmt = $db->prepare('INSERT INTO image (user_id,title,img_path,visits,private,created_at) VALUES (?,?,?,0,?,?)');
+                $stmt->bindParam(1, $id, \PDO::PARAM_STR);
+                $stmt->bindParam(2, $title, \PDO::PARAM_STR);
+                $stmt->bindParam(3, $img_path, \PDO::PARAM_STR);
+                $stmt->bindParam(4, $tinyint, \PDO::PARAM_STR);
+                $stmt->bindParam(5, $date, \PDO::PARAM_STR);
                 $error = $stmt->execute();
                 $this->status = 3;
 

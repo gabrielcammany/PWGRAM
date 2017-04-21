@@ -62,7 +62,7 @@ class SignIn
             if (sizeof($result['id']) == 0) {
                 $this->status = 11;
             } else {
-                localStorage.getItem();
+                //localStorage.getItem();
                 $stmt = $db->prepare('UPDATE user SET active= WHERE email=? OR username=?');
                 $stmt->bindParam(1, $email, \PDO::PARAM_STR);
                 $stmt->bindParam(2, $username, \PDO::PARAM_STR);

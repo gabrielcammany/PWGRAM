@@ -5,10 +5,12 @@
 var user_info;
 $(function() {
     user_info = JSON.parse(localStorage.getItem('user'));
+   // console.log(user_info);
     $('#perfil_reg').attr('src','../'+user_info.img_path);
     $('#email_reg').attr('value',user_info.email);
     $('#username').attr('value',user_info.username);
-    $('#date').attr('value',user_info.birthdate);
+   // console.log(user_info.birthdate.replace(/-/g , "/"));
+    $('#date').attr('value',user_info.birthdate.replace(/-/g , "/"));
     $('#password_reg').attr('value',user_info.password);
     $('#password_confirmation').attr('value',user_info.password);
 });
