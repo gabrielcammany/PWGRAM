@@ -97,7 +97,7 @@ function status_modal( $response){
                 url: '/manel',
                 data: ""
             });*/
-            window.location.href = "/manel";
+            window.location.href = "/";
             break;
         default:
             $('.error').addClass('alert alert-danger').html("Error desconocido");
