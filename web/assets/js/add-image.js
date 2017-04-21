@@ -1,6 +1,12 @@
 /**
  * Created by Uni on 19/04/2017.
  */
+var user_info;
+
+$(function () {
+    user_info = JSON.parse(localStorage.getItem('user'));
+    console.log(user_info["username"]);
+});
 $('#addImage').click(function (e) {
    e.preventDefault();
   /* console.log($('#add_image').attr('src'));
@@ -13,6 +19,8 @@ $('#addImage').click(function (e) {
       object.title = $('#titleImage').val();
       object.private = $('#private').is(":checked");
       object.public = $('#public').is(":checked");
+      object.username = user_info["username"];
+      object.userID = user_info["id"];
       var stringData = JSON.stringify(object);
 
       $.ajax({
