@@ -12,7 +12,7 @@ namespace PwGram\Controller;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use PwGram\Model\upload;
+use PwGram\Model\Upload;
 
 class ImageController
 {
@@ -32,7 +32,7 @@ class ImageController
     }
 
     public function addNewImage(Request $request){
-        $upload = new upload($request);
+        $upload = new Upload($request);
         return $upload->addNewImage();
     }
 }

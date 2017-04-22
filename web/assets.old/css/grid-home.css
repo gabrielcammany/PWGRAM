@@ -2,12 +2,13 @@ body{
     /*height: 10000px;*/
     font-family: "Lato";
     background-color: #D2D2D2;
-    padding:20px 30px;
+    padding:10px 10px;
     margin: 0px;
 }
 
 .profile-content{
     margin-top:120px;
+    padding-top: 50px;
 }
 ul.rig {
     list-style: none;

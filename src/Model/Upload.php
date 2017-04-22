@@ -10,7 +10,7 @@ namespace PwGram\Model;
 
 use PDO;
 
-class upload
+class Upload
 {
     private $request;
     private $status=0;
@@ -69,7 +69,8 @@ class upload
                 //date_default_timezone_set('Europe/Spain');
                 $date = date('Y/m/d H:i:s');
 
-                $db = new PDO('mysql:host=localhost;dbname=pwgram', "homestead", "secret");
+                $db = new PDO('mysql:host=localhost;dbname=pwgram', "root", "gabriel");
+                //$db = new PDO('mysql:host=localhost;dbname=pwgram', "homestead", "secret");
                 $stmt = $db->prepare('INSERT INTO image (user_id,title,img_path,visits,private,created_at) VALUES (?,?,?,0,?,?)');
                 $stmt->bindParam(1, $id, \PDO::PARAM_STR);
                 $stmt->bindParam(2, $title, \PDO::PARAM_STR);

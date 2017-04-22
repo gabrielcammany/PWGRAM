@@ -1,13 +1,3 @@
-/*
- *
- * login-register modal
- * Autor: Creative Tim
- * Web-autor: creative.tim
- * Web script: http://creative-tim.com
- * 
- */
- 
-/*  Shake animation  */
 
 @charset "UTF-8";
 
@@ -75,6 +65,7 @@
 }
 
 .login .modal-dialog{
+    margin-top: 100px;
     width: 350px;
 }
 .login .modal-footer{

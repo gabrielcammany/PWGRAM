@@ -62,6 +62,25 @@ class HelloController{
         return $response;
     }
 
+    /*
+     * Pagina de confirmacio del email
+     */
+    public function confirm(Application $app,Request $request, $token){
+
+        $content=$app['twig']->render('confirmation.twig', array(
+            'app' => [
+                'name'=>$app['app.name']
+            ]
+        ));
+        echo $token;
+        $response=new Response();
+        $response->setStatusCode($response::HTTP_OK);
+        $response->headers->set('Content-Type','text/html');
+        $response->setContent($content);
+
+        return $response;
+    }
+
     public function addAction(Application $app,$num1,$num2){
         return "the result is: ".$app['calc']->add($num1,$num2);
     }
