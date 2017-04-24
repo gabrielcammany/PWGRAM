@@ -53,7 +53,8 @@ class SignUp
                 }
             }
 
-            $db = new \PDO('mysql:host=localhost;dbname=pwgram', "root", "gabriel");
+            //$db = new \PDO('mysql:host=localhost;dbname=pwgram', "root", "gabriel");
+            $db = new \PDO('mysql:host=localhost;dbname=pwgram', "homestead", "secret");
             $vResult = $this->validation_user($db,$username);
 
             if(!$vResult){
