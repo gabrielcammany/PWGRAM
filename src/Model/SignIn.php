@@ -49,17 +49,15 @@ class SignIn
         /*
          * Nos aseguramos de realizar el inicio de sesion con el email o username
          */
-        if (($this->validaEmail($email) || $this->validaUsername($username)) && $this->validatePassword($password)) {
-            $stmt = $db->prepare('SELECT * FROM user WHERE (email=? OR username=?) AND password = ?');
+        if (($this->validaEmail($email) || $this->validaUsername($username))) {
+            $stmt = $db->prepare('SELECT * FROM user WHERE (email=? OR username=?)');
             $stmt->bindParam(1, $email, \PDO::PARAM_STR);
             $stmt->bindParam(2, $username, \PDO::PARAM_STR);
-            $stmt->bindParam(3, $password, \PDO::PARAM_STR);
             $stmt->execute();
             $result = $stmt->fetch(\PDO::FETCH_ASSOC);
-
-            if (sizeof($result['id']) == 0) {
+            if (sizeof($result['id']) == 0 || !password_verify( $password , $result['password'] )) {
                 $this->status = 11;
-            } else {
+            } else{
                 //localStorage.getItem();
                 $stmt = $db->prepare('UPDATE user SET active= WHERE email=? OR username=?');
                 $stmt->bindParam(1, $email, \PDO::PARAM_STR);
@@ -71,52 +69,6 @@ class SignIn
         $result["status"] = $this->status;
         return json_encode($result);
     }
-
-
-/*if(($email!=' ')==1){
-    if($this->validaEmail($email) && $this->validatePassword($password)){
-        $stmt = $db->prepare('SELECT * FROM user WHERE email=? AND password = ?');
-        $stmt->bindParam(1,$email,\PDO::PARAM_STR);
-        $stmt->bindParam(2,$password,\PDO::PARAM_STR);
-        $stmt->execute();
-        $result = $stmt->fetch(\PDO::FETCH_ASSOC);
-        if(sizeof($result['id'])== 0) {
-            return 11;//No se encuentra el respectivo email o contraseña
-        }else{
-            /*
-             * Actualizamos el estado del usuario
-             *
-            $stmt = $db->prepare('UPDATE user SET active="1" WHERE email=?');
-            $stmt->bindParam(1,$email,\PDO::PARAM_STR);
-            $stmt->execute();
-            return $result;
-        }
-    }else{
-        return 12;
-    }
-}else{
-/*
-* PETA LA VALIDACION DEL NOMBRE DE USUARIO PERO NI IDEA DE PK!
-*
-    //if(/*$this->validaUsername($username)==true&&*$this->validatePassword($password)==true){
-
-        $stmt = $db->prepare('SELECT * FROM user WHERE username=? AND password = ?');
-        $stmt->bindParam(1,$username,\PDO::PARAM_STR);
-        $stmt->bindParam(2,$password,\PDO::PARAM_STR);
-        $stmt->execute();
-        $result = $stmt->fetch(\PDO::FETCH_ASSOC);
-        if(sizeof($result['id'])== 0) {
-            return 12;//No se encuentra el respectivo username o contraseña
-        }else{
-            $stmt = $db->prepare('UPDATE user SET active="1" WHERE username=?');
-            $stmt->bindParam(1,$username,\PDO::PARAM_STR);
-            $stmt->execute();
-            return json_encode($result);
-        }
-  //  }else{
-   //      return 13;
-  //  }
-}*/
 
     public function validaEmail($v1){
         if(filter_var($v1,FILTER_VALIDATE_EMAIL)){

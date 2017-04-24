@@ -35,7 +35,7 @@ class HelloController{
     }
     public function indexSamu(Application $app,Request $request){
 
-        $content=$app['twig']->render('home_samu.twig', array(
+        $content=$app['twig']->render('home.twig', array(
             'app' => [
                 'name'=>$app['app.name']
             ]
@@ -49,7 +49,7 @@ class HelloController{
     }
     public function indexManu(Application $app,Request $request){
 
-        $content=$app['twig']->render('home_manu.twig', array(
+        $content=$app['twig']->render('home.twig', array(
             'app' => [
                 'name'=>$app['app.name']
             ]
@@ -62,24 +62,6 @@ class HelloController{
         return $response;
     }
 
-    /*
-     * Pagina de confirmacio del email
-     */
-    public function confirm(Application $app,Request $request, $token){
-
-        $content=$app['twig']->render('confirmation.twig', array(
-            'app' => [
-                'name'=>$app['app.name']
-            ]
-        ));
-        echo $token;
-        $response=new Response();
-        $response->setStatusCode($response::HTTP_OK);
-        $response->headers->set('Content-Type','text/html');
-        $response->setContent($content);
-
-        return $response;
-    }
 
     public function addAction(Application $app,$num1,$num2){
         return "the result is: ".$app['calc']->add($num1,$num2);

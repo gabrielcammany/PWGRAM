@@ -58,15 +58,12 @@ function log_in( email, username, password){
     reg.username = username;
     reg.pass = password;
     var stringData = JSON.stringify(reg)
-    console.log(email);
-    console.log(username);
-    console.log(password);
     $.ajax({
         type: 'post',
         url: '/signin',
         data: {myData:stringData},
         success: function ($response) {
-            console.log($response);
+            //console.log($response);
             $response = JSON.parse($response);
             user_logged = $response;
             status = $response.status;
@@ -105,9 +102,7 @@ $('#registerUser').click(function(e){
         reg.username = $('#username').val();
         if(img_path)reg.img = 1;
         if(!img_path)reg.img = 0;
-        //console.log('--> '+reg.img+'\n');
         var stringData = JSON.stringify(reg);
-        //console.log("LLEGOO ANTES AJAX");
         $.ajax({
             type: 'post',
             url: '/signup',
@@ -115,7 +110,7 @@ $('#registerUser').click(function(e){
             success: function ($response) {
                 //Determinar resposta server
                 status_modal($response);
-                //Evitar que es fasci shake quan es registra.
+                //Evitar que es faci shake quan es registra.
                 if($response!=1)shakeModalRegistration();
             }
         });
@@ -289,14 +284,17 @@ function status_modal( $response){
             $('#img_profile').attr('src',user_logged.img_path);
             $('h3').html(user_logged.username);
             localStorage.setItem('user', JSON.stringify(user_logged));
+            var anchor = document.getElementById('userNameDropdown');
+            anchor.innerHTML += user_logged.username;
+            $('#userDropdown').show(); //Per alguna rao si utilitzes el anchor d'abans no et fa el show correctament, aixi que s'ha de tornar a demanar
             break;
         case'11':
-            $('.error').addClass('alert alert-danger').html("Email o contrasena incorrecta");
+            $('.error').addClass('alert alert-danger').html("Email o contraseña incorrecta");
             break;
         case'12':
             $('.error').addClass('alert alert-danger').html("Username o contrasena incorrecta");
         default:
-            $('.error').addClass('alert alert-danger').html("Error desconocido");
+            $('.error').addClass('alert alert-danger').html("Error desconocido" + $response);
     }
 }
 

@@ -68,17 +68,17 @@ class SignUp
                         $valid_path = copy('assets/img/default/default_user.png',$img_path);
                     }
                     if($valid_path){
+                        $hashed_pass = password_hash($pass, PASSWORD_DEFAULT);
                         $stmt = $db->prepare('INSERT INTO user(email,password,birthdate,username,img_path,active) values(?,?,?,?,?,0)');
                         $stmt->bindParam(1, $email, \PDO::PARAM_STR);
-                        $stmt->bindParam(2, $pass, \PDO::PARAM_STR);
+                        $stmt->bindParam(2, $hashed_pass, \PDO::PARAM_STR);
                         $stmt->bindParam(3, $date, \PDO::PARAM_STR);
                         $stmt->bindParam(4, $username, \PDO::PARAM_STR);
                         $stmt->bindParam(5, $img_path, \PDO::PARAM_STR);
                         $stmt->execute();
 
-
                         $this->status = 1;
-                        $this->sendEmail();
+                        $this->sendEmail($email,$username);
 
                     }else{
                         $this->status=8;
@@ -165,18 +165,18 @@ class SignUp
         return true;
     }
 
-    public function sendEmail(){
+    public function sendEmail($email,$username){
         date_default_timezone_set('Etc/UTC');
-
+        $token = md5($email.$username."b2891fceefe96e96c97d7b7a014fe2eb");
         //Create a new PHPMailer instance
-        $mail = new PHPMailer;
+        $mail = new \PHPMailer;
         //Tell PHPMailer to use SMTP
         $mail->isSMTP();
         //Enable SMTP debugging
         // 0 = off (for production use)
         // 1 = client messages
         // 2 = client and server messages
-        $mail->SMTPDebug = 2;
+        $mail->SMTPDebug = 0;
         //Ask for HTML-friendly debug output
         $mail->Debugoutput = 'html';
         //Set the hostname of the mail server
@@ -195,23 +195,24 @@ class SignUp
         //Password to use for SMTP authentication
         $mail->Password = "mMg151296961215";
         //Set who the message is to be sent from
-        $mail->setFrom('lenam96mmg@gmail.com', 'Manel Manchon');
+        $mail->setFrom('no-reply@pwgram.com', 'Equipo de PWGram');
         //Set an alternative reply-to address
         //$mail->addReplyTo('replyto@example.com', 'First Last');
         //Set who the message is to be sent to
-        $mail->addAddress('gabriel.cammany@gmail.com', 'Gabriel Cammany');
+        $mail->addAddress($email, $username);
         //Set the subject line
-        $mail->Subject = 'PHPMailer GMail SMTP test';
+        $mail->Subject = 'Bienvenido a PwGram '.$username.'!';
         //Read an HTML message body from an external file, convert referenced images to embedded,
         //convert HTML into a basic plain-text alternative body
         //Replace the plain text body with one created manually
-        $mail->Body = "Mail contents";
+        $file = file_get_contents('assets/html/emailBody.html', true);
+        $mail->Body = str_replace("%BtnURL%","http://instagram.dev/validate/".$username."/".$token,str_replace("%UserName%",$username,$file));
+        $mail->IsHTML(true);
         //send the message, check for errors
         if (!$mail->send()) {
             echo "Mailer Error: " . $mail->ErrorInfo;
-        } else {
-            echo "Message sent!";
         }
     }
 
-}
+
+    }

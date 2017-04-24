@@ -27,3 +27,72 @@
 
 .text-header{
 }
+body{
+    margin-top: 100px;
+}
+
+#userDropdown{
+    display: none;
+}
+.dropdown:hover .dropbtn {
+    background-color: #3e8e41;
+}
+
+#navBar{
+    display: none;
+}
+
+#user_acces_icon{
+    max-width: 30px;
+    max-height: 30px;
+    margin-right: 10px;
+    margin-top: -5px;
+}
+
+#logo_navbar{
+    max-width: 40px!important;
+    max-height: 40px!important;
+    margin-right: 20px;
+    margin-top: 5px;
+}
+
+nav.navbar.navbar-inverse.navbar-fixed-top{
+    background-color: white;
+    border-color: #f4f4f4;
+}
+.navbar-inverse .navbar-collapse, .navbar-inverse .navbar-form {
+    background-color: white;
+    border-color: #f4f4f4;
+}
+.dropdown-toggle:active, .open .dropdown-toggle {
+    background:whitesmoke !important;
+    color:black !important;
+}
+#userNameDropdown:hover {
+    color: black!important;;
+}
+
+a#userNameDropdown:visited {
+    color: black!important;;
+}
+
+a.navbar-brand:visited {
+    color: black!important;;
+}
+a#inicioBtn:visited{
+    color: grey!important;;
+}
+
+a#login_home:visited{
+    color: grey!important;;
+}
+
+button.navbar-toggle{
+    background-color: black;
+}
+
+#footerA{
+    padding-bottom: 30px;
+    margin-right: 14px;
+    margin-left: 14px;
+}

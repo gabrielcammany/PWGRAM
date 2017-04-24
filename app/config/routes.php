@@ -13,10 +13,10 @@ $app->get('/hello/{name}',function($name) use ($app){
 $app->get('','PwGram\\Controller\\HelloController::indexAction');
 $app->get('/samu','PwGram\\Controller\\HelloController::indexSamu');
 $app->get('/edit_profile','PwGram\\Controller\\EditController::editProfile');
-$app->get('/confirm/{token}','PwGram\\Controller\\HelloController::confirm');
+$app->get('/validate/{username}/{token}/','PwGram\\Controller\\ConfirmController::confirmController');
 $app->get('/manel','PwGram\\Controller\\HelloController::indexManu');
 $app->get('/add_image','PwGram\\Controller\\ImageController::addImage');
-$app->get('add/{num1}/{num2}','PwGram\\Controller\\HelloController::addAction');
+$app->post('/update','PwGram\\Controller\\UpdateController::updateUser');
 $app->post('/signup','PwGram\\Controller\\RegistrationController::registrationController');
 $app->post('/signin','PwGram\\Controller\\LoginController::loginController');
 $app->post('/upload','PwGram\\Controller\\RegistrationController::uploadImage');
