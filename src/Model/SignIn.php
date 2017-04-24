@@ -45,7 +45,8 @@ class SignIn
                 $i++;
             }
         }
-        $db = new \PDO('mysql:host=localhost;dbname=pwgram', "root", "gabriel");
+        //$db = new \PDO('mysql:host=localhost;dbname=pwgram', "root", "gabriel");
+        $db = new \PDO('mysql:host=localhost;dbname=pwgram', "homestead", "secret");
         /*
          * Nos aseguramos de realizar el inicio de sesion con el email o username
          */

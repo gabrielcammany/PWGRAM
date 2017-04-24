@@ -23,7 +23,8 @@ class Confirm
 
     public function confirm($token,$username)
     {
-        $db = new \PDO('mysql:host=localhost;dbname=pwgram', "root", "gabriel");
+        //$db = new \PDO('mysql:host=localhost;dbname=pwgram', "root", "gabriel");
+        $db = new \PDO('mysql:host=localhost;dbname=pwgram', "homestead", "secret");
         $stmt = $db->prepare('SELECT * FROM user WHERE username=?');
         $stmt->bindParam(1, $username, \PDO::PARAM_STR);
         $stmt->execute();
