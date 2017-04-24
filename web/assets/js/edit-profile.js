@@ -10,7 +10,7 @@ $(function() {
     $('#email_reg').attr('value',user_info.email);
     $('#username').attr('value',user_info.username);
    // console.log(user_info.birthdate.replace(/-/g , "/"));
-    $('#date').attr('value',user_info.birthdate.replace(/-/g , "/"));
+    $('#datepicker').attr('value',user_info.birthdate.replace(/-/g , "/"));
     $('#password_reg').attr('value',user_info.password);
     $('#password_confirmation').attr('value',user_info.password);
 });
@@ -18,12 +18,12 @@ $(function() {
 $('#update_info').click(function (e) {
     e.preventDefault();
 
-    if(validaUsername($('#username').val())&&validaEmail($('#email_reg').val())&&validateDate($('#date').val())&&validatePasswordRegistration($('#password_reg').val(),$('#password_confirmation').val())){
+    if(validaUsername($('#username').val())&&validaEmail($('#email_reg').val())&&validateDate($('#datepicker').val())&&validatePasswordRegistration($('#password_reg').val(),$('#password_confirmation').val())){
         console.log('@@ ');
         var reg = {};
         reg.email = $('#email_reg').val();
         reg.pass = $('#password_reg').val();
-        reg.date = $('#date').val();
+        reg.date = $('#datepicker').val();
         reg.confirm_pass = $('#password_confirmation').val();
         reg.username = $('#username').val();
         if(img_path)reg.img = 1;

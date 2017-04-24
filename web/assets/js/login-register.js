@@ -21,7 +21,7 @@ function showRegisterForm(){
         $('.login-footer').fadeOut('fast',function(){
             $('.register-footer').fadeIn('fast');
         });
-        $('.modal-title').html('Register with');
+        $('.modal-title').html('Creación de cuenta');
     }); 
     $('.error').removeClass('alert alert-danger').html('');
        
@@ -33,7 +33,7 @@ function showLoginForm(){
             $('.login-footer').fadeIn('fast');    
         });
         
-        $('.modal-title').html('Login with');
+        $('.modal-title').html('Iniciar sesión');
     });       
      $('.error').removeClass('alert alert-danger').html(''); 
 }
@@ -91,14 +91,14 @@ $('#login_submit').click(function (e){
 
 $('#registerUser').click(function(e){
     e.preventDefault();
-    if(validaUsername($('#username').val())&&validaEmail($('#email_reg').val())&&validateDate($('#date').val())&&validatePasswordRegistration($('#password_reg').val(),$('#password_confirmation').val())){
+    if(validaUsername($('#username').val())&&validaEmail($('#email_reg').val())&&validateDate($('#datepicker').val())&&validatePasswordRegistration($('#password_reg').val(),$('#password_confirmation').val())){
 
         var reg = {};
         reg.email = $('#email_reg').val();
         reg.pass = $('#password_reg').val();
-        reg.date = $('#date').val();
+        reg.date = $('#datepicker').val();
         reg.confirm_pass = $('#password_confirmation').val();
-       // $('#password').append('<h3>hola tete</h3>')
+        // $('#password').append('<h3>hola tete</h3>')
         reg.username = $('#username').val();
         if(img_path)reg.img = 1;
         if(!img_path)reg.img = 0;

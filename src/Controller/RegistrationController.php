@@ -19,7 +19,6 @@ class RegistrationController
 {
 
     public function registrationController(Application $app, Request $request){
-        //echo "LLEGO AL CONTROLLER";
 
         $signUp = new SignUp($request);
 
@@ -27,7 +26,6 @@ class RegistrationController
    }
 
     public function uploadImage(Request $request){
-        //echo "LLEGO AL CONTROLLER";
         $upload = new Upload($request);
 
         return $upload->saveImage();

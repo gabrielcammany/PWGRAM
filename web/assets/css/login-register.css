@@ -65,7 +65,7 @@
 }
 
 .login .modal-dialog{
-    margin-top: 100px;
+    margin-top: 50px;
     width: 350px;
 }
 .login .modal-footer{
@@ -231,8 +231,15 @@
     text-align: center;
     display: inline-block;
 }
+img#perfil_reg.img-responsive.img-raised{
+    display: block;
+    margin: auto;
+    width: 100%;
+    max-width: 300px;
+    max-height: 250px;
+}
 
-#btnselectimage{
-    display: inline-block;
+#labelButtonSelect{
+    margin-top: 10px;
 }
 

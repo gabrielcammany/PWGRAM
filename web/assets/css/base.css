@@ -96,3 +96,11 @@ button.navbar-toggle{
     margin-right: 14px;
     margin-left: 14px;
 }
+#datepicker{
+    margin-bottom: 0px !important;
+
+}
+
+#password_reg{
+    margin-top: 5px;
+}

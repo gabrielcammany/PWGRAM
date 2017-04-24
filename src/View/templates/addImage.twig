@@ -30,30 +30,27 @@
                     <div class="row">
                         <div class="col-md-6 col-md-offset-3">
                             <div class="profile-tabs">
-                                <div class="nav-align-center">
-                                    <div id="titulo-newImage">
-                                        <h1>Add new image</h1>
-                                    </div>
-                                    <div class="error"></div>
-                                    <section id="formAddImage">
-                                        <form enctype="multipart/form-data" method="post" id="formNewImage">
+                                <h1 class="page-header text-header">Añadir nueva imagen
+                                </h1>
+                                <div class="error"></div>
+                                <section id="formAddImage">
+                                    <form enctype="multipart/form-data" method="post" id="formNewImage">
+                                        <div id="imageSelector" enctype="multipart/form-data" method="post" >
+                                            <img id="newImage" name="imageProfile" src="/assets/img/default/default_user.png" class="img-responsive img-raised">
+                                            <!-- <img id="perfil_reg" src="#" class="img-circle img-responsive img-raised">-->
+                                            <label class="btn btn-default btn-file btn-group-justified" id="labelButtonSelect">
+                                                Seleccionar una imagen <input type="file" style="display: none;" id="btnSelectImage">
+                                            </label>
+                                        </div>
+                                        <input id="titleImage" class="form-control" type="text" placeholder="Title" name="title-image">
+                                        <input id="public" type="radio" name="public" value="public" checked> Public<br>
+                                        <input id="private" type="radio" name="private" value="private"> Private<br>
+                                        <input class="btn btn-default btn-register" type="submit" value="Upload Image" name="newImage" id="addImage">
 
-                                            <section id="imageSelector"  class="form-group" >
-                                                <img id="add_image" name="newImage" src="../assets/img/default/default_user.png" class="img-container img-responsive img-raised">
-                                                <input type="file" name="image" class="btn btn-group-justified" id="btnSelectImage">
-                                            </section>
 
-                                            <input id="titleImage" class="form-control" type="text" placeholder="Title" name="title-image">
-                                            <input id="public" type="radio" name="public" value="public" checked> Public<br>
-                                            <input id="private" type="radio" name="private" value="private"> Private<br>
-                                            <input class="btn btn-default btn-register" type="submit" value="Upload Image" name="newImage" id="addImage">
-
-
-                                        </form>
-                                    </section>
-                                </div>
+                                    </form>
+                                </section>
                             </div>
-                            <!-- End Profile Tabs -->
                         </div>
                     </div>
 
