@@ -14,10 +14,12 @@ class SignUp
 {
     private $request;
     private $status=0;
+    private $app;
 
-    public function __construct($request)
+    public function __construct($request,$app)
     {
         $this->request = $request;
+        $this->app = $app;
         return $this;
     }
 
@@ -53,37 +55,27 @@ class SignUp
                 }
             }
 
-            //$db = new \PDO('mysql:host=localhost;dbname=pwgram', "root", "gabriel");
-            $db = new \PDO('mysql:host=localhost;dbname=pwgram', "homestead", "secret");
+            $db = new \PDO('mysql:host=localhost;dbname=pwgram', "root", "gabriel");
+            //$db = new \PDO('mysql:host=localhost;dbname=pwgram', "homestead", "secret");
             $vResult = $this->validation_user($db,$username);
 
             if(!$vResult){
 
                 if($this->validaEmail($email)&&$this->validateDate($date)&&$this->validatePasswordRegistration($pass,$confirm_pass)){
                     //if($this->uploadFile($img)) {
+                    $img_path='assets/img/tmp/'.$username.'.jpg';
+                    $this->app['session']->set('username',$username);
+                    $hashed_pass = password_hash($pass, PASSWORD_DEFAULT);
+                    $stmt = $db->prepare('INSERT INTO user(email,password,birthdate,username,img_path,active) values(?,?,?,?,?,0)');
+                    $stmt->bindParam(1, $email, \PDO::PARAM_STR);
+                    $stmt->bindParam(2, $hashed_pass, \PDO::PARAM_STR);
+                    $stmt->bindParam(3, $date, \PDO::PARAM_STR);
+                    $stmt->bindParam(4, $username, \PDO::PARAM_STR);
+                    $stmt->bindParam(5, $img_path, \PDO::PARAM_STR);
+                    $stmt->execute();
 
-                    $img_path='assets/img/uploads/user_'.$username.'.jpg';
-                    if($img==1){
-                        $valid_path = rename('assets/img/uploads/preview.jpg',$img_path);
-                    }else{
-                        $valid_path = copy('assets/img/default/default_user.png',$img_path);
-                    }
-                    if($valid_path){
-                        $hashed_pass = password_hash($pass, PASSWORD_DEFAULT);
-                        $stmt = $db->prepare('INSERT INTO user(email,password,birthdate,username,img_path,active) values(?,?,?,?,?,0)');
-                        $stmt->bindParam(1, $email, \PDO::PARAM_STR);
-                        $stmt->bindParam(2, $hashed_pass, \PDO::PARAM_STR);
-                        $stmt->bindParam(3, $date, \PDO::PARAM_STR);
-                        $stmt->bindParam(4, $username, \PDO::PARAM_STR);
-                        $stmt->bindParam(5, $img_path, \PDO::PARAM_STR);
-                        $stmt->execute();
-
-                        $this->status = 1;
-                        $this->sendEmail($email,$username);
-
-                    }else{
-                        $this->status=8;
-                    }
+                    $this->status = 1;
+                    $this->sendEmail($email,$username);
                 }
             }
             return $this->status;

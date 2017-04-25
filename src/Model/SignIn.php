@@ -14,10 +14,12 @@ class SignIn
 {
     private $request;
     private $status=0;
+    private $app;
 
-    public function __construct($request)
+    public function __construct($request,$app)
     {
         $this->request = $request;
+        $this->app = $app;
         return $this;
     }
 
@@ -45,8 +47,8 @@ class SignIn
                 $i++;
             }
         }
-        //$db = new \PDO('mysql:host=localhost;dbname=pwgram', "root", "gabriel");
-        $db = new \PDO('mysql:host=localhost;dbname=pwgram', "homestead", "secret");
+        $db = new \PDO('mysql:host=localhost;dbname=pwgram', "root", "gabriel");
+        //$db = new \PDO('mysql:host=localhost;dbname=pwgram', "homestead", "secret");
         /*
          * Nos aseguramos de realizar el inicio de sesion con el email o username
          */
@@ -60,10 +62,10 @@ class SignIn
                 $this->status = 11;
             } else{
                 //localStorage.getItem();
-                $stmt = $db->prepare('UPDATE user SET active= WHERE email=? OR username=?');
-                $stmt->bindParam(1, $email, \PDO::PARAM_STR);
-                $stmt->bindParam(2, $username, \PDO::PARAM_STR);
-                $stmt->execute();
+                $this->app['session']->set('id',$result['id']);
+                $this->app['session']->set('username',$result['username']);
+                $this->app['session']->set('posts',$result['posts']);
+
                 $this->status = 10;
             }
         }

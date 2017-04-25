@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\Response;
 class ConfirmController
 {
     public function confirmController(Application $app, Request $request, $username, $token){
-        $login = new Confirm($request);
+        $login = new Confirm($request,$app);
         $content=$app['twig']->render('confirmed.twig', array(
             'app' => [
                 'name'=>$app['app.name'],

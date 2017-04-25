@@ -4,22 +4,25 @@
 
 var user_info;
 $(function() {
-    user_info = JSON.parse(localStorage.getItem('user'));
-   // console.log(user_info);
-    $('#perfil_reg').attr('src','../'+user_info.img_path);
-    $('#email_reg').attr('value',user_info.email);
-    $('#username').attr('value',user_info.username);
-   // console.log(user_info.birthdate.replace(/-/g , "/"));
-    $('#datepicker').attr('value',user_info.birthdate.replace(/-/g , "/"));
-    $('#password_reg').attr('value',user_info.password);
-    $('#password_confirmation').attr('value',user_info.password);
+
+
+
+    /* user_info = JSON.parse(localStorage.getItem('user'));
+     // console.log(user_info);
+     $('#perfil_reg').attr('src','../'+user_info.img_path);
+     $('#email_reg').attr('value',user_info.email);
+     $('#username').attr('value',user_info.username);
+     // console.log(user_info.birthdate.replace(/-/g , "/"));
+     $('#datepicker').attr('value',user_info.birthdate.replace(/-/g , "/"));
+     $('#password_reg').attr('value',user_info.password);
+     $('#password_confirmation').attr('value',user_info.password);*/
 });
 
 $('#update_info').click(function (e) {
     e.preventDefault();
 
     if(validaUsername($('#username').val())&&validaEmail($('#email_reg').val())&&validateDate($('#datepicker').val())&&validatePasswordRegistration($('#password_reg').val(),$('#password_confirmation').val())){
-        console.log('@@ ');
+       // console.log('@@ ');
         var reg = {};
         reg.email = $('#email_reg').val();
         reg.pass = $('#password_reg').val();
@@ -65,12 +68,12 @@ function validaUsername(v1){
     var usernameRegex = /^[a-zA-Z0-9]+([-_\.][a-zA-Z0-9]+)*[a-zA-Z0-9]$/;
     //if(!validaEmail(v1)) {
 
-        if (usernameRegex.test(v1) && v1.length <= 20) {
-            return true;
-        } else {
-            status = 4;
-            return false;
-        }
+    if (usernameRegex.test(v1) && v1.length <= 20) {
+        return true;
+    } else {
+        status = 4;
+        return false;
+    }
     //}
 
 }
@@ -241,3 +244,6 @@ $("#btnSelectImage").change(function(){
     readURL(this);
     img_path=1;
 });
+/**
+ * Created by Uni on 25/04/2017.
+ */

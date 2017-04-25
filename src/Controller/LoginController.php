@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Request;
 class LoginController
 {
     public function loginController(Application $app, Request $request){
-        $login = new SignIn($request);
+        $login = new SignIn($request,$app);
 
         return $login->signIn();
     }

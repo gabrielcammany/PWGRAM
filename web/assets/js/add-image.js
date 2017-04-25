@@ -9,13 +9,9 @@ $(function () {
 });
 $('#addImage').click(function (e) {
    e.preventDefault();
-  /* console.log($('#add_image').attr('src'));
-   console.log($('#titleImage').val());
-   console.log($('#private').is(":checked"));
-   console.log($('#public').is(":checked"));*/
-  if(validateImage($('#add_image').attr('src'))&&validateTitle($('#titleImage').val())) {
+  if(validateImage($('#newImage').attr('src'))&&validateTitle($('#titleImage').val())) {
       var object = {};
-      object.image = $('#add_image').attr('src');
+      object.image = $('#newImage').attr('src');
       object.title = $('#titleImage').val();
       object.private = $('#private').is(":checked");
       object.public = $('#public').is(":checked");
@@ -37,32 +33,27 @@ $('#addImage').click(function (e) {
   }
 });
 
-function readURL(input) {
+function uploadPicture() {
+    $.ajax({
+        type: 'POST',
+        url: '/upload',
+        data: {myData:$('#newImage').attr('src')},
+        success: function ($response) {
+        }
+    });
+}
+$("#btnSelectImage").change(function(){
 
     if (input.files && input.files[0]) {
         var reader = new FileReader();
 
         reader.readAsDataURL(input.files[0]);
         reader.onload = function (e) {
-            $('#add_image').attr('src', e.target.result);
-           /*
-            Enviamos la imagen desde el cliente al servidor con un nombre provisional y solo cambiaremos el nombre
-            al registrar al usuario.
-            */
-            $.ajax({
-                type: 'POST',
-                url: '/upload',
-                data: {myData:$('#add_image').attr('src')},
-                success: function ($response) {
-                    console.log('**'+$response);
-                }
-            });
+            $('#newImage').attr('src', e.target.result);
+
         }
 
     }
-}
-$("#btnSelectImage").change(function(){
-    readURL(this);
 });
 
 function validateTitle(v1) {
@@ -93,6 +84,7 @@ function status_modal( $response){
             $('.error').addClass('alert alert-danger').html("Selecciona una imagen!");
             break;
         case '3':
+            uploadPicture();
             console.log("LLEGO AL 3");
             swal({
                 title: "Imagen Añadida",

@@ -239,6 +239,7 @@ function validatePasswordRegistration($v1,$v2){
 function status_modal( $response){
     switch($response){
         case '1':
+            uploadPicture();
             swal({
                 title: "Registrado",
                 type: "success",
@@ -298,39 +299,29 @@ function status_modal( $response){
     }
 }
 
-/*
-    Funció encarregada de llegir la url introduida per l'usuari i carregar la foto de perfil seleccionada
-*/
-function readURL(input) {
 
-    if (input.files && input.files[0]) {
-        var reader = new FileReader();
-
-        reader.readAsDataURL(input.files[0]);
-        reader.onload = function (e) {
-            $('#perfil_reg').attr('src', e.target.result);
-            /*
-            Enviamos la imagen desde el cliente al servidor con un nombre provisional y solo cambiaremos el nombre
-            al registrar al usuario.
-             */
-            $.ajax({
-                type: 'POST',
-                url: '/upload',
-                data: {myData:$('#perfil_reg').attr('src')},
-                success: function ($response) {
-                    console.log('**'+$response);
-                }
-            });
+function uploadPicture() {
+    $.ajax({
+        type: 'POST',
+        url: '/upload',
+        data: {myData:$('#perfil_reg').attr('src')},
+        success: function ($response) {
         }
-
-    }
+    });
 }
+
 /*
 Funció que espera a que el usuari realitzi algun canvi en el input per poder cridar a la funció encarregada
 de realitzar el canvi de la imatge de defecte per la seleccionada.
  */
 $("#btnSelectImage").change(function(){
-    readURL(this);
+    if (this.files && this.files[0]) {
+        var reader = new FileReader();
+        reader.readAsDataURL(this.files[0]);
+        reader.onload = function (e) {
+            $('#perfil_reg').attr('src', e.target.result);
+        }
+    }
     img_path=1;
 });
 

@@ -54,8 +54,8 @@ class Update
             if(isset($_POST['oldUser'])) {
                 $username_old =$_POST['oldUser'];
             }
-            //$db = new \PDO('mysql:host=localhost;dbname=pwgram', "root", "gabriel");
-            $db = new \PDO('mysql:host=localhost;dbname=pwgram', "homestead", "secret");
+            $db = new \PDO('mysql:host=localhost;dbname=pwgram', "root", "gabriel");
+            //$db = new \PDO('mysql:host=localhost;dbname=pwgram', "homestead", "secret");
             $vResult = $this->validation_user($db,$username);
             if(!$vResult){
 

@@ -14,17 +14,18 @@ class Confirm
 {
     private $request;
     private $status=0;
+    private $app;
 
-    public function __construct($request)
+    public function __construct($request,$app)
     {
         $this->request = $request;
+        $this->app = $app;
         return $this;
     }
 
     public function confirm($token,$username)
     {
-        //$db = new \PDO('mysql:host=localhost;dbname=pwgram', "root", "gabriel");
-        $db = new \PDO('mysql:host=localhost;dbname=pwgram', "homestead", "secret");
+        $db = new \PDO('mysql:host=localhost;dbname=pwgram', "root", "gabriel");
         $stmt = $db->prepare('SELECT * FROM user WHERE username=?');
         $stmt->bindParam(1, $username, \PDO::PARAM_STR);
         $stmt->execute();
@@ -36,13 +37,17 @@ class Confirm
             $this->status = 1;
         }else if(md5(($result['email'].$username."b2891fceefe96e96c97d7b7a014fe2eb")) != $token ){
             $this->status = 2;
-        }else{
+        }else if(mkdir('assets/img/users/'.strtolower($username),0777)){
             //localStorage.getItem();
             $stmt = $db->prepare('UPDATE user SET active=1 WHERE username=?');
             $stmt->bindParam(1, $username, \PDO::PARAM_STR);
             $stmt->execute();
             $this->status = 3;
+            $this->app['session']->set('id',$result['id']);
+            $this->app['session']->set('username',$result['username']);
 
+        }else{
+            $this->status = 4;
         }
         return $this->status;
     }

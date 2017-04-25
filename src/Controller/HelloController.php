@@ -24,7 +24,7 @@ class HelloController{
     }
     public function indexSamu(Application $app,Request $request){
 
-        $content=$app['twig']->render('home.twig', array(
+        $content=$app['twig']->render('home_samu.twig', array(
             'app' => [
                 'name'=>$app['app.name']
             ]
@@ -38,8 +38,9 @@ class HelloController{
     }
     public function indexManu(Application $app,Request $request){
 
-        $content=$app['twig']->render('home.twig', array(
+        $content=$app['twig']->render('profile_owner.twig', array(
             'app' => [
+                'user' => 'Alejandra',
                 'name'=>$app['app.name']
             ]
         ));

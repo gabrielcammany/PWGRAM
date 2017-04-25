@@ -8,24 +8,27 @@
 
 namespace PwGram\Model;
 
-use PDO;
 
-class Upload
+use PDO;
+use Silex\Application;
+
+class Image
 {
     private $request;
     private $status=0;
+    private $app;
 
-    public function __construct($request)
+    public function __construct($request,$app)
     {
         $this->request = $request;
+        $this->app = $app;
         return $this;
     }
     public function saveImage()
     {
         if (!empty($_POST['myData'])) {
             $img_data=$_POST['myData'];
-            $img = $this->base64_to_jpeg($img_data, 'preview.jpg');
-            rename('preview.jpg','assets/img/uploads/preview.jpg');
+            $this->base64_to_jpeg($img_data, '/assets/img/tmp/'.$this->app['session']->get('username').'jpg');
         }
         return 1;
     }
@@ -50,7 +53,7 @@ class Upload
             $img = $data['image'];
             $title = $data['title'];
             $private = $data['private'];
-            $public = $data['public'];
+            //$public = $data['public'];
             $username = $data['username'];
             $id = $data['userID'];
 
@@ -61,14 +64,11 @@ class Upload
             }
 
             if($this->validateImage($img) && $this->validateTitle($title)) {
-                $img = $this->base64_to_jpeg($img, 'preview.jpg');
-                $img_path = 'assets/img/uploads/user_' . $title . '_' .$username.'_'.'.jpg';
-                rename('preview.jpg', 'assets/img/uploads/preview.jpg');
-                rename('assets/img/uploads/preview.jpg', $img_path);
 
                 //date_default_timezone_set('Europe/Spain');
                 $date = date('Y/m/d H:i:s');
-
+                $img_path = '../assets/img/users/'.$username.'/'.str_replace("/","-",$date).'.jpg';
+                $this->base64_to_jpeg($img, $img_path);
                 $db = new PDO('mysql:host=localhost;dbname=pwgram', "root", "gabriel");
                 //$db = new PDO('mysql:host=localhost;dbname=pwgram', "homestead", "secret");
                 $stmt = $db->prepare('INSERT INTO image (user_id,title,img_path,visits,private,created_at) VALUES (?,?,?,0,?,?)');
@@ -77,7 +77,7 @@ class Upload
                 $stmt->bindParam(3, $img_path, \PDO::PARAM_STR);
                 $stmt->bindParam(4, $tinyint, \PDO::PARAM_STR);
                 $stmt->bindParam(5, $date, \PDO::PARAM_STR);
-                $error = $stmt->execute();
+                $stmt->execute();
                 $this->status = 3;
 
             }
@@ -102,4 +102,14 @@ class Upload
             return true;
         }
     }
+
+    public function getListImages(){
+
+        if(isset($_POST['myData'])){
+            $data = json_decode($_POST['myData'],true);
+
+        }
+    }
+
+
 }
