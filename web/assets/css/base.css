@@ -49,6 +49,7 @@ body{
     margin-top: -5px;
 }
 
+
 #logo_navbar{
     max-width: 40px!important;
     max-height: 40px!important;
@@ -71,6 +72,7 @@ nav.navbar.navbar-inverse.navbar-fixed-top{
 #userNameDropdown:hover {
     color: black!important;;
 }
+
 
 a#userNameDropdown:visited {
     color: black!important;;
