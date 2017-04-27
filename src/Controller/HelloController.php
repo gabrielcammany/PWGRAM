@@ -11,7 +11,8 @@ class HelloController{
     public function indexAction(Application $app,Request $request){
         $content=$app['twig']->render('home.twig', array(
             'app' => [
-                'name'=>$app['app.name']
+                'name'=>$app['app.name'],
+                 'username' => $app['session']->get('username')
             ]
         ));
         $response=new Response();
@@ -27,7 +28,7 @@ class HelloController{
         $content=$app['twig']->render('home_samu.twig', array(
             'app' => [
                 'name'=>$app['app.name']
-            ]
+            ],
         ));
         $response=new Response();
         $response->setStatusCode($response::HTTP_OK);

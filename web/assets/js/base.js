@@ -5,16 +5,14 @@
 
 $(function() {
     var customBar = $('#userDropdown');
+    var dropDown = $('#userNameDropdown');
     var login = $('#navBar');
-    if(localStorage.getItem("user") === null){
-        console.log("Empty");
+    if(dropDown.attr('data-content') == ""){
         customBar.hide();
         login.show();
     }else{
         login.hide();
         customBar.show();
-        var anchor = document.getElementById('userNameDropdown');
-        anchor.innerHTML += "  " +JSON.parse(localStorage.getItem("user")).username;
     }
     var button = $('#logout');
     button.click(function () {

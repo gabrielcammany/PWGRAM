@@ -1,0 +1,45 @@
+
+div.buttons_icons{
+    float:left;
+    width:40% !important;
+}
+#username{
+    font-size: 20px;
+    margin-top: 9px;
+    text-align: right;
+    padding-right: 10px;
+    color:black;
+}
+#gallery{
+    margin-top: 25px;
+}
+
+.img_profile{
+    /*width:400px;
+    height: 300px;*/
+    display: block;
+    margin: 0 auto;
+}
+
+div.portfolio-item{
+    min-width: 300px;
+    min-height: 400px;
+}
+
+.img-wrapper{
+    min-width: 350px;
+}
+
+
+a#link_username:visited {
+    color: black!important;
+
+}
+a#link_username:hover {
+    text-decoration: none;
+}
+#username:hover {
+    color: dimgray!important;
+
+
+}

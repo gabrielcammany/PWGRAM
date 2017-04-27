@@ -1,0 +1,69 @@
+{% extends "base_gabri.twig" %}
+
+{% block head %}
+    {{ parent() }}
+{% endblock %}
+
+{% block title %}Home{% endblock %}
+
+{% block styles %}
+    {{ parent() }}
+    <link href="{{ asset('/profile.css','css') }}" rel="stylesheet" />
+    <link href="{{ asset('gallery.css','css')}}" rel="stylesheet"/>
+{% endblock %}
+
+{% block header %}
+    {{ parent() }}
+{% endblock %}
+
+{% block header_elements %}
+    {{ parent() }}
+{% endblock %}
+
+{% block content %}
+
+    <div class="container" id="profileContainer">
+        <article id="articleID">
+            <header id="headerID">
+
+                <div id="ImgID">
+                    <img src="/assets/img/avatar.jpg" class="img-rounded img-responsive" id="ImgSrcID">
+                </div>
+
+                <div id="infoUser">
+                    <h1 id="userName" data-content="{{ app.user.id }}">{{ app.user.name }}</h1>
+                    {% if  app.client.edit  %}
+                         <input type="button" value="Editar Perfil" class="btn btn-default" id="btnEditProfile" href="/edit_profile">
+                    {% endif %}
+                    <div id="infoPostsComentaris">
+                        <h4 class="infoPCUser">
+                            <strong class="num">{{ app.user.posts }}</strong>posts
+                        </h4>
+                        <h4 class="infoPCUser">
+                            <strong class="num">{{ app.user.comments }}</strong>comentarios
+                        </h4>
+                    </div>
+                </div>
+            </header>
+        </article>
+    </div>
+
+
+    <div class="container">
+
+
+        <div  id="gallery">
+
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block footer %}
+    {{ parent() }}
+{% endblock %}
+
+{% block scripts %}
+    {{ parent() }}
+    <script src="{{ asset('/profile.js','js')}}"></script>
+{% endblock %}

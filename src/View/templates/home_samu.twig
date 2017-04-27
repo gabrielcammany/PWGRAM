@@ -8,7 +8,7 @@
 
 {% block styles %}
     {{ parent() }}
-<link href="{{ asset('home_samu.css','css')}}" rel="stylesheet"/>
+<link href="{{ asset('gallery.css','css')}}" rel="stylesheet"/>
 {% endblock %}
 
 {% block header %}
@@ -19,190 +19,25 @@
 {% endblock %}
 
 {% block content %}
-    <!-- Page Header -->
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="img-wrapper img-header">
-                <img class="img-responsive" src="../assets/img/bg.jpg" width="400" height="300" alt="">
+    
+    <div class="container">
+        <div class="row">
+            <h1>Populares</h1>
+            <div id="gallery_pop">
 
             </div>
-            <div id="info_profile">
-
-            </div>
-
-        </div>
     </div>
-    <!-- /.row -->
-
     <!-- Projects Row -->
-    <div class="row">
-        <h1>Popular</h1>
-        <div id="gallery">
+    <div class="container">
+        <div class="row">
+            <h1>Recientes</h1>
+            <div id="gallery_recent">
 
-        </div>
-        <h2>Default Content </h2>
-        <div class="col-md-4 portfolio-item ">
-            <a href="#">
-                <div class="img-wrapper">
-                    <img class="img-responsive" src="../assets/img/bg.jpg" width="400" height="300" alt="">
-                </div>
-            </a>
-            <div class="social-line">
-                <a href="#like#1" >
-                    <img src="../assets/img/icons/like.png" width="30" height="30">
-                </a>
-                <a href="#like#2" class="btn btn-simple btn-just-icon">
-                    <img src="../assets/img/icons/comments.png" width="30" height="30">
-                </a>
             </div>
-            <h3 >
-                Project Name
-            </h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae.</p>
 
-        </div>
-        <div class="col-md-4 portfolio-item">
-            <div class="item-overlay top"></div>
-            <a href="#">
-                <div class="img-wrapper">
-                    <img class="img-responsive" src="../assets/img/bg.jpg" width="400" height="300" alt="">
-                </div></a>
-            <div class="social-line">
-                <a href="#like#1" >
-                    <img src="../assets/img/icons/like.png" width="30" height="30">
-                </a>
-                <a href="#like#2" >
-                    <img src="../assets/img/icons/comments.png" width="30" height="30">
-                </a>
-            </div>
-            <h3>
-                Project Name
-            </h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae.</p>
-        </div>
-        <div class="col-md-4 portfolio-item">
-            <div class="item-overlay top"></div>
-            <a href="#">
-                <div class="img-wrapper">
-                    <img class="img-responsive" src="../assets/img/bg.jpg" width="400" height="300" alt="">
-                </div></a>
-            <h3>
-                Project Name
-            </h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae.</p>
-        </div>
-    </div>
-    <!-- /.row -->
-
-    <!-- Projects Row -->
-    <div class="row">
-        <div class="col-md-4 portfolio-item">
-            <div class="item-overlay top"></div>
-            <a href="#">
-                <div class="img-wrapper">
-                    <img class="img-responsive" src="../assets/img/examples/chris4.jpg" width="400" height="300" alt="">
-                </div></a>
-            <h3>
-                Project Name
-            </h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae.</p>
-        </div>
-        <div class="col-md-4 portfolio-item">
-            <div class="item-overlay top"></div>
-            <a href="#">
-                <div class="img-wrapper">
-                    <img class="img-responsive" src="../assets/img/examples/chris4.jpg" width="400" height="300" alt="">
-                </div></a>
-            <h3>
-                Project Name
-            </h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae.</p>
-        </div>
-        <div class="col-md-4 portfolio-item">
-            <div class="item-overlay top"></div>
-            <a href="#">
-                <div class="img-wrapper">
-                    <img class="img-responsive" src="../assets/img/examples/chris4.jpg" width="400" height="300" alt="">
-                </div></a>
-            <h3>
-                Project Name
-            </h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae.</p>
-        </div>
     </div>
 
-    <!-- Projects Row -->
-    <div class="row">
-        <div class="col-md-4 portfolio-item">
-            <div class="item-overlay top"></div>
-            <a href="#">
-                <div class="img-wrapper">
-                    <img class="img-responsive" src="../assets/img/examples/chris4.jpg" width="400" height="300" alt="">
-                </div>
-            </a>
-            <h3>
-                Project Name
-            </h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae.</p>
-        </div>
-        <div class="col-md-4 portfolio-item">
-            <div class="item-overlay top"></div>
-            <a href="#">
-                <div class="img-wrapper">
-                    <img class="img-responsive" src="../assets/img/examples/chris4.jpg" width="400" height="300" alt="">
-                </div></a>
-            <h3>
-                Project Name
-            </h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae.</p>
-        </div>
-        <div class="col-md-4 portfolio-item">
-            <div class="item-overlay top"></div>
-            <a href="#">
-                <div class="img-wrapper">
-                    <img class="img-responsive" src="../assets/img/examples/chris4.jpg" width="400" height="300" alt="">
-                </div></a>
-            <h3>
-                Project Name
-            </h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae.</p>
-        </div>
-    </div>
-    <!-- /.row -->
 
-    <hr>
-
-    <!-- Pagination -->
-    <div class="row text-center">
-        <div class="col-lg-12">
-            <ul class="pagination">
-                <li>
-                    <a href="#">&laquo;</a>
-                </li>
-                <li class="active">
-                    <a href="#">1</a>
-                </li>
-                <li>
-                    <a href="#">2</a>
-                </li>
-                <li>
-                    <a href="#">3</a>
-                </li>
-                <li>
-                    <a href="#">4</a>
-                </li>
-                <li>
-                    <a href="#">5</a>
-                </li>
-                <li>
-                    <a href="#">&raquo;</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-    <!-- /.row -->
-
-    <hr>
 {% endblock %}
 
 {% block footer %}

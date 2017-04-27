@@ -20,8 +20,10 @@ class ConfirmController
         $content=$app['twig']->render('confirmed.twig', array(
             'app' => [
                 'name'=>$app['app.name'],
-                'status'=>$login->Confirm($token,$username)
-            ]
+                'status'=>$login->Confirm($token,$username),
+                'username' => $app['session']->get('username')
+
+            ],
         ));
         $response=new Response();
         $response->setStatusCode($response::HTTP_OK);

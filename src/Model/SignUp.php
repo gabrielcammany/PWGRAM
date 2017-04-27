@@ -73,7 +73,6 @@ class SignUp
                     $stmt->bindParam(4, $username, \PDO::PARAM_STR);
                     $stmt->bindParam(5, $img_path, \PDO::PARAM_STR);
                     $stmt->execute();
-
                     $this->status = 1;
                     $this->sendEmail($email,$username);
                 }
@@ -81,7 +80,6 @@ class SignUp
             return $this->status;
         }
     }
-
 
 
     function validation_user($db,$v1){

@@ -98,7 +98,6 @@ $('#registerUser').click(function(e){
         reg.pass = $('#password_reg').val();
         reg.date = $('#datepicker').val();
         reg.confirm_pass = $('#password_confirmation').val();
-        // $('#password').append('<h3>hola tete</h3>')
         reg.username = $('#username').val();
         if(img_path)reg.img = 1;
         if(!img_path)reg.img = 0;
@@ -246,7 +245,8 @@ function status_modal( $response){
                 timer:2000,
                 showConfirmButton: false
             });
-            log_in(' ',$('#username').val(),$('#password_reg').val())
+            $('#close_modal').click();
+            //log_in(' ',$('#username').val(),$('#password_reg').val())
             break;
         case '2':
             $('.error').addClass('alert alert-danger').html("Usuario existente");
@@ -284,9 +284,6 @@ function status_modal( $response){
             $('.main_profile').css('display','block');
             $('#img_profile').attr('src',user_logged.img_path);
             $('h3').html(user_logged.username);
-            localStorage.setItem('user', JSON.stringify(user_logged));
-            var anchor = document.getElementById('userNameDropdown');
-            anchor.innerHTML += user_logged.username;
             $('#userDropdown').show(); //Per alguna rao si utilitzes el anchor d'abans no et fa el show correctament, aixi que s'ha de tornar a demanar
             break;
         case'11':
@@ -301,10 +298,14 @@ function status_modal( $response){
 
 
 function uploadPicture() {
+    var object = {};
+    object.image = $('#perfil_reg').attr('src');
+    object.username = $('#username').val();
+    var stringData = JSON.stringify(object);
     $.ajax({
         type: 'POST',
         url: '/upload',
-        data: {myData:$('#perfil_reg').attr('src')},
+        data: {myData:stringData},
         success: function ($response) {
         }
     });

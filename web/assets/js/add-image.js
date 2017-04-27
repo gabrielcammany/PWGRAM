@@ -1,11 +1,8 @@
 /**
  * Created by Uni on 19/04/2017.
  */
-var user_info;
 
 $(function () {
-    user_info = JSON.parse(localStorage.getItem('user'));
-    console.log(user_info["username"]);
 });
 $('#addImage').click(function (e) {
    e.preventDefault();
@@ -24,15 +21,17 @@ $('#addImage').click(function (e) {
           url: '/uploadNewImage',
           data: {myData: stringData},
           success: function ($response) {
-              //$response = JSON.parse($response);
-              console.log('**' + $response);
+              var status = $response.split('#');
+             // console.log('**' + $response);
               status_modal($response);
-
           }
       });
   }
 });
-
+/**
+ * Esta función no hace una mierda BY MANEL MANCHON!...
+ */
+/*
 function uploadPicture() {
     $.ajax({
         type: 'POST',
@@ -41,13 +40,14 @@ function uploadPicture() {
         success: function ($response) {
         }
     });
-}
+}*/
+
 $("#btnSelectImage").change(function(){
 
-    if (input.files && input.files[0]) {
+    if (this.files && this.files[0]) {
         var reader = new FileReader();
 
-        reader.readAsDataURL(input.files[0]);
+        reader.readAsDataURL(this.files[0]);
         reader.onload = function (e) {
             $('#newImage').attr('src', e.target.result);
 
@@ -92,11 +92,6 @@ function status_modal( $response){
                 timer:2000,
                 showConfirmButton: true
             });
-            /*$.ajax({
-                type: 'GET',
-                url: '/manel',
-                data: ""
-            });*/
             window.location.href = "/";
             break;
         default:

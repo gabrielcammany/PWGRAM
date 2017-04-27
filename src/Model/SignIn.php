@@ -58,15 +58,21 @@ class SignIn
             $stmt->bindParam(2, $username, \PDO::PARAM_STR);
             $stmt->execute();
             $result = $stmt->fetch(\PDO::FETCH_ASSOC);
-            if (sizeof($result['id']) == 0 || !password_verify( $password , $result['password'] )) {
+            if (sizeof($result['id']) == 0 || !password_verify( $password , $result['password'] ) || $result['active'] == 0) {
                 $this->status = 11;
             } else{
-                //localStorage.getItem();
                 $this->app['session']->set('id',$result['id']);
                 $this->app['session']->set('username',$result['username']);
                 $this->app['session']->set('posts',$result['posts']);
-
                 $this->status = 10;
+                $generator = new Random();
+                $token = $generator->generate(36);
+                setcookie("id_s",$token,time()+2592000);
+                $stmt = $db->prepare('UPDATE user SET sessionID=? WHERE (email=? OR username=?)');
+                $stmt->bindParam(1, $token, \PDO::PARAM_STR);
+                $stmt->bindParam(2, $email, \PDO::PARAM_STR);
+                $stmt->bindParam(3, $username, \PDO::PARAM_STR);
+                $stmt->execute();
             }
         }
         $result["status"] = $this->status;

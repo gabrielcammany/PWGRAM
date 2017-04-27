@@ -17,26 +17,38 @@ class ProfileController
 {
     public function profileOwner(Application $app,$username){
         $response=new Response();
-        $sql = "SELECT id, posts, comments FROM user WHERE username = ?";
+        $sql = "SELECT posts, comments,id FROM user WHERE username = ?";
         $get = $app['db']->fetchAssoc($sql,array($username));
 
         if(!$get){
             $content = $app['twig']->render('error.twig',[
-                'message' => 'USER NOT FOUND'
+                'message' => 'USER NOT FOUND',
             ]);
             $response->setContent($content);
             $response->setStatusCode(Response::HTTP_NOT_FOUND);
         }else{
-            $content=$app['twig']->render('profile_owner.twig', array(
+            if($get['id'] == $app['session']->get('id')){
+                $edit = true;
+            }else{
+                $edit = false;
+            }
+
+            $content=$app['twig']->render('profile.twig', array(
                 'app' => [
                     'user' =>[
                         'name' =>$username,
                         'posts' =>$get['posts'],
                         'comments' =>$get['comments'],
-                        'id' => $get['id'],
+                        'id' => $get['id']
                     ],
                     'name'=>$app['app.name'],
-                ]
+                    'client' =>[
+                        'edit' => $edit,
+                    ],
+                    'username' => $app['session']->get('username')
+
+                ],
+
             ));
 
             $response->setStatusCode($response::HTTP_OK);

@@ -17,11 +17,12 @@ use PwGram\Model\Image;
 class ImageController
 {
     public function addImage(Application $app,Request $request){
-        //$name=$request->query->get('name');
+
         $content=$app['twig']->render('addImage.twig', array(
             'app' => [
-                'name'=>$app['app.name']
-            ]
+                'name'=>$app['app.name'],
+                'username' => $app['session']->get('username')
+            ],
         ));
         $response=new Response();
         $response->setStatusCode($response::HTTP_OK);
@@ -36,10 +37,59 @@ class ImageController
         return $upload->addNewImage();
     }
 
-    public function getImages(Request $request,Application $app){
+    /**
+     * @param Request $request
+     * @param Application $app
+     * @return 
+     */
+    public function getListImages(Request $request,Application $app){
         $image = new Image($request,$app);
 
         return $image->getListImages();
-        //return $image->
+    }
+    public function getListUserImages(Request $request,Application $app){
+        $image = new Image($request,$app);
+
+        return $image->getListImages();
+    }
+
+    /**
+     * Solicitem a la base de dades les imatges més vistes.
+     *
+     * @param Request $request
+     * @param Application $app
+     * @return lista de las más vistas
+     *
+     */
+    public function getPopularImages(Request $request,Application $app){
+        $image = new Image($request,$app);
+
+        return $image->getListPopularImages();
+    }
+
+    /**
+     * Funcio que s'encarrega d'incrementar els likes de la imatge.
+     *
+     * @param Request $request
+     * @param Application $app
+     * @return mixed
+     */
+    public function incLike(Request $request,Application $app){
+        $image = new Image($request,$app);
+
+        return $image->newLike();
+    }
+
+    /**
+     * Funcio que s'encarrega d'incrementar els likes de la imatge.
+     *
+     * @param Request $request
+     * @param Application $app
+     * @return mixed
+     */
+    public function removeLike(Request $request,Application $app){
+        $image = new Image($request,$app);
+
+        return $image->dislike();
     }
 }
