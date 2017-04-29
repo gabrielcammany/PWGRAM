@@ -32,9 +32,34 @@ class ImageController
         return $response;
     }
 
+    public function renderImage(Application $app,Request $request){
+        $actual_link = $_SERVER['REQUEST_URI'];
+        $data = explode('/',$actual_link);
+        echo $data[2];
+        $content=$app['twig']->render('unicImage.twig', array(
+            'app' => [
+                'name'=>$app['app.name'],
+                'username' => $app['session']->get('username'),
+                'image_id'=> $data[2]
+            ],
+        ));
+        $response=new Response();
+        $response->setStatusCode($response::HTTP_OK);
+        $response->headers->set('Content-Type','text/html');
+        $response->setContent($content);
+
+        return $response;
+    }
+
     public function addNewImage(Request $request,Application $app){
         $upload = new Image($request,$app);
         return $upload->addNewImage();
+    }
+
+
+    public function getImageInfo(Request $request,Application $app){
+        $upload = new Image($request,$app);
+        return $upload->getInfoUnicImage();
     }
 
     /**
@@ -92,4 +117,5 @@ class ImageController
 
         return $image->dislike();
     }
+
 }

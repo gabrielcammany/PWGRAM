@@ -17,7 +17,7 @@ class ProfileController
 {
     public function profileOwner(Application $app,$username){
         $response=new Response();
-        $sql = "SELECT posts, comments,id FROM user WHERE username = ?";
+        $sql = "SELECT * FROM user WHERE username = ?";
         $get = $app['db']->fetchAssoc($sql,array($username));
 
         if(!$get){
@@ -32,14 +32,17 @@ class ProfileController
             }else{
                 $edit = false;
             }
-
+            //$string = strval($username . ",".$get['date']. ',' .$get['email']);
             $content=$app['twig']->render('profile.twig', array(
                 'app' => [
                     'user' =>[
                         'name' =>$username,
                         'posts' =>$get['posts'],
                         'comments' =>$get['comments'],
-                        'id' => $get['id']
+                        'id' => $get['id'],
+                        'email' => $get['email'],
+                        'date' => $get['birthdate'],
+                        'img_path' => $get['img_path']
                     ],
                     'name'=>$app['app.name'],
                     'client' =>[

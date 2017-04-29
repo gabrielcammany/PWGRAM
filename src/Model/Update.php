@@ -46,16 +46,13 @@ class Update
                             break;
                         case 5:
                             $img = $value;
+                            break;
                     }
                     $i++;
                 }
 
             }
-            if(isset($_POST['oldUser'])) {
-                $username_old =$_POST['oldUser'];
-            }
             $db = new \PDO('mysql:host=localhost;dbname=pwgram', "root", "gabriel");
-            //$db = new \PDO('mysql:host=localhost;dbname=pwgram', "homestead", "secret");
             $vResult = $this->validation_user($db,$username);
             if(!$vResult){
 
