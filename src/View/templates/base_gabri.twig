@@ -41,14 +41,14 @@
                         <span class="icon-bar"></span>
                     </button>
 
-                    <img class="navbar-left" id="logo_navbar" src="/assets/img/instagram_black.png">
+                    <img class="navbar-left" id="logo_navbar" src="/assets/img/icons/instagram_black.png">
                     <a class="navbar-brand" href="/">PwGram</a>
                 </div>
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     {% block header_elements %}
-                        <ul class="nav navbar-nav">
+                        <ul class="nav navbar-nav ">
                             <li >
-                                <a id="inicioBtn" href="/" >
+                                <a id="inicioBtn" class="maintext" href="/" >
                                     Inicio
                                 </a>
                             </li>
@@ -60,14 +60,53 @@
                                 </a>
                             </li>
                         </ul>
-                        <ul class="nav navbar-nav navbar-right" id="customnavBar">
-                            <li class="dropdown" id="userDropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" id="userNameDropdown" data-content="{{ app.username }}">
-                                    <img id="user_acces_icon" src="/assets/img/user_black.png">{{ app.username }}</a>
+                        <ul class="nav navbar-nav navbar-right" id="customnavBar" hidden>
+
+                            <li>
+                                <a title="Gestion de comentarios" href="/comentarios"><img  class="navBarIcons" src="/assets/img/icons/comments.png"><label class="visible-xs-inline-block navBarText">Gestión de comentarios</label></a>
+                            </li>
+                            <li class="dropdown">
+                                <a title="Tus notificaciones"  class="dropdown-toggle dropDownNav" data-toggle="dropdown" role="button" aria-expanded="false" href="">
+                                    <img class="navBarIcons" src="/assets/img/icons/notifications.png"> <span class="badge" id="notificationNumber" hidden></span>
+                                    <label class="visible-xs-inline-block navBarText">Tus Notificaciones </label>
+                                </a>
+                                <ul class="dropdown-menu" role="menu" id="notificationsList">
+                                    <li class="navBarTextNotif">
+                                        <label class="navBarText ">No tienes nuevas notificaciones :(</label>
+                                    </li>
+                                    <li>
+                                        <!--<div class="tableNotifications" >
+                                            <table id="tableNotifications"
+                                                   class="display table table-bordered">
+                                                <thead>
+                                                <tr>
+                                                    <th data-field="id">id</th>
+                                                    <th data-field="user_fired_event">user_fired_event</th>
+                                                    <th data-field="user_id">user_id</th>
+                                                    <th data-field="event_id">event_id</th>
+                                                    <th data-field="seen_by_user">seen_by_user</th>
+                                                    <th data-field="post_id">post_id</th>
+                                                    <th data-field="created_at">created_at</th>
+                                                </tr> </thead>
+                                            </table>
+                                        </div>-->
+                                    </li>
+                                    <br>
+                                    <div class="divider"></div>
+                                    <li>
+                                        <a href="/notificaciones" id="profile">
+                                            Ver todas las notificaciones
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a id="userNameDropdown" href="#" class="dropdown-toggle dropDownNav" data-toggle="dropdown" role="button" aria-expanded="false" data-content="{{ app.username }}">
+                                    <img id="user_acces_icon" src="/assets/img/icons/user_black.png">{{ app.username }}</a>
                                 <ul class="dropdown-menu" role="menu">
                                     <li>
-                                        <a href="/profile/{{ app.username }}" id="edit_profile">
-                                            Perfil
+                                        <a href="/profile/{{ app.username }}" id="profile">
+                                            Mi Perfil
                                         </a>
                                     </li>
                                     <li>
@@ -125,13 +164,13 @@
                                     <!--<form method="post" html="{:multipart=>true}" data-remote="true" action="/" accept-charset="UTF-8" enctype="multipart/form-data">-->
                                     <form html="{:multipart=>true}" accept-charset="UTF-8" id="infoRegistro">
                                         <div id="imageSelector" enctype="multipart/form-data" method="post" >
-                                            <img id="perfil_reg" name="imageProfile" src="/assets/img/default/default_user.png" class="img-responsive img-raised">
+                                            <img id="perfil_reg" name="imageProfile" src="/assets/img/default/default_profile_400.png" class="img-responsive img-raised">
                                             <!-- <img id="perfil_reg" src="#" class="img-circle img-responsive img-raised">-->
                                             <label class="btn btn-default btn-file btn-group-justified" id="labelButtonSelect">
                                                 Seleccionar una imagen <input type="file" style="display: none;" id="btnSelectImage">
                                             </label>
                                         </div>
-                                        <input id="username" class="form-control" type="text" placeholder="Nombre de usuario" name="username">
+                                        <input id="usernameReg" class="form-control" type="text" placeholder="Nombre de usuario" name="username">
                                         <input id="email_reg" class="form-control" type="text" placeholder="Correo electrónico" name="email">
                                         <div class="input-group date" data-date-format="yyyy/mm/dd" data-provide="datepicker" id="datepickergroup" >
                                             <input type="text" placeholder="Fecha de nacimiento" class="form-control" id="datepicker" >
@@ -175,10 +214,10 @@
                                 <div class="form">
                                     <form html="{:multipart=>true}" accept-charset="UTF-8" id="infoRegistro">
                                         <div id="imageSelector" enctype="multipart/form-data" method="post" >
-                                            <img id="perfil_reg" name="imageProfile" src="/assets/img/default/default_user.png" class="img-circle img-responsive img-raised">
+                                            <img id="perfil_reg" name="imageProfile" src="/assets/img/default/default_profile_100.png" class="img-circle img-responsive img-raised">
                                             <input type="file" name="image" class="btn btn-group-justified" id="btnSelectImage">
                                         </div>
-                                        <input id="username" class="form-control" type="text" placeholder="Username" name="username">
+                                        <input id="usernameReg" class="form-control" type="text" placeholder="Username" name="username">
                                         <input id="email_reg" class="form-control" type="text" placeholder="Email" name="email">
                                         <input id="date" class="form-control" type="text" name="date-birth" placeholder="YYYY/MM/DD">
                                         <input id="password_reg" class="form-control" type="password" placeholder="Password" name="password">
@@ -196,7 +235,7 @@
     </div>
 </body>
 <footer>
-    <div class="row  navbar-bottom" id="footerA">
+    <div class="navbar-bottom" id="footerA">
         {% block footer %}
             <div class="col-lg-12">
                 <div class="copyright pull-right">

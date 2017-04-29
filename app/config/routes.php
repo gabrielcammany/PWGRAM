@@ -57,6 +57,8 @@ $app->get('/edit_profile','PwGram\\Controller\\EditController::editProfile')->be
 $app->get('/validate/{username}/{token}/','PwGram\\Controller\\ConfirmController::confirmController');
 $app->get('/profile/{username}','PwGram\\Controller\\ProfileController::profileOwner');
 $app->get('/add_image','PwGram\\Controller\\ImageController::addImage')->before($beforeLogged);
+$app->get('/comentarios','PwGram\\Controller\\ImageController::addImage')->before($beforeLogged);
+$app->get('/notificaciones','PwGram\\Controller\\NotificationsController::showUserNotifications')->before($beforeLogged);
 $app->post('/update','PwGram\\Controller\\UpdateController::updateUser');
 $app->post('/signup','PwGram\\Controller\\RegistrationController::registrationController');
 $app->post('/signin','PwGram\\Controller\\LoginController::loginController');
@@ -68,4 +70,5 @@ $app->post('/getRecentImages','PwGram\\Controller\\ImageController::getListImage
 $app->post('/popular_images','PwGram\\Controller\\ImageController::getPopularImages');
 $app->post('/incLike','PwGram\\Controller\\ImageController::incLike');
 $app->post('/removeLike','PwGram\\Controller\\ImageController::removeLike');
+$app->post('/getUserNotifications','PwGram\\Controller\\NotificationsController::getUserNotifications');
 

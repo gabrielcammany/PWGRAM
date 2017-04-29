@@ -68,7 +68,8 @@ function log_in( email, username, password){
             user_logged = $response;
             status = $response.status;
             status_modal(''+status+'');
-            shakeModal();
+           // shakeModal();
+
             return 10;
         }
     });
@@ -91,14 +92,14 @@ $('#login_submit').click(function (e){
 
 $('#registerUser').click(function(e){
     e.preventDefault();
-    if(validaUsername($('#username').val())&&validaEmail($('#email_reg').val())&&validateDate($('#datepicker').val())&&validatePasswordRegistration($('#password_reg').val(),$('#password_confirmation').val())){
+    if(validaUsername($('#usernameReg').val())&&validaEmail($('#email_reg').val())&&validateDate($('#datepicker').val())&&validatePasswordRegistration($('#password_reg').val(),$('#password_confirmation').val())){
 
         var reg = {};
         reg.email = $('#email_reg').val();
         reg.pass = $('#password_reg').val();
         reg.date = $('#datepicker').val();
         reg.confirm_pass = $('#password_confirmation').val();
-        reg.username = $('#username').val();
+        reg.username = $('#usernameReg').val();
         if(img_path)reg.img = 1;
         if(!img_path)reg.img = 0;
         var stringData = JSON.stringify(reg);
@@ -115,7 +116,7 @@ $('#registerUser').click(function(e){
         });
     }else{
         status_modal(''+status+'');
-        shakeModalRegistration();
+        //shakeModalRegistration();
     }
 
 });
@@ -277,14 +278,15 @@ function status_modal( $response){
                 timer:2000,
                 showConfirmButton: false
             });
-
+            /*
             $('#login_home').hide();
             $('#close_modal').click();
 
             $('.main_profile').css('display','block');
             $('#img_profile').attr('src',user_logged.img_path);
             $('h3').html(user_logged.username);
-            $('#userDropdown').show(); //Per alguna rao si utilitzes el anchor d'abans no et fa el show correctament, aixi que s'ha de tornar a demanar
+            $('#userDropdown').show(); //Per alguna rao si utilitzes el anchor d'abans no et fa el show correctament, aixi que s'ha de tornar a demanar*/
+            location.reload();
             break;
         case'11':
             $('.error').addClass('alert alert-danger').html("Email o contraseña incorrecta");

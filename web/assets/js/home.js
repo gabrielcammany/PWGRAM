@@ -12,11 +12,10 @@ $(function(){
         type: 'post',
         url: '/popular_images',
         success: function ($response) {
-        console.log($response);
             $images = JSON.parse($response);
-            console.log(typeof ($response));
             var size = $response.length;
-            for (var i_image in $images){
+            var i_image = 0;
+            for (i_image in $images){
                 var array = $images[i_image].img_path.split('/');
                 var path = $images[i_image].img_path.split('.');
                 $('#gallery_pop').append("<div class='col-md-4 portfolio-item'><a href='#'><div class='img-wrapper'>" +
@@ -24,24 +23,27 @@ $(function(){
                     "</div></a>" +
                     "<div class='buttons_icons'>" +
                     "<a class='btn btn-simple btn-just-icon'>" +
-                    "<img src='../assets/img/icons/like.png' id='"+i_image+"' width='30' height='30'>" +
+                    "<img src='../assets/img/icons/like.png' id='"+i_image+"popular' width='30' height='30'>" +
                     "</a><a class='btn btn-simple btn-just-icon' >" +
                     "<img src='../assets/img/icons/comments.png' id='"+i_image + i_image+"' width='30' height='30'>" +
                     "</a></div>" +
                     "<a href='/profile/"+array[3]+"' id='link_username'><h3 id='username'>"+array[3]+"</h3></a>" +
                     "<h3>"+$images[i_image].title+"</h3>" );
 
-                $("#"+i_image).on('click',{index:i_image},function(e) {
+                $("#"+i_image+"popular").on('click',{index:i_image},function(e) {
                     console.log('title: ', $images[e.data.index].title);
-                    if ($('#' + e.data.index).attr('src') == '../assets/img/icons/like.png') {
+                    var data = {};
+                    data.user_id = $images[e.data.index].user_id;
+                    data.image_id = $images[e.data.index].id;
+                    if ($('#' + e.data.index+'popular').attr('src') == '../assets/img/icons/like.png') {
                         //console.log('0--> ',e.data.path);
                         $.ajax({
                             type: 'post',
                             url: '/incLike',
-                            data: {"path": $images[e.data.index].img_path},
+                            data: {data:JSON.stringify(data)},
                             success: function ($response) {
-                                $('#' + e.data.index).attr('src', '../assets/img/icons/like_filled.png');
-                                console.log(JSON.parse($response)['likes']);
+                                $('#' + e.data.index+'popular').attr('src', '../assets/img/icons/like_filled.png');
+                                console.log($response);
                             }
                         });
 
@@ -49,10 +51,10 @@ $(function(){
                         $.ajax({
                             type: 'post',
                             url: '/removeLike',
-                            data: {"path": $images[e.data.index].img_path},
+                            data: {data:JSON.stringify(data)},
                             success: function ($response) {
-                                $('#' + e.data.index).attr('src', '../assets/img/icons/like.png');
-                                console.log(JSON.parse($response)['likes']);
+                                $('#' + e.data.index+'popular').attr('src', '../assets/img/icons/like.png');
+                                console.log($response);
                             }
                         });
                     }
@@ -64,46 +66,46 @@ $(function(){
     $.ajax({
         type: 'post',
         url: '/getRecentImages',
-        success: function ($response_v2) {
-            console.log($response_v2);
-            $images_v2 = JSON.parse($response_v2);
-            for (var ri_image in $images_v2){
-                var array = $images_v2[ri_image].img_path.split('/');
-                var path = $images_v2[ri_image].img_path.split('.');
+        success: function ($response) {
+            $images = JSON.parse($response);
+            for (var i_image in $images){
+                var array = $images[i_image].img_path.split('/');
+                var path = $images[i_image].img_path.split('.');
                 $('#gallery_recent').append("<div class='col-md-4 portfolio-item'><a href='#'><div class='img-wrapper'>" +
                     "<img class='img-responsive img_profile' src='../"+path[0]+"_400.jpg' alt=''" +
                     "</div></a>" +
                     "<div class='buttons_icons'>" +
                     "<a class='btn btn-simple btn-just-icon'>" +
-                    "<img src='../assets/img/icons/like.png' id='"+ri_image+"' width='30' height='30'>" +
+                    "<img src='../assets/img/icons/like.png' id='"+i_image+"recent' width='30' height='30'>" +
                     "</a><a class='btn btn-simple btn-just-icon' >" +
-                    "<img src='../assets/img/icons/comments.png' id='"+ri_image + ri_image+"' width='30' height='30'>" +
+                    "<img src='../assets/img/icons/comments.png' id='"+i_image + i_image+"' width='30' height='30'>" +
                     "</a></div>" +
                     "<a href='/profile/"+array[3]+"' id='link_username'><h3 id='username'>"+array[3]+"</h3></a>" +
-                    "<h3>"+$images_v2[ri_image].title+"</h3>" );
+                    "<h3>"+$images[i_image].title+"</h3>" );
 
-                $("#"+ri_image).on('click',{index_v2:ri_image},function(e) {
-                    console.log('title: ', $images_v2[e.data.index_v2].title);
-                    if ($('#' + e.data.index_v2).attr('src') == '../assets/img/icons/like.png') {
+                $("#"+i_image+"recent").on('click',{index:i_image},function(e) {
+                    var data = {};
+                    data.user_id = $images[e.data.index].user_id;
+                    data.image_id = $images[e.data.index].id;
+                    if ($('#' + e.data.index+'recent').attr('src') == '../assets/img/icons/like.png') {
                         //console.log('0--> ',e.data.path);
                         $.ajax({
                             type: 'post',
                             url: '/incLike',
-                            data: {"path": $images_v2[e.data.index_v2].img_path},
-                            success: function ($response_v2) {
-                                $('#' + e.data.index_v2).attr('src', '../assets/img/icons/like_filled.png');
-                                console.log(JSON.parse($response_v2)['likes']);
+                            data: {data:JSON.stringify(data)},
+                            success: function ($response) {
+                                $('#' + e.data.index+'recent').attr('src', '../assets/img/icons/like_filled.png');
+                                console.log($response);
                             }
                         });
-
                     } else {
                         $.ajax({
                             type: 'post',
                             url: '/removeLike',
-                            data: {"path": $images_v2[e.data.index_v2].img_path},
-                            success: function ($response_v2) {
-                                $('#' + e.data.index_v2).attr('src', '../assets/img/icons/like.png');
-                                console.log(JSON.parse($response_v2)['likes']);
+                            data: {data:JSON.stringify(data)},
+                            success: function ($response) {
+                                $('#' + e.data.index+'recent').attr('src', '../assets/img/icons/like.png');
+                                console.log($response);
                             }
                         });
                     }

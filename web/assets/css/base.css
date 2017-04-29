@@ -24,20 +24,16 @@
     float: left;
     margin: 0px 15px 15px 0px;
 }
+.navBarTextNotif{
+    margin: 15px !important;
+}
 
 body{
     margin-top: 100px;
 }
 
-#userDropdown{
-    display: none;
-}
 .dropdown:hover .dropbtn {
     background-color: #3e8e41;
-}
-
-#navBar{
-    display: none;
 }
 
 #user_acces_icon{
@@ -47,6 +43,16 @@ body{
     margin-top: -5px;
 }
 
+.navBarIcons{
+    width: 25px;
+    height: 25px;
+    margin-left: 3px;
+}
+.navBarText{
+    margin-left: 12px;
+    color: black!important;
+    font-weight: normal !important;
+}
 
 #logo_navbar{
     max-width: 40px!important;
@@ -67,12 +73,12 @@ nav.navbar.navbar-inverse.navbar-fixed-top{
     background:whitesmoke !important;
     color:black !important;
 }
-#userNameDropdown:hover {
+
+.dropDownNav:hover {
     color: black!important;;
 }
 
-
-a#userNameDropdown:visited {
+a.dropDownNav:visited {
     color: black!important;;
 }
 
@@ -104,3 +110,26 @@ button.navbar-toggle{
 #password_reg{
     margin-top: 5px;
 }
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    margin-bottom: 100px;
+}
+
+footer {
+    clear: both;
+    position:relative;
+    z-index: 10;
+    height: 3em;
+    margin-bottom: -1em;
+}
+
+.maintext{
+    color: black!important;
+    font-weight: normal !important;
+}
+

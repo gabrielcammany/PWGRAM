@@ -27,7 +27,8 @@ class HelloController{
 
         $content=$app['twig']->render('home_samu.twig', array(
             'app' => [
-                'name'=>$app['app.name']
+                'name'=>$app['app.name'],
+                'username' => $app['session']->get('username')
             ],
         ));
         $response=new Response();

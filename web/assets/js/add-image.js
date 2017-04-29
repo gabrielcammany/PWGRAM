@@ -1,60 +1,70 @@
-/**
- * Created by Uni on 19/04/2017.
- */
 
-$(function () {
+
+var $image = $('.img-container > img');
+var loaded =   false;
+$(function(){
+
+    var imgloaded = $('.loaded');
+    imgloaded.hide();
+    var imgnoloaded = $('.noloaded');
+    imgnoloaded.show();
 });
+
+
 $('#addImage').click(function (e) {
-   e.preventDefault();
-  if(validateImage($('#newImage').attr('src'))&&validateTitle($('#titleImage').val())) {
-      var object = {};
-      object.image = $('#newImage').attr('src');
-      object.title = $('#titleImage').val();
-      object.private = $('#private').is(":checked");
-      object.public = $('#public').is(":checked");
-      object.username = user_info["username"];
-      object.userID = user_info["id"];
-      var stringData = JSON.stringify(object);
+    e.preventDefault();
 
-      $.ajax({
-          type: 'post',
-          url: '/uploadNewImage',
-          data: {myData: stringData},
-          success: function ($response) {
-              var status = $response.split('#');
-             // console.log('**' + $response);
-              status_modal($response);
-          }
-      });
-  }
+    if(validateImage($('#newImage').attr('src'))&&validateTitle($('#titleImage').val())) {
+        var object = {};
+        object.image = $('#newImage').attr('src');
+        object.title = $('#titleImage').val();
+        object.private = $('#private').is(":checked");
+        object.public = $('#public').is(":checked");
+        object.data = $image.cropper('getData');
+        var stringData = JSON.stringify(object);
+        $.ajax({
+            type: 'post',
+            url: '/uploadNewImage',
+            data: {myData: stringData},
+            success: function ($response) {
+                var status = $response.split('#');
+                status_modal($response);
+            }
+        });
+    }
 });
-/**
- * Esta función no hace una mierda BY MANEL MANCHON!...
- */
-/*
-function uploadPicture() {
-    $.ajax({
-        type: 'POST',
-        url: '/upload',
-        data: {myData:$('#newImage').attr('src')},
-        success: function ($response) {
-        }
-    });
-}*/
 
-$("#btnSelectImage").change(function(){
+
+$("#inputImage").change(function(){
 
     if (this.files && this.files[0]) {
         var reader = new FileReader();
 
         reader.readAsDataURL(this.files[0]);
         reader.onload = function (e) {
-            $('#newImage').attr('src', e.target.result);
-
+            if(!loaded){
+                $image.cropper({
+                    aspectRatio: 1/ 1,
+                    viewMode: 2,
+                    preview: '.preview',
+                    responsive: true,
+                    mouseWheelZoom: true,
+                    touchDragZoom: true,
+                    modal: false,
+                    strict: true,
+                });
+                loaded = true;
+                var imgnoloaded = $('.noloaded');
+                var imgloaded = $('.loaded');
+                imgnoloaded.hide();
+                imgloaded.show();
+            }
+            $image.cropper('replace', e.target.result)
         }
 
     }
 });
+
 
 function validateTitle(v1) {
     if(!v1){
@@ -66,7 +76,7 @@ function validateTitle(v1) {
 }
 
 function validateImage(v1) {
-    if(v1.localeCompare("../assets/img/default/default_user.png") == 0){
+    if(v1.localeCompare("") == 0){
         $('.error').addClass('alert alert-danger').html("Selecciona una imagen");
 
         return false;

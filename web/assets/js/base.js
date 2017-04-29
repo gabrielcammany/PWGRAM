@@ -4,7 +4,7 @@
 
 
 $(function() {
-    var customBar = $('#userDropdown');
+    var customBar = $('#customnavBar');
     var dropDown = $('#userNameDropdown');
     var login = $('#navBar');
     if(dropDown.attr('data-content') == ""){
@@ -14,6 +14,21 @@ $(function() {
         login.hide();
         customBar.show();
     }
+    /*$.ajax({
+        type: 'post',
+        url: '/getUserNotifications',
+        data: {"dropdown": 1},
+        success: function ($response) {
+            if($response != "false"){
+                console.log(JSON.parse($response));
+                var numberNotification = $('#notificationNumber');
+                numberNotification.text($response.length);
+            }else{
+                var numberNotification = $('#notificationNumber');
+                numberNotification.hide();
+            }
+        }
+    });*/
     var button = $('#logout');
     button.click(function () {
         swal({

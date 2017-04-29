@@ -4,18 +4,10 @@
 
 var user_info;
 $(function() {
+    $('#btnEditProfile').show();
+    $('#gallery').show();
+    $('#containerInfoUser').hide();
 
-
-
-    /* user_info = JSON.parse(localStorage.getItem('user'));
-     // console.log(user_info);
-     $('#perfil_reg').attr('src','../'+user_info.img_path);
-     $('#email_reg').attr('value',user_info.email);
-     $('#username').attr('value',user_info.username);
-     // console.log(user_info.birthdate.replace(/-/g , "/"));
-     $('#datepicker').attr('value',user_info.birthdate.replace(/-/g , "/"));
-     $('#password_reg').attr('value',user_info.password);
-     $('#password_confirmation').attr('value',user_info.password);*/
 });
 
 $('#update_info').click(function (e) {
@@ -244,6 +236,19 @@ $("#btnSelectImage").change(function(){
     readURL(this);
     img_path=1;
 });
-/**
- * Created by Uni on 25/04/2017.
- */
+
+$('#btnEditProfile').on('click',function (e) {
+    e.preventDefault();
+    $('#btnEditProfile').hide();
+    $('#gallery').hide();
+    $('#containerInfoUser').show();
+    var info = $('#containerInfoUser').attr('data-content').split("?");;
+    $('#inputNombreUsuario').val(info[0]);
+    $('#inputCorreoUsuario').val(info[1]);
+    $('#inputDateUsuario').val(info[2]);
+});
+
+$('#backToProfile').on('click',function (e) {
+    e.preventDefault();
+    window.location.reload();
+})
