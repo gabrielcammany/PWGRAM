@@ -65,10 +65,10 @@
                    </aside>
                    <div id="divImgEditProfile" class="group-button">
                        <button title="Editar foto de perfil" id="btnEditImage">
-                           <img id="idImgBtn" alt="Editar foto de perfil" src="/assets/img/default/default_profile_100.png">
+                           <img id="idImgBtn" alt="Editar foto de perfil" src="/assets/img/default/default_profile_100.png" class="img-rounded img-responsive">
                        </button>
                        <form enctype="multipart/form-data">
-                           <input type="file" accept="image/jpeg">
+                           <input type="file" accept="image/jpeg" id="imgProfile">
                        </form>
                    </div>
                </div>
@@ -93,8 +93,11 @@
                        <aside>
                            <label>Fecha de Nacimiento</label>
                        </aside>
-                       <div  class="divInput">
-                           <input type="text" id="inputDateUsuario" class="inputs" aria-required="false">
+                       <div  class="divInput input-group date" data-date-format="yyyy/mm/dd" data-provide="datepicker">
+                           <input type="text" id="inputDateUsuario" class="inputs form-control" aria-required="false">
+                           <div class="input-group-addon">
+                               <span class="glyphicon glyphicon-th"></span>
+                           </div>
                        </div>
                    </div>
                    <div class="divCampo">

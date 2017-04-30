@@ -71,4 +71,6 @@ $app->post('/popular_images','PwGram\\Controller\\ImageController::getPopularIma
 $app->post('/incLike','PwGram\\Controller\\ImageController::incLike');
 $app->post('/removeLike','PwGram\\Controller\\ImageController::removeLike');
 $app->post('/getUserNotifications','PwGram\\Controller\\NotificationsController::getUserNotifications');
+$app->get('/image/{id}','PwGram\\Controller\\ImageController::renderImage');
+$app->post('/getInfoImage','PwGram\\Controller\\ImageController::getImageInfo');
 

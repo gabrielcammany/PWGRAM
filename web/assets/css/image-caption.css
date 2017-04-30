@@ -6,13 +6,13 @@ figure.snip0016 {
     float: left;
     overflow: hidden;
     margin: 10px 1%;
-    min-width: 400px;
-    min-height: 400px;
+    max-width: 600px;
+    max-height: 600px;
     width: 100%;
-   /* min-width: 220px;
-    max-width: 310px;
-    max-height: 220px;
-    width: 100%;*/
+    /* min-width: 220px;
+     max-width: 310px;
+     max-height: 220px;
+     width: 100%;*/
     background: #000000;
     text-align: left;
 }
@@ -109,5 +109,5 @@ figure.snip0016:hover figcaption::before {
     transition-delay: 0s;
 }
 #label_like{
-    margin-top: 70px;
+    margin-top: 52px;
 }

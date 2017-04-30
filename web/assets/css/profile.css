@@ -85,6 +85,15 @@ aside{
     outline: none;
 }
 
+div.input-group-addon{
+    border: none !important;
+
+}
+
+#btnEditImage:focus{
+    outline: none;
+}
+
 #divImgEditProfile{
     overflow: hidden;
     position: relative;
@@ -156,7 +165,7 @@ footer {
     position: absolute;
     bottom: 0;
     width: 100%;
-    height: 100px; //same height as the margin to the bottom of the body
+    height: auto; //same height as the margin to the bottom of the body
 }
 
 

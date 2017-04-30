@@ -153,7 +153,10 @@ class Image
         $this->scale(100,$new_path,$img_path);
         $new_path = $aux_path[0].'_400.jpg';
         copy($img_path,$new_path);
-        $this->scale(400,$new_path,$img_path);
+        $this->scale(600,$new_path,$img_path);
+        $new_path = $aux_path[0].'_600.jpg';
+        copy($img_path,$new_path);
+        $this->scale(600,$new_path,$img_path);
     }
 
     function scale($size,$newPath,$originalPath){
@@ -194,7 +197,8 @@ class Image
      * Funcion que incrementa y devuelve los likes de una imagen.
      * @return string -> Numero de likes actualizado
      */
-    function newLike(){
+    public function newLike(){
+        $result = 'no hay datos';
         if(!empty($_POST['data'])) {
             $data = json_decode($_POST['data']);
             try{
@@ -221,7 +225,7 @@ class Image
         return json_encode($result);
     }
 
-    function dislike(){
+    public function dislike(){
         if(!empty($_POST['data'])) {
             $data = json_decode($_POST['data']);
             $db = new PDO('mysql:host=localhost;dbname=pwgram', "root", "gabriel");
@@ -240,5 +244,15 @@ class Image
         return json_encode($result);
     }
 
-
+    public function getInfoUnicImage(){
+        if(isset($_POST['id'])) {
+            $db = new PDO('mysql:host=localhost;dbname=pwgram', "root", "gabriel");
+            $stmt = $db->prepare('SELECT * FROM image WHERE id=?;');
+            $stmt->bindParam(1, $_POST['id'], \PDO::PARAM_STR);
+            $stmt->execute();
+            $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+            return json_encode($result);
+        }
+        return 0;
+    }
 }

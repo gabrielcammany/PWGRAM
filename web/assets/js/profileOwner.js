@@ -13,23 +13,20 @@ $(function() {
 $('#update_info').click(function (e) {
     e.preventDefault();
 
-    if(validaUsername($('#username').val())&&validaEmail($('#email_reg').val())&&validateDate($('#datepicker').val())&&validatePasswordRegistration($('#password_reg').val(),$('#password_confirmation').val())){
+    if(validaUsername($('#inputNombreUsuario').val())&&validaEmail($('#inputCorreoUsuario').val())&&validateDate($('#inputDateUsuario').val())&&validatePasswordRegistration($('#inputPassword').val(),$('#inputConfirmPass').val())){
        // console.log('@@ ');
         var reg = {};
-        reg.email = $('#email_reg').val();
+        reg.email = $('#inputCorreoUsuario').val();
         reg.pass = $('#password_reg').val();
-        reg.date = $('#datepicker').val();
-        reg.confirm_pass = $('#password_confirmation').val();
-        reg.username = $('#username').val();
-        if(img_path)reg.img = 1;
-        if(!img_path)reg.img = 0;
-        //console.log('--> '+reg.img+'\n');
+        reg.date = $('#inputDateUsuario').val();
+        reg.confirm_pass = $('#inputConfirmPass').val();
+        reg.username = $('#inputNombreUsuario').val();
+        reg.img = $('#idImgBtn').attr('src');
         var stringData = JSON.stringify(reg);
-        //console.log("LLEGOO ANTES AJAX");
         $.ajax({
             type: 'post',
             url: '/update',
-            data: {myData:stringData,oldUser:user_info.username},
+            data: {myData:stringData},
             success: function ($response) {
                 //Determinar resposta server
                 status_modal($response);
@@ -251,4 +248,19 @@ $('#btnEditProfile').on('click',function (e) {
 $('#backToProfile').on('click',function (e) {
     e.preventDefault();
     window.location.reload();
-})
+});
+
+$('#btnEditImage').on('click',function (e) {
+    e.preventDefault();
+    $('#imgProfile').trigger('click');
+});
+
+$("#imgProfile").change(function(){
+    if (this.files && this.files[0]) {
+        var reader = new FileReader();
+        reader.readAsDataURL(this.files[0]);
+        reader.onload = function (e) {
+            $('#idImgBtn').attr('src', e.target.result);
+        }
+    }
+});
