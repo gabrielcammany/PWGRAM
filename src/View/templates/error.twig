@@ -1,0 +1,18 @@
+{% extends "base_gabri.twig" %}
+{% block title %}Error Page{% endblock %}
+{% block head %}
+    {{ parent() }}
+    <style type="text/css">
+        h1{text-transform: uppercase;}
+    </style>
+{% endblock %}
+{% block content %}
+    <!-- <h1>An error has occurred</h1>
+     <div>
+         <p>User not found</p>
+     </div>-->
+    <div>
+        <p>{{ message }}</p>
+    </div>
+{% endblock %}
+{% block footer %}{% endblock %}

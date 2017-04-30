@@ -1,0 +1,55 @@
+{% extends "base_gabri.twig" %}
+
+{% block head %}
+    {{ parent() }}
+{% endblock %}
+
+{% block title %}Home{% endblock %}
+
+{% block styles %}
+    {{ parent() }}
+    <link href="{{ asset('unicImage.css','css')}}" rel="stylesheet"/>
+{% endblock %}
+
+{% block header %}
+    {{ parent() }}
+{% endblock %}
+
+{% block header_elements %}
+    {{ parent() }}
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-8 left_container">
+                <img class='img-responsive img_profile' id="main_image" src='' alt='{{ app.image_id }}'/>
+
+                <div class='buttons_icons' align='center'>
+                    <a class='btn btn-simple btn-just-icon'>
+                        <img src='{{ asset('../assets/img/icons/edit.png') }}' id='editImage' width='30' height='30'>
+                    </a>
+                    <a class='btn btn-simple btn-just-icon' >
+                        <img src='{{ asset('../assets/img/icons/delete.png') }}' id='deleteImage' width='30' height='30'>
+                    </a>
+                </div>
+            </div>
+            <div class = "col-sm-4 right_container" id="content" align="center">
+
+            </div>
+
+        </div>
+
+    </div>
+
+{% endblock %}
+
+{% block footer %}
+    {{ parent() }}
+{% endblock %}
+
+{% block scripts %}
+    {{ parent() }}
+    <script src="{{ asset('/unicImage.js','js')}}"></script>
+
+{% endblock %}
