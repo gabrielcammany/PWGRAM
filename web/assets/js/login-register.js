@@ -293,8 +293,10 @@ function status_modal( $response){
             break;
         case'12':
             $('.error').addClass('alert alert-danger').html("Username o contrasena incorrecta");
+            break;
         default:
             $('.error').addClass('alert alert-danger').html("Error desconocido" + $response);
+            break;
     }
 }
 

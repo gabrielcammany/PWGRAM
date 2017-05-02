@@ -18,13 +18,12 @@ $('#update_info').click(function (e) {
         var reg = {};
 
         reg.email = $('#inputCorreoUsuario').val();
-        reg.pass = $('#password_reg').val();
+        reg.pass = $('#inputPassword').val();
         reg.date = $('#inputDateUsuario').val();
         reg.confirm_pass = $('#inputConfirmPass').val();
         reg.username = $('#inputNombreUsuario').val();
         reg.img = $('#idImgBtn').attr('src');
         reg.id = $('#userName').attr('data-content');
-
         var stringData = JSON.stringify(reg);
         $.ajax({
             type: 'post',
@@ -242,6 +241,7 @@ $("#imgProfile").change(function(){
         reader.readAsDataURL(this.files[0]);
         reader.onload = function (e) {
             $('#idImgBtn').attr('src', e.target.result);
+            img_path = 1;
         }
     }
 });

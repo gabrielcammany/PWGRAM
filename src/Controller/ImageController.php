@@ -21,7 +21,9 @@ class ImageController
         $content=$app['twig']->render('addImage.twig', array(
             'app' => [
                 'name'=>$app['app.name'],
-                'username' => $app['session']->get('username')
+                'username' => $app['session']->get('username'),
+                'img' => $app['session']->get('img')
+
             ],
         ));
         $response=new Response();
@@ -40,7 +42,9 @@ class ImageController
             'app' => [
                 'name'=>$app['app.name'],
                 'username' => $app['session']->get('username'),
-                'image_id'=> $data[2]
+                'image_id'=> $data[2],
+                'img' => $app['session']->get('img')
+
             ],
         ));
         $response=new Response();
@@ -123,5 +127,10 @@ class ImageController
         $image = new Image($request, $app);
 
         return $image->dropImage();
+    }
+    public function editImageInfo(Request $request,Application $app)
+    {
+        $image = new Image($request,$app);
+        return $image->editImage();
     }
 }

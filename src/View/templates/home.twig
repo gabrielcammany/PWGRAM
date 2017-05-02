@@ -9,6 +9,7 @@
 {% block styles %}
     {{ parent() }}
 <link href="{{ asset('gallery.css','css')}}" rel="stylesheet"/>
+<link href="{{ asset('caption.css','css')}}" rel="stylesheet"/>
 {% endblock %}
 
 {% block header %}
@@ -20,21 +21,19 @@
 
 {% block content %}
 
-    <div class="responsive container">
-        <div class=" responsive row">
-            <h1>Populares</h1>
-            <div class="responsive" id="gallery_pop">
-
-            </div>
-    </div>
-    <!-- Projects Row -->
+    <h1 class="page-header text-header">Populares
+    </h1>
+    <div class="divider"></div>
     <div class="container">
-        <div class="responsive row">
-            <h1>Recientes</h1>
-            <div class="responsive" id="gallery_recent">
-
-            </div>
-
+        <div class="responsive row row-flex row-flex-wrap" id="gallery_pop">
+        </div>
+    </div>
+    <h1 class="page-header text-header">Recientes
+    </h1>
+    <div class="divider"></div>
+    <div class="container">
+        <div class="responsive row row-flex row-flex-wrap" id="gallery_recent">
+        </div>
     </div>
 
 

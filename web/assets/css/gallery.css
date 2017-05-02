@@ -1,7 +1,7 @@
 
 div.buttons_icons{
     width:100% !important;
-    min-width: 425px;
+    min-width: 300px;
 }
 #gallery{
     margin-top: 25px;
@@ -14,7 +14,7 @@ div.buttons_icons{
 div.portfolio-item{
     min-width: 300px;
     min-height: 400px;
-    display: inline-block;
+    display: block;
     align-content: center;
 }
 

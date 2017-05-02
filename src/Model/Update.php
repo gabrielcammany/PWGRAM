@@ -61,24 +61,28 @@ class Update
             }
 
             if($this->validaUsername($username)&&$this->validaEmail($email)&&$this->validateDate($date)&&$this->validatePasswordRegistration($pass,$confirm_pass)){
-
-                $img_path='assets/img/users/'.strtolower($username).'/profileImage.jpg';
-
-                if(strcmp($img,'/assets/img/default/default_profile_100.png') == 0){
-                    copy(__DIR__.'../assets/img/default/default_profile_100.png','/assets/img/users/'.strtolower($username).'/');
-                    rename('assets/img/users/'.strtolower($username).'/default_profile_100.png','profileImage.jpg');
-                }else{
+                $img_path= 'assets/img/users/'.strtolower($username).'/profileImage.jpg';
+                if(strcmp('../assets/img/users/'.strtolower($username).'/profileImage_100.jpg',$img) != 0){
                     $this->imgClass->base64_to_jpeg($img, $img_path);
                     $this->imgClass->resize_process($img_path);
                 }
-                if(empty($pass) && empty($confirm_pass)){
-                    $sql = "UPDATE user SET email=?,password=?,birthdate=?,username=?,img_path=? WHERE id=?";
-                    $get = $this->app['db']->executeUpdate($sql,array($email,$pass,$date,$username,$img_path,$id));
-                }else{
-                    $sql = "UPDATE user SET email=?,password=?,birthdate=?,username=?,img_path=?,password=? WHERE id=?";
-                    $get = $this->app['db']->executeUpdate($sql,array($email,$pass,$date,$username,$img_path,$pass,$id));
+
+                $sql = "SELECT password FROM user WHERE id=?";
+                $get = $this->app['db']->fetchAssoc($sql,array($id));
+                if(!$get){
+                     $this->status = 2;
+                }else {
+
+                    if (empty($pass) && empty($confirm_pass)) {
+                        $sql = "UPDATE user SET email=?,password=?,birthdate=?,username=?,img_path=?,password=? WHERE id=?";
+                        $get = $this->app['db']->executeUpdate($sql, array($email, $pass, $date, $username, $img_path,$get['password'], $id));
+                    } else {
+                        $hashed_pass = password_hash($pass, PASSWORD_DEFAULT);
+                        $sql = "UPDATE user SET email=?,password=?,birthdate=?,username=?,img_path=?,password=? WHERE id=?";
+                        $get = $this->app['db']->executeUpdate($sql, array($email, $pass, $date, $username, $img_path, $hashed_pass, $id));
+                    }
+                    $this->status = 1;
                 }
-                $this->status = 1;
             }
 
         }

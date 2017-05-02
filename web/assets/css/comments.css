@@ -1,0 +1,21 @@
+#validateText{
+    text-align: center;
+    padding-bottom: 30px;
+}
+
+
+a.linkText{
+    text-align: center;
+    font-weight: normal !important;
+    color: black!important;
+}
+
+a.linkText:visited {
+    color: black!important;
+}
+a.linkText:hover {
+    color: black!important;
+}
+.fixed-table-toolbar .search input{
+    border: 1px solid grey;
+}

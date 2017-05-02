@@ -13,10 +13,10 @@ $(function() {
 function listeners() {
     window.actionEvents = {
         'click .remove': function (e, value, row, index) {
-            removeNotification(row);
+            removeComment(row);
         }
     };
-    $('#tableNotifications').on('all.bs.table', function (e, name, args) {
+    $('#tableComments').on('all.bs.table', function (e, name, args) {
         //console.log('Event:', name, ', data:', args);
     })
         .on('refresh.bs.table', function (e, data) {
@@ -35,14 +35,14 @@ function actionFormatter(value, row, index) {
 
 function imglink(value, row, index) {
     return [
-        '<a class="imgNotification linkText" href="/image/'+value+'" title="Imagen">'
-         +value+
+        '<a class="imgComment linkText" href="/image/'+(value.split("_"))[0]+'" title="Imagen">'
+         +(value.split("_"))[1]+
         '</a>',
     ].join('');
 }
 function userlink(value, row, index) {
     return [
-        '<a class="userNotification linkText" href="/profile/'+value+'" title="Usuario">'
+        '<a class="userComment linkText" href="/profile/'+value+'" title="Usuario">'
         +value+
         '</a>',
     ].join('');
@@ -51,11 +51,9 @@ function userlink(value, row, index) {
 function fillTable() {
     $.ajax({
         type: 'post',
-        url: '/getUserNotifications',
-        data: {"dropdown": 0},
-        success: function (response) {
-            list = (JSON).parse(response);
-            list_aux = (JSON).parse(response);
+        url: '/getUserComments',
+        success: function ($response) {
+            list = (JSON).parse($response);
             if(list.length != 0) {
                 for (var i = 0; i < list.length; i++) {
                     var startDate = new Date();
@@ -91,39 +89,30 @@ function fillTable() {
                         }
                     }
                     list[i].created_at = time;
-                    list_aux[i].created_at = time;
-                    if (list[i].event_id == 1) {
-                        list[i].event_id = "Like"
-                    } else {
-                        list[i].event_id = "Comentario"
-                    }
-                    list[i].post_id = ((list[i].post_id).split("_"))[1];
                 }
                 mainlist = list;
                 if(refillTable){
-                    $('#tableNotifications').bootstrapTable("load", mainlist);
-                    $("#tableNotificationsList").html("");
-                    addNotifications(list_aux,true);
+                    $('#tableComments').bootstrapTable("load", mainlist);
                     var $search = $('.fixed-table-toolbar .search input');
-                    $search.attr('placeholder', 'Busca notificaciones!');
+                    $search.attr('placeholder', 'Busca Comentarios!');
                 }else{
-                    $('#tableNotifications').bootstrapTable({
+                    $('#tableComments').bootstrapTable({
                         data: mainlist,
                         formatNoMatches: function () {
-                            return 'No tienes ninguna notificación';
+                            return 'No tienes ningun comentario';
                         }
                     });
                     var $search = $('.fixed-table-toolbar .search input');
-                    $search.attr('placeholder', 'Busca notificaciones!');
+                    $search.attr('placeholder', 'Busca Comentarios!');
                 }
             }else{
-                $('#tableNotifications').bootstrapTable({
+                $('#tableComments').bootstrapTable({
                     formatNoMatches: function () {
-                        return 'No tienes ninguna notificación';
+                        return 'No tienes ningun comentario';
                     }
                 });
                 var $search = $('.fixed-table-toolbar .search input');
-                $search.attr('placeholder', 'Busca notificaciones!');
+                $search.attr('placeholder', 'Busca Comentarios!');
             }
         }
     });
@@ -135,7 +124,7 @@ function updateTable() {
         url: '/getNumNotifications',
         success: function ($response) {
             var num = (JSON.parse($response))[0]["COUNT(id)"];
-            var numberNotification = $('#notificationNumber');
+            var numberNotification = $('#commentNumber');
             numberNotification.text(num);
             refillTable = true;
             fillTable();
@@ -143,22 +132,20 @@ function updateTable() {
     });
 }
 
-function removeNotification(row){
+function removeComment(row){
     $.ajax({
         type: 'post',
-        url: '/notificationSeen',
-        data: {index:row["id"]},
+        url: '/commentRemove',
+        data: {index:(row.image_id.split("_"))[0]},
         success: function ($response) {
-            var numberNotification = $('#notificationNumber');
-            numberNotification.text(mainlist.length-1);
-            if (mainlist.length != 1){
-                refillTable = true;
-                fillTable();
-            }else{
-                numberNotification.hide();
-                var noNotification = $('#noNotification');
-                noNotification.show();
-                $('#tableNotifications').bootstrapTable('removeAll');
+            var res = JSON.parse($response);
+            if(res.length == 0){
+                if (mainlist.length != 1){
+                    refillTable = true;
+                    fillTable();
+                }else{
+                    $('#tableComments').bootstrapTable('removeAll');
+                }
             }
         }
     });

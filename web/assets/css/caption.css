@@ -5,9 +5,10 @@ figure.snip0016 {
     position: relative;
     float: left;
     overflow: hidden;
-    margin: 10px 1%;
-    min-width: 400px;
-    min-height: 400px;
+    min-width: 329px;
+    min-height: 300px;
+    margin-left: -16px;
+    border-radius: 5px;
     width: 100%;
    /* min-width: 220px;
     max-width: 310px;

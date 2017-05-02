@@ -64,6 +64,7 @@ class SignIn
                 $this->app['session']->set('id',$result['id']);
                 $this->app['session']->set('username',$result['username']);
                 $this->app['session']->set('posts',$result['posts']);
+                $this->app['session']->set('img',$result['img_path']);
                 $this->status = 10;
                 $generator = new Random();
                 $token = $generator->generate(36);

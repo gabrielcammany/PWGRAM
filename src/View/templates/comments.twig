@@ -8,7 +8,7 @@
 
 {% block styles %}
     {{ parent() }}
-    <link href="{{ asset('/notifications.css','css') }}" rel="stylesheet" />
+    <link href="{{ asset('/comments.css','css') }}" rel="stylesheet" />
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.css">
 {% endblock %}
 
@@ -28,20 +28,19 @@
             <div class="profile-content">
                 <div class="container">
                     <div class="row">
-                        <h2 class="page-header text-header">Mis notificaciones
+                        <h2 class="page-header text-header">Comentarios de mis imagenes
                         </h2>
                         <div class="divider"></div>
                         <div >
-                            <table id="tableNotifications"
+                            <table id="tableComments"
                                    class="table" data-search="true" data-pagination="true"
                                    data-show-refresh="true"
                                    data-show-toggle="true">
                                 <thead >
                                     <tr>
-                                        <th data-formatter="userlink"data-field="user_fired_event" data-sortable="true" data-events="actionEvents">¿Quien?</th>
-                                        <th data-field="event_id" data-sortable="true" data-events="actionEvents">Tipo</th>
-                                        <th data-formatter="imglink" data-field="post_id" data-sortable="true" data-events="actionEvents">¿En que imagen?</th>
-                                        <th data-field="created_at" data-sortable="true" data-events="actionEvents">¿Cuando?</th>
+                                        <th data-formatter="imglink" data-field="image_id" data-sortable="true" data-events="actionEvents">¿En que imagen?</th>
+                                        <th data-field="created_at" data-sortable="true" data-events="actionEvents">¿Hace cuanto?</th>
+                                        <th data-field="text" data-sortable="true" data-events="actionEvents">Comentario</th>
                                         <th data-field="action" data-formatter="actionFormatter" data-events="actionEvents">Eliminar</th>
                                     </tr>
                                 </thead>
@@ -65,7 +64,7 @@
 
 {% block scripts %}
     {{ parent() }}
-    <script src="{{ asset('/notifications.js','js')}}"></script>
+    <script src="{{ asset('/comments.js','js')}}"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.js"></script>
 
 {% endblock %}

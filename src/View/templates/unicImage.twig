@@ -34,8 +34,16 @@
                     </a>
                 </div>
             </div>
-            <div class = "col-sm-4 right_container" id="content" align="center">
-
+            <div class = "col-sm-4 right_container" id="content" align="center" >
+                <form id='formEditImage' hidden>
+                    <div class='form-grup' align='left'>
+                        <label for='title_input'>Title:</label>
+                        <input class='form-control' id ='title_input' name="title" type="text" data-content="{{ app.image_id }}">
+                    </div>
+                    <input id='public' type='radio' name='radio' value='public'> Imagen Pública<br>
+                    <input id='private' type='radio' name='radio' value='private'> Imagen Privada<br>
+                    <input id='saveChanges' class='btn  btn-default btn-register' type='button' value='Guardar Cambios'>
+                </form>
             </div>
 
         </div>

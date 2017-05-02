@@ -27,7 +27,9 @@ class EditController
             'user'=> 'samu',
             'app' => [
                 'name'=>$app['app.name'],
-                'username' => $app['session']->get('username')
+                'username' => $app['session']->get('username'),
+                'img' => $app['session']->get('img')
+
 
             ],
         ));

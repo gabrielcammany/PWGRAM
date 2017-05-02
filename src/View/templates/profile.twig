@@ -28,7 +28,7 @@
             <header id="headerID">
 
                 <div id="ImgID">
-                    <img src="/assets/img/default/default_profile_100.png" class="img-rounded img-responsive" id="ImgSrcID">
+                    <img src="{{ app.user.img_path.cuatro }}" class="img-rounded img-responsive" id="ImgSrcID">
                 </div>
 
                 <div id="infoUser">
@@ -52,7 +52,10 @@
 
     <div class="container">
         <div class="error"></div>
-        <div  id="gallery"></div>
+        <div class="container">
+            <div class="responsive row row-flex row-flex-wrap" id="gallery">
+            </div>
+        </div>
         <div class="wrapper" id="containerInfoUser" data-content="{{ app.user.name }}?{{ app.user.email }}?{{ app.user.date }}?{{ app.user.img_path }}" hidden>
            <article id="articleForm">
                <div id="contenedorImagen">
@@ -61,7 +64,7 @@
                    </aside>
                    <div id="divImgEditProfile" class="group-button">
                        <button title="Editar foto de perfil" id="btnEditImage">
-                           <img id="idImgBtn" alt="Editar foto de perfil" src="/assets/img/default/default_profile_100.png" class="img-rounded img-responsive">
+                           <img id="idImgBtn" alt="Editar foto de perfil" src="../{{ app.user.img_path.cien }}" class="img-rounded img-responsive">
                        </button>
                        <form enctype="multipart/form-data">
                            <input type="file" accept="image/jpeg" id="imgProfile">

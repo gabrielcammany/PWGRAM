@@ -12,7 +12,9 @@ class HelloController{
         $content=$app['twig']->render('home.twig', array(
             'app' => [
                 'name'=>$app['app.name'],
-                 'username' => $app['session']->get('username')
+                 'username' => $app['session']->get('username'),
+                'img' => $app['session']->get('img')
+
             ]
         ));
         $response=new Response();
@@ -28,7 +30,9 @@ class HelloController{
         $content=$app['twig']->render('home_samu.twig', array(
             'app' => [
                 'name'=>$app['app.name'],
-                'username' => $app['session']->get('username')
+                'username' => $app['session']->get('username'),
+                'img' => $app['session']->get('img')
+
             ],
         ));
         $response=new Response();
@@ -43,7 +47,9 @@ class HelloController{
         $content=$app['twig']->render('profile_owner.twig', array(
             'app' => [
                 'user' => 'Alejandra',
-                'name'=>$app['app.name']
+                'name'=>$app['app.name'],
+                'img' => $app['session']->get('img')
+
             ]
         ));
         $response=new Response();

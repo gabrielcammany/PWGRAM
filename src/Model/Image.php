@@ -53,8 +53,6 @@ class Image
     }
 
     public function addNewImage(){
-        $success = array();
-        // echo ($_POST['myData']);
         if(isset($_POST['myData'])){
             $data = json_decode($_POST['myData'],true);
             $img = $data['image'];
@@ -117,6 +115,7 @@ class Image
         $stmt->execute();
         $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         $result = $this->checkLikes($db,$result);
+        $result = $this->addComments($db,$result);
         return json_encode($result);
     }
 
@@ -131,6 +130,7 @@ class Image
             $stmt->execute();
             $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
             $result = $this->checkLikes($db,$result);
+            $result = $this->addComments($db,$result);
             return json_encode($result);
         }
     }
@@ -143,6 +143,7 @@ class Image
         $stmt->execute();
         $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         $result = $this->checkLikes($db,$result);
+        $result = $this->addComments($db,$result);
         return json_encode($result);
     }
     function checkLikes($db,$result){
@@ -170,6 +171,49 @@ class Image
         }
         return $result;
     }
+
+    function addComments($db,$result){
+        $query = str_repeat("?,", count($result)-1) . "?";
+        $stmt = $db->prepare('SELECT user_id,image_id,text,created_at FROM comment WHERE image_id IN ('.$query.'); ORDER BY created_at DESC');
+        $limit = count($result)+1;
+        $j = 0;
+        for($i = 1;$i<$limit;$i++){
+            $stmt->bindParam($i, $result[$j]["id"], \PDO::PARAM_STR);
+            $j++;
+        }
+        $stmt->execute();
+        $result2 = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        if(count($result2) != 0){
+            $query = str_repeat("?,", count($result2)-1) . "?";
+            $stmt = $db->prepare('SELECT id,username,img_path FROM user WHERE id IN ('.$query.');');
+            $limit = count($result2)+1;
+            $j = 0;
+            for($i = 1;$i<$limit;$i++){
+                $stmt->bindParam($i, $result2[$j]["user_id"], \PDO::PARAM_STR);
+                $j++;
+            }
+            $stmt->execute();
+            $result3 = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+            $commentsList = array();
+            for ($i = 0; $i < count($result); $i++) {
+                for ($j = 0; $j < count($result2); $j++) {
+                    if ($result[$i]["id"] == $result2[$j]["image_id"]) {
+                        $commentsContent = array();
+                        $resultSearch = $result3[(array_search($result2[$j]["user_id"], array_column($result3,"id")))];
+                        array_push($commentsContent,$resultSearch["username"]);
+                        array_push($commentsContent,$result2[$j]["text"]);
+                        array_push($commentsContent,$resultSearch["img_path"]);
+                        array_push($commentsContent,$result2[$j]["created_at"]);
+                        array_push($commentsList,$commentsContent);
+                    }
+                }
+                $result[$i]["comments"] = $commentsList;
+                $commentsList = array();
+            }
+        }
+        return $result;
+    }
+
     /**
      * Funcio encarregada de crear les imatges en diferents mides
      * @param $img_path
@@ -225,18 +269,18 @@ class Image
      * @return string -> Numero de likes actualizado
      */
     public function newLike(){
-        $result = 'no hay datos';
+        $result = "0";
         if(!empty($_POST['data'])) {
             $data = json_decode($_POST['data']);
             $id = $this->app['session']->get('id');
             try{
                 $db = new PDO('mysql:host=localhost;dbname=pwgram', "root", "gabriel");
-                $stmt = $db->prepare('SELECT seen_by_user FROM notification WHERE user_fired_event=? AND post_id=?;');
+                $stmt = $db->prepare('SELECT COUNT(id) FROM notification WHERE user_fired_event=? AND post_id=?;');
                 $stmt->bindParam(1,$id, \PDO::PARAM_STR);
                 $stmt->bindParam(2,$data->image_id, \PDO::PARAM_STR);
                 $stmt->execute();
                 $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-                if(count($result)==0){
+                if($result[0]["COUNT(id)"]==0){
                     $stmt = $db->prepare('UPDATE image SET likes = likes + 1 WHERE id=?;');
                     $stmt->bindParam(1, $data->image_id, \PDO::PARAM_STR);
                     $stmt->execute();
@@ -265,12 +309,12 @@ class Image
             $data = json_decode($_POST['data']);
             $id = $this->app['session']->get('id');
             $db = new PDO('mysql:host=localhost;dbname=pwgram', "root", "gabriel");
-            $stmt = $db->prepare('SELECT seen_by_user FROM notification WHERE user_fired_event=? AND post_id=?;');
+            $stmt = $db->prepare('SELECT COUNT(id) FROM notification WHERE user_fired_event=? AND post_id=?;');
             $stmt->bindParam(1,$id, \PDO::PARAM_STR);
             $stmt->bindParam(2,$data->image_id, \PDO::PARAM_STR);
             $stmt->execute();
             $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-            if(count($result)!=0) {
+            if($result[0]["COUNT(id)"]!=0){
                 $stmt = $db->prepare('UPDATE image SET likes = likes - 1 WHERE id=?;');
                 $stmt->bindParam(1, $data->image_id, \PDO::PARAM_STR);
                 $stmt->execute();
@@ -278,11 +322,11 @@ class Image
                 $stmt->bindParam(1, $id, \PDO::PARAM_STR);
                 $stmt->bindParam(2, $data->image_id, \PDO::PARAM_STR);
                 $stmt->execute();
-                $stmt = $db->prepare('SELECT likes FROM image WHERE id=?;');
-                $stmt->bindParam(1, $data->image_id, \PDO::PARAM_STR);
-                $stmt->execute();
-                $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
             }
+            $stmt = $db->prepare('SELECT likes FROM image WHERE id=?;');
+            $stmt->bindParam(1, $data->image_id, \PDO::PARAM_STR);
+            $stmt->execute();
+            $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         }
         return json_encode($result);
     }
@@ -305,8 +349,15 @@ class Image
             $stmt = $db->prepare('DELETE FROM image WHERE id=?;');
             $stmt->bindParam(1, $_POST['id'], \PDO::PARAM_STR);
             $stmt->execute();
-            return json_encode(PDO::rowCount());
+            return 1;
         }
         return 0;
+    }
+
+    public function editImage(){
+        if(isset($_POST['myData'])){
+            var_dump($_POST['myData']);
+            return 1;
+        }
     }
 }

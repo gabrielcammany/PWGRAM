@@ -8,7 +8,7 @@
 
 namespace PwGram\Controller;
 
-use PwGram\Model\Confirm;
+use PwGram\Model\Profile;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,6 +23,8 @@ class ProfileController
         if(!$get){
             $content = $app['twig']->render('error.twig',[
                 'message' => 'USER NOT FOUND',
+                'img' => $app['session']->get('img')
+
             ]);
             $response->setContent($content);
             $response->setStatusCode(Response::HTTP_NOT_FOUND);
@@ -32,6 +34,8 @@ class ProfileController
             }else{
                 $edit = false;
             }
+            $img_path = $get['img_path'];
+            $img_path = str_replace(".jpg","_100.jpg",$img_path);
             $content=$app['twig']->render('profile.twig', array(
                 'app' => [
                     'user' =>[
@@ -41,13 +45,18 @@ class ProfileController
                         'id' => $get['id'],
                         'email' => $get['email'],
                         'date' => str_replace("-","/",$get['birthdate']),
-                        'img_path' => $get['img_path']
+                        'img_path' => [
+                            'cien' => $img_path,
+                            'cuatro' => '../assets/img/users/'.strtolower($username).'/profileImage_400.jpg'
+                        ]
                     ],
                     'name'=>$app['app.name'],
                     'client' =>[
                         'edit' => $edit,
                     ],
-                    'username' => $app['session']->get('username')
+                    'username' => $app['session']->get('username'),
+                    'img' => $app['session']->get('img')
+
 
                 ],
 
@@ -58,7 +67,11 @@ class ProfileController
 
         $response->headers->set('Content-Type','text/html');
         $response->setContent($content);
-
         return $response;
+    }
+    public function getUserInfo(Application $app,Request $request){
+        $notification = new Profile($request,$app);
+
+        return $notification->getInfo();
     }
 }
