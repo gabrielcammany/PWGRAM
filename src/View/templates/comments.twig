@@ -1,0 +1,70 @@
+{% extends "base_gabri.twig" %}
+
+{% block head %}
+    {{ parent() }}
+{% endblock %}
+
+{% block title %}Comments{% endblock %}
+
+{% block styles %}
+    {{ parent() }}
+    <link href="{{ asset('/comments.css','css') }}" rel="stylesheet" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.css">
+{% endblock %}
+
+{% block header %}
+    {{ parent() }}
+{% endblock %}
+
+{% block header_elements %}
+    {{ parent() }}
+{% endblock %}
+
+{% block content %}
+
+    <div class="wrapper">
+
+        <div class="main main-raised">
+            <div class="profile-content">
+                <div class="container">
+                    <div class="row">
+                        <h2 class="page-header text-header">Comentarios de mis imagenes
+                        </h2>
+                        <div class="divider"></div>
+                        <div >
+                            <table id="tableComments"
+                                   class="table" data-search="true" data-pagination="true"
+                                   data-show-refresh="true"
+                                   data-show-toggle="true">
+                                <thead >
+                                    <tr>
+                                        <th data-formatter="imglink" data-field="image_id" data-sortable="true" data-events="actionEvents">¿En que imagen?</th>
+                                        <th data-field="created_at" data-sortable="true" data-events="actionEvents">¿Hace cuanto?</th>
+                                        <th data-field="text" data-sortable="true" data-events="actionEvents">Comentario</th>
+                                        <th data-field="action" data-formatter="actionFormatter" data-events="actionEvents">Eliminar</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+{% endblock %}
+
+{% block footer %}
+    {{ parent() }}
+{% endblock %}
+
+{% block scripts %}
+    {{ parent() }}
+    <script src="{{ asset('/comments.js','js')}}"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.js"></script>
+
+{% endblock %}

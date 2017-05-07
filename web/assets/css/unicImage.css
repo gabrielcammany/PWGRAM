@@ -1,0 +1,46 @@
+#title{
+    text-transform:capitalize;
+    font-weight: bold;
+    font-size: 32px;
+}
+
+#link_username{
+    text-transform:capitalize;
+}
+
+#main_image{
+    width: 100%;
+}
+
+#label_like{
+    margin-top: 20px;
+}
+
+A:hover{
+    text-decoration: none !important;
+    color: #666666;
+}
+
+/**
+Definimos qui el tamaño para que en el twig de subir imagen se mantega igual y no cambie su estilo.
+ */
+.selector{
+    margin:0 !important;
+    width: 25% !important;
+}
+section#formAddImage{
+    width: 398%;
+}
+
+input#titleimage{
+    background-color: white;
+    color: black;
+}
+/*
+input#titleimage.form-control :focus{
+    border-radius: 3px;
+    background-color: rgba(0, 0, 0, 0.09);
+    box-shadow: 0 1px 0px 0px rgba(0, 0, 0, 0.09) inset;
+    color: #FFFFFF;
+}
+*/Q

@@ -1,0 +1,57 @@
+{% extends "base_gabri.twig" %}
+
+{% block head %}
+    {{ parent() }}
+{% endblock %}
+
+{% block title %}Add Image{% endblock %}
+
+{% block styles %}
+    {{ parent() }}
+    <link href="{{ asset('/confirmation.css','css') }}" rel="stylesheet" />
+{% endblock %}
+
+{% block header %}
+    {{ parent() }}
+{% endblock %}
+
+{% block header_elements %}
+    {{ parent() }}
+{% endblock %}
+
+{% block content %}
+
+    <div class="wrapper">
+        <div class="main main-raised">
+            <div class="profile-content">
+                <div class="container">
+                    <div class=" row main_profile">
+                        <div class="profile user_profile" >
+                            <div id="validateText" class="name">
+                            </div>
+                        </div>
+                        <div class="description text-center user_profile" id="descriptionText">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+{% endblock %}
+
+{% block footer %}
+    {{ parent() }}
+{% endblock %}
+
+{% block scripts %}
+    {{ parent() }}
+    <script src="{{ asset('/confirm.js','js')}}"></script>
+    <script>
+        preparePage({{ app.status }});
+    </script>
+
+{% endblock %}
