@@ -43,4 +43,12 @@ input#titleimage.form-control :focus{
     box-shadow: 0 1px 0px 0px rgba(0, 0, 0, 0.09) inset;
     color: #FFFFFF;
 }
-*/Q
+*/
+
+.edit .modal-dialog{
+    margin: auto;
+    width: 50%;
+    margin-top: 150px !important;
+    max-width: 400px;
+    min-width: 350px;
+}

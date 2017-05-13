@@ -64,8 +64,11 @@
 }
 
 .login .modal-dialog{
-    margin-top: 50px;
-    width: 350px;
+    margin: auto;
+    width: 50%;
+    margin-top: 70px !important;
+    max-width: 360px;
+    min-width: 300px;
 }
 .login .modal-footer{
     border-top: 0;

@@ -1,8 +1,6 @@
 <?php
 namespace  PwGram\Controller;
 
-//use Silex\Application;
-
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -11,12 +9,35 @@ use PwGram\Model\Profile;
 
 class HelloController{
     public function indexAction(Application $app,Request $request){
+        $image = new Image($request,$app);
+        $pr = new Profile($request,$app);
+        $pop = json_decode($image->getListPopularImages());
+        $popList = array();
+        foreach( $pop as $img){
+            $uname =$pr->getUsername($img->user_id);
+            $valor =json_decode($uname);
+            array_push($popList,$valor[0]->username);
+
+        }
+
+        $rec = json_decode($image->getListImages());
+        $recList = array();
+        foreach( $rec as $img){
+            $uname =$pr->getUsername($img->user_id);
+            $valor =json_decode($uname);
+            array_push($recList,$valor[0]->username);
+        }
 
         $content=$app['twig']->render('home.twig', array(
-            'app' => [
-                'name'=>$app['app.name'],
-                'username' => $app['session']->get('username'),
-                'img' => $app['session']->get('img')
+            'app' => $app['defaultParams'](1),
+            'images' => [
+                'populares' => $pop,
+                'recientes' => $rec,
+                'size_pop'  => sizeof($pop),
+                'size_rec'  => sizeof($rec),
+                'uname_pop' => $popList,
+                'uname_rec' => $recList,
+                'show' => 5
             ],
         ));
         $response=new Response();
@@ -25,7 +46,6 @@ class HelloController{
         $response->setContent($content);
 
         return $response;
-       // return $app['home'];
     }
 
     public function indexSamu(Application $app,Request $request){
@@ -73,28 +93,6 @@ class HelloController{
 
         return $response;
 
-    }
-    public function indexManu(Application $app,Request $request){
-
-        $content=$app['twig']->render('profile_owner.twig', array(
-            'app' => [
-                'user' => 'Alejandra',
-                'name'=>$app['app.name'],
-                'img' => $app['session']->get('img')
-
-            ]
-        ));
-        $response=new Response();
-        $response->setStatusCode($response::HTTP_OK);
-        $response->headers->set('Content-Type','text/html');
-        $response->setContent($content);
-
-        return $response;
-    }
-
-
-    public function addAction(Application $app,$num1,$num2){
-        return "the result is: ".$app['calc']->add($num1,$num2);
     }
 
 }

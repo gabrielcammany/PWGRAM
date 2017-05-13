@@ -22,7 +22,9 @@ class ConfirmController
                 'name'=>$app['app.name'],
                 'status'=>$login->Confirm($token,$username),
                 'username' => $app['session']->get('username'),
-                'img' => $app['session']->get('img')
+                'img' => $app['session']->get('img'),
+                'idUser'   => $app['session']->get('id')
+
 
 
             ],

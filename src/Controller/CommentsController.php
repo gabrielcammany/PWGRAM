@@ -49,7 +49,8 @@ class CommentsController
             'app' => [
                 'name'=>$app['app.name'],
                 'username' => $app['session']->get('username'),
-                'img' => $app['session']->get('img')
+                'img' => $app['session']->get('img'),
+                'idUser'   => $app['session']->get('id')
 
             ],
         ));
@@ -67,4 +68,8 @@ class CommentsController
 
     }
 
+    public function editComment(Request $request,Application $app){
+        $comment = new Comments($request,$app);
+        return $comment->editComment();
+    }
 }

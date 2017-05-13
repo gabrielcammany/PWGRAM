@@ -117,7 +117,7 @@ class Comments
 
     public function getComments(){
         $id = $this->app['session']->get('id');
-        $sql = 'SELECT text,created_at,image_id FROM comment WHERE user_id = ? ORDER BY created_at DESC;';
+        $sql = 'SELECT id,text,created_at,image_id FROM comment WHERE user_id = ? ORDER BY created_at DESC;';
         $result = $this->app['db']->fetchAll($sql,array(
             $id
         ));
@@ -163,6 +163,32 @@ class Comments
 
         }
         return json_encode($result);
+    }
+
+    public function editComment(){
+
+        if(!empty($_POST['myData'])){
+            $json = json_decode($_POST['myData']);
+
+            $update = $this->app['db']->executeUpdate(
+                'UPDATE comment SET text = ? WHERE id = ?',
+                array(
+                    $json->comment,
+                    $json->id
+                )
+            );
+            if($update>0){
+                $result['result'] = 1;
+                return json_encode($result);
+            }else{
+                $result['result'] = 2;
+                $result['error'] = $json;
+                return json_encode($result);
+            }
+        }else{
+            $result['result'] = 0;
+            return json_encode($result);
+        }
     }
 
 

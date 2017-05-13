@@ -28,7 +28,7 @@ function listeners() {
 function actionFormatter(value, row, index) {
     return [
         '<a class="remove ml10" href="javascript:void(0)" title="Eliminar">',
-        '<i class="glyphicon glyphicon-remove"></i>',
+        '<i class="glyphicon glyphicon-eye-close"></i>',
         '</a>'
     ].join('');
 }
@@ -54,6 +54,7 @@ function fillTable() {
         url: '/getUserNotifications',
         data: {"dropdown": 0},
         success: function (response) {
+            //console.log(response);
             list = (JSON).parse(response);
             list_aux = (JSON).parse(response);
             if(list.length != 0) {

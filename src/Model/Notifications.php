@@ -25,12 +25,18 @@ class Notifications
 
     public function getNumber(){
         $id = $this->app['session']->get('id');
+
+        $result = $this->app['db']->fetchColumn(
+            'SELECT COUNT(id) FROM notification WHERE user_id = ? AND seen_by_user=0 AND NOT user_fired_event=?',
+            array($id,$id)
+        );
+        /*
         $db = new \PDO('mysql:host=localhost;dbname=pwgram', "root", "gabriel");
         $stmt = $db->prepare('SELECT COUNT(id) FROM notification WHERE user_id = ? AND seen_by_user=0 AND NOT user_fired_event=?;');
         $stmt->bindParam(1, $id , \PDO::PARAM_STR);
         $stmt->bindParam(2, $id , \PDO::PARAM_STR);
         $stmt->execute();
-        $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);*/
         return json_encode($result);
     }
 
@@ -64,9 +70,10 @@ class Notifications
         $id = $this->app['session']->get('id');
         if($_POST['dropdown'] == "1"){
             $result = $this->app['db']->fetchAll(
-                'SELECT * FROM notification WHERE user_id = ? AND seen_by_user = ? AND NOT user_fired_event=? ORDER BY created_at DESC LIMIT ?',
+                'SELECT * FROM notification WHERE user_id = ? AND seen_by_user = 0 AND NOT user_fired_event=? ORDER BY created_at DESC LIMIT 4',
                 array(
-                    $id, 0, $id, 4
+                    $id,
+                    $id
                 )
             );
             /*$db = new \PDO('mysql:host=localhost;dbname=pwgram', "root", "gabriel");
@@ -109,7 +116,7 @@ class Notifications
             for($i = 0;$i<count($result);$i++){
                 $result2 = $this->app['db']->fetchColumn(
                     'SELECT username FROM user WHERE id = ?',
-                    array($result[0]["username"])
+                    array($result[$i]["user_fired_event"])
                 );
                /* $stmt = $db->prepare('SELECT username FROM user WHERE id = ?');
                 $stmt->bindParam(1, $result[$i]["user_fired_event"] , \PDO::PARAM_STR);

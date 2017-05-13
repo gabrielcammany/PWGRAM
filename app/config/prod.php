@@ -25,6 +25,10 @@ $app->register(new PwGram\Providers\HomeServiceProvider(),array(
     'home.default_name' => 'Samuel',
 ));
 
+$app->register(new PwGram\Providers\DefaultParamsServiceProvider());
+
+$app->register(new PwGram\Providers\TimeServiceProvider());
+
 $app->register(new Silex\Provider\SessionServiceProvider());
 
 $app->register(new Silex\Provider\DoctrineServiceProvider(),array(

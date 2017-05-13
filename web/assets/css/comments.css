@@ -19,3 +19,11 @@ a.linkText:hover {
 .fixed-table-toolbar .search input{
     border: 1px solid grey;
 }
+
+#comentario{
+    color: black !important;
+}
+
+#changeComment{
+    margin-top: 5%;
+}

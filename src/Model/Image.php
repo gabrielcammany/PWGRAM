@@ -132,7 +132,7 @@ class Image
     }
     public function getListImages()
     {
-        $sql = 'SELECT * FROM image WHERE  private=0 ORDER BY created_at DESC';
+        $sql = 'SELECT * FROM image WHERE  private=0 ORDER BY created_at DESC LIMIT 5';
         $result = $this->app['db']->fetchAll($sql);
         $result = $this->checkLikes($result);
         $result = $this->addComments($result);
@@ -140,7 +140,6 @@ class Image
     }
 
     public function getListUserImages(){
-
         if(isset($_POST['myData'])){
             $id = json_decode($_POST['myData'],true);
             $sql = 'SELECT * FROM image WHERE  user_id=? ORDER BY created_at DESC';
@@ -153,8 +152,49 @@ class Image
         }
     }
 
+    public function getListPopularUserImages($id){
+        $sql = 'SELECT * FROM image WHERE user_id=? ORDER BY visits DESC';
+        $result = $this->app['db']->fetchAll($sql,array(
+            $id
+        ));
+        $result = $this->checkLikes($result);
+        $result = $this->addComments($result);
+        return json_encode($result);
+    }
+
+
+    public function getListCommentsUserImages($id){
+        $sql = 'SELECT * FROM image WHERE user_id=? ORDER BY comments DESC';
+        $result = $this->app['db']->fetchAll($sql,array(
+            $id
+        ));
+        $result = $this->checkLikes($result);
+        $result = $this->addComments($result);
+        return json_encode($result);
+    }
+
+    public function getListLikesUserImages($id){
+        $sql = 'SELECT * FROM image WHERE user_id=? ORDER BY likes DESC';
+        $result = $this->app['db']->fetchAll($sql,array(
+            $id
+        ));
+        $result = $this->checkLikes($result);
+        $result = $this->addComments($result);
+        return json_encode($result);
+    }
+
+    public function getListRecentsUserImages($id){
+        $sql = 'SELECT * FROM image WHERE user_id=? ORDER BY created_at DESC';
+        $result = $this->app['db']->fetchAll($sql,array(
+            $id
+        ));
+        $result = $this->checkLikes($result);
+        $result = $this->addComments($result);
+        return json_encode($result);
+    }
+
     public function getListPopularImages(){
-        $sql = 'SELECT * FROM image WHERE private=? ORDER BY visits DESC';
+        $sql = 'SELECT * FROM image ORDER BY visits DESC LIMIT 5';
         $result = $this->app['db']->fetchAll($sql,array(0));
         $result = $this->checkLikes($result);
         $result = $this->addComments($result);
@@ -207,7 +247,7 @@ class Image
         $stmt = $this->app['db']->executeQuery($sql,array($array),array(Connection::PARAM_INT_ARRAY));
         $result2 = $stmt->fetchAll();
 
-        //var_dump($result2);
+        //var_dump(count($result2));
         if(count($result2) != 0){
            // $query = str_repeat("?,", count($result2)-1) . "?";
             $sql = 'SELECT id,username,img_path FROM user WHERE id IN (?);';
@@ -217,6 +257,7 @@ class Image
             //$j = 0;
             for($i = 0;$i<$limit;$i++){
                 $array[$i] = $result2[$i]["user_id"];
+                $result2[$i]["created_at"] = $this->app['time']($result2[$i]["created_at"]);
                 /*$stmt->bindParam($i, $result2[$j]["user_id"], \PDO::PARAM_STR);
                 $j++;*/
             }
@@ -240,6 +281,8 @@ class Image
                 $result[$i]["comments"] = $commentsList;
                 $commentsList = array();
             }
+        }else{
+            $result[0]["comments"] = $result2;
         }
         return $result;
     }
@@ -492,5 +535,61 @@ class Image
 
         }
         return json_encode($array['result'] = 0);
+    }
+
+    public function getFivePop(){
+        if(!empty($_POST['myData'])){
+
+            $stmt = $this->app['db']->executeQuery('SELECT * FROM image');
+            $result = $stmt->fetchAll();
+            if(count($result)-$_POST['myData'] >= 5) {
+                $query = $this->app['db']
+                    ->createQueryBuilder()
+                    ->select('*')
+                    ->from('image')
+                    ->orderBY('visits','DESC')
+                    ->setMaxResults(5)
+                    ->setFirstResult(intval($_POST['myData']));
+                $stmt = $query->execute();
+                $result = $stmt->fetchAll();
+                $result = $this->checkLikes($result);
+                $result = $this->addComments($result);
+
+            }elseif(count($result)-$_POST['myData'] > 0){
+                $resta = count($result)-$_POST['myData'];
+                $query = $this->app['db']
+                    ->createQueryBuilder()
+                    ->select('*')
+                    ->from('image')
+                    ->orderBY('visits','DESC')
+                    ->setMaxResults($resta)
+                    ->setFirstResult(intval($_POST['myData']));
+                $stmt = $query->execute();
+                $result = $stmt->fetchAll();
+
+
+                /*$result = $this->app['db']->fetchAll(
+                    'SELECT * FROM image ORDER BY visits DESC LIMIT ? OFFSET ?',
+                    array(
+                        $resta,
+                        $_POST['myData']
+                    )
+                );*/
+                $result = $this->checkLikes($result);
+                $result = $this->addComments($result);
+
+            }else{
+                $result = 0;
+            }
+
+        }else{
+            $result = 1;
+        }
+        return json_encode($result);
+
+    }
+
+    public function getFiveRec(){
+
     }
 }

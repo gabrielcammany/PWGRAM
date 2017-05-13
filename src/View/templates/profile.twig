@@ -4,7 +4,7 @@
     {{ parent() }}
 {% endblock %}
 
-{% block title %}Home{% endblock %}
+{% block title %}Profile{% endblock %}
 
 {% block styles %}
     {{ parent() }}
@@ -54,9 +54,17 @@
 
         <div class="error"></div>
 
-            <div class="responsive row row-flex row-flex-wrap" id="gallery">
-        </div>
+            <div class="responsive row row-flex row-flex-wrap" id="gallery_pop">
 
+                {% for img in images.list_images %}
+                    {% if  app.client.edit  %}
+                        {{  block("individualImage",  "image.twig") }}
+                    {% elseif img.private==0 %}
+                        {{  block("individualImage",  "image.twig") }}
+                    {% endif %}
+                {% endfor %}
+        </div>
+        {% if  app.client.edit  %}
         <div class="wrapper" id="containerInfoUser" data-content="{{ app.user.name }}?{{ app.user.email }}?{{ app.user.date }}?{{ app.user.img_path }}" hidden>
            <article id="articleForm">
                <div id="contenedorImagen">
@@ -125,7 +133,7 @@
                </form>
            </article>
         </div>
-
+        {% endif %}
     </div>
 {% endblock %}
 
@@ -136,6 +144,8 @@
 {% block scripts %}
     {{ parent() }}
     <script src="{{ asset('/profile.js','js')}}"></script>
-    <script src="{{ asset('/profileOwner.js','js')}}"></script>
+    {% if  app.client.edit  %}
+        <script src="{{ asset('/profileOwner.js','js')}}"></script>
+    {% endif %}
 
 {% endblock %}

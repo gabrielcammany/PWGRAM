@@ -5,7 +5,7 @@
 var user_info;
 $(function() {
     $('#btnEditProfile').show();
-    $('#gallery').show();
+    $('#gallery_pop').show();
     $('#containerInfoUser').hide();
 
 });
@@ -217,7 +217,7 @@ $("#btnSelectImage").change(function(){
 $('#btnEditProfile').on('click',function (e) {
     e.preventDefault();
     $('#btnEditProfile').hide();
-    $('#gallery').hide();
+    $('#gallery_pop').hide();
     $('#containerInfoUser').show();
     var info = $('#containerInfoUser').attr('data-content').split("?");;
     $('#inputNombreUsuario').val(info[0]);

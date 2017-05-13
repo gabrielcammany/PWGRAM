@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 $before = function (Request $request, Application $app){
     if($app['session']->get('id') == 0){
         if(!empty($_COOKIE['id_s'])){
-            $sql = "SELECT id,username FROM user WHERE sessionID=?";
+            $sql = "SELECT id,username,img_path FROM user WHERE sessionID=?";
             $result = $app['db']->fetchAssoc($sql,array($_COOKIE['id_s']));
             if($result){
                 $app['session']->set('id',$result['id']);
@@ -46,7 +46,10 @@ $beforeLogged = function (Request $request, Application $app){
                 $response = new Response();
                 $content = $app['twig']->render('error.twig', [
                     'message' => '403 Forbidden',
-                    'app' => ['username'=> ""]
+                    'app' => [
+                        'username'=> "",
+                        'idUser'   => $app['session']->get('id')
+                    ]
                 ]);
                 $app['session']->set('id',0);
                 $response->setContent($content);
@@ -61,7 +64,10 @@ $beforeLogged = function (Request $request, Application $app){
             $response = new Response();
             $content = $app['twig']->render('error.twig', [
                 'message' => '403 Forbidden',
-                'app' => ['username'=> ""],
+                'app' => [
+                    'username'=> "",
+                    'idUser'   => $app['session']->get('id')
+                ],
             ]);
             $app['session']->set('id',0);
             $response->setContent($content);
@@ -78,6 +84,8 @@ $beforeLogged = function (Request $request, Application $app){
 $app->get('','PwGram\\Controller\\HelloController::indexAction')->before($before);
 $app->post('/popular_images','PwGram\\Controller\\ImageController::getPopularImages');
 $app->post('/getRecentImages','PwGram\\Controller\\ImageController::getListImages');
+$app->post('/getFiveMorePop','PwGram\\Controller\\ImageController::getFivePop');
+$app->post('/getFiveMoreRec','PwGram\\Controller\\ImageController::getFiveRec');
 
 /**
  * Rutas relacionadas con el registro y login
@@ -86,7 +94,7 @@ $app->post('/getRecentImages','PwGram\\Controller\\ImageController::getListImage
 $app->post('/signup','PwGram\\Controller\\RegistrationController::registrationController');
 $app->post('/signin','PwGram\\Controller\\LoginController::loginController');
 $app->get('/validate/{username}/{token}/','PwGram\\Controller\\ConfirmController::confirmController');
-$app->post('/upload','PwGram\\Controller\\RegistrationController::uploadImage');//Añadir imagen del usuario
+$app->post('/upload','PwGram\\Controller\\RegistrationController::uploadImage');//Añadir imagen del usuario(FALTA)
 
 /**
  * Rutas relacionadas con ver el perfil y editarlo
@@ -129,7 +137,7 @@ $app->post('/deleteComment','PwGram\\Controller\\CommentsController::deleteComme
 $app->post('/updateCommentBox','PwGram\\Controller\\CommentsController::getLastMessages')->before($beforeLogged);
 $app->post('/getUserComments','PwGram\\Controller\\CommentsController::getUserComments');
 $app->post('/commentRemove','PwGram\\Controller\\CommentsController::removeComent')->before($beforeLogged);
-
+$app->post('/commentedit','PwGram\\Controller\\CommentsController::editComment');
 /**
  * Rutas relacionadas con las notificaciones
  */
@@ -149,4 +157,3 @@ $app->post('/getUserCommentInfo','PwGram\\Controller\\ProfileController::getUser
  * RUTAS A BORRAR!!!!!
  */
 $app->get('/samu','PwGram\\Controller\\HelloController::indexSamu');
-$app->get('/edit_profile','PwGram\\Controller\\EditController::editProfile')->before($beforeLogged); // BORRAR SU CONTROLLER Y TWIG

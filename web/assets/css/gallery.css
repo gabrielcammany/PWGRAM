@@ -43,3 +43,24 @@ A {
 A#link_username{
     margin-top: 12%;
 }
+
+
+.label_like{
+    margin-top: 30px;
+}
+
+.addDiv{
+    position: relative;
+}
+.add{
+    position: absolute;
+    right: 50%;
+    left: 50%;
+    top:0;
+}
+
+.add i{
+    color: grey !important;
+    width: 10%;
+    height: 10%;
+}

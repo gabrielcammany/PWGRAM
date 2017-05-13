@@ -20,10 +20,11 @@
 {% endblock %}
 
 {% block content %}
+    {{ parent() }}
    <div class="container-fluid">
         <div class="row">
             <div class="col-sm-8 left_container">
-                <img class='img-responsive img_profile' id="main_image" src='' data-content='{{ app.image_id }}'/>
+                <img class='img-responsive img_profile' id="main_image" src='../{{ image.img_path }}' data-content='{{ app.image_id }}'/>
                 {% if enableEdit %}
                 <div class='buttons_icons' align='center'>
                     <a class='btn btn-simple btn-just-icon'>
@@ -35,53 +36,111 @@
                 </div>
                 {% endif %}
             </div>
-
-            <div class = "col-sm-4 right_container" id="content" align="center" ></div>
-
+            <div class = "col-sm-4 right_container" id="content" align="center" >
+                <h2 id='title'>{{ image.title }}</h2>
+                <p><h2><A href="/profile/{{ image.user_id }}" id='link_username' data-content="{{ app.username }}">{{ image.user_id }}</A></h2></p>
+                <p id='label_like'>Likes: {{ image.likes }}</p>
+                <p id='label_visits'>Visitas: {{ image.visits }}</p>
+                <p id='label_time'>Hace: {{ image.created_at }}</p>
+                <div class="col-sm-15 divLinia">
+                    <div class="panel panel-white post panel-shadow divLinia">
+                        <div id="statusError0content" class="alert alert-danger statusError" role="alert" hidden>
+                            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                            <span class="sr-only">Error: Solo puedes añadir un comentario en la imagen</span>
+                        </div>
+                        <div id="divLinia0content" class="post-footer divLinia">
+                            <div class='row' >
+                                {% if app.idUser is null %}
+                                {% else %}
+                                <div class='col likeButton' align='center'>
+                                    {% if image.liked == 1 %}
+                                        <a class='btn btn-simple btn-just-icon' ><img class="likeImg" src='../assets/img/icons/like_filled.png' width='30' height='30' data-content="{{ image.id }}"></a>
+                                    {% else %}
+                                        <a class='btn btn-simple btn-just-icon'><img class="likeImg" src='../assets/img/icons/like.png' width='30' height='30' data-content="{{ image.id }}"></a>
+                                    {% endif %}
+                                </div>
+                                <div class='col'>
+                                    <div class="input-group" id="inputCommentGroup" >
+                                        <input id='commentInput{{ image.id }}' class="form-control" placeholder="Añadir un comentario" type="text" data-content="{{ image.user_id }}">
+                                        <span class="input-group-addon" id ="commentButton" data-content="{{ image.id }}">
+                                    <a>
+                                        <i class="fa fa-edit">
+                                        </i>
+                                    </a>
+                                </span>
+                                    </div>
+                                </div>
+                                {% endif %}
+                            </div>
+                            <div id="comentariscontent">
+                                {% if numComments == 0 %}
+                                    <ul id="comments-list" class="comments-list">
+                                        <li class="comment">
+                                            <div class="comment-body">
+                                                <div class="comment-heading">
+                                                     <h4 class="noComments">No hay ningún comentario</h4>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                {% endif %}
+                                <ul class="comments-list">
+                                {% for comment in comments %}
+                                        <li class="comment">
+                                            <a class="pull-left" href="#">
+                                                <img class="avatar" src="../{{ comment[2] }}" alt="avatar">
+                                            </a>
+                                            <div class="comment-body">
+                                                <div class="comment-heading">
+                                                    <h4 class="user">{{ comment[0] }}</h4>
+                                                    <h5 class="time"> {{ comment[3] }}</h5>
+                                                </div>
+                                                <p>{{ comment[1] }}</p>
+                                            </div>
+                                        </li>
+                                {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+   </div>
 
-    </div>
-
-    <div class="modal fade login" id="edit_modal">
-        <div class="modal-dialog login animated">
+   <div class="modal fade edit" id="edit_modal">
+        <div class="modal-dialog edit animated">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true" id="close_modal">&times;</button>
                     <h4 class="modal-title">Edit Image</h4>
                 </div>
-                    <div class="modal-body">
-                        <div class="wrapper">
-                                <div class="main main-raised">
-                                    <div class="profile-content">
-                                        <div class="error"></div>
-                                            <div>
-                                                <div class="error"></div>
-                                                <section id="formAddImage">
-                                                    <form enctype="multipart/form-data" method="post" id="formNewImage" class="selector">
+                <div class="modal-body">
+                    <div class="wrapper">
+                        <div class="main main-raised">
+                            <div class="profile-content">
+                                <div>
+                                    <div class="error"></div>
+                                    <section id="formAddImage">
+                                        <form enctype="multipart/form-data" method="post" id="formNewImage" class="selector">
 
-                                                        <input id="titleImage" class="form-control" placeholder="" type="text" name="title-image">
-                                                        <input id="public" type="radio" name="radio" value="public" checked> Imagen Pública<br>
-                                                        <input id="private" type="radio" name="radio" value="private"> Imagen Privada<br>
-                                                        <input class="btn btn-default btn-register" type="submit" value="Guardar Cambios" name="newImage" id="updateImage" >
-                                                    </form>
-                                                </section>
-                                            <div class="modal-body"></div>
-                                            </div>
-                                        <div class="docs-alert"><span class="warning message"></span></div>
-                                    <!--</div>-->
+                                            <input id="titleImage" class="form-control" placeholder="" type="text" name="title-image">
+                                            <input id="public" type="radio" name="radio" value="public" checked> Imagen Pública<br>
+                                            <input id="private" type="radio" name="radio" value="private"> Imagen Privada<br>
+                                            <input class="btn btn-default btn-register" type="submit" value="Guardar Cambios" name="newImage" id="updateImage" >
+                                        </form>
+                                    </section>
+                                    <div class="modal-body"></div>
                                 </div>
-
+                                <div class="docs-alert"><span class="warning message"></span></div>
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
         </div>
-    </div>
-    <!--
-    <div class="divider"></div>
-    <div class="container" >
-        <div class="responsive row row-flex row-flex-wrap" id="main_image" data-content="{{ app.image_id }}"    ></div>
-    </div>
--->
+   </div>
+
 {% endblock %}
 
 {% block footer %}
@@ -91,6 +150,5 @@
 {% block scripts %}
     {{ parent() }}
     <script src="{{ asset('/unicImage.js','js')}}"></script>
-    <script src="{{ asset('/base.js','js')}}"></script>
 
 {% endblock %}

@@ -8,8 +8,8 @@
 
 {% block styles %}
     {{ parent() }}
-<link href="{{ asset('gallery.css','css')}}" rel="stylesheet"/>
-<link href="{{ asset('caption.css','css')}}" rel="stylesheet"/>
+    <link href="{{ asset('gallery.css','css')}}" rel="stylesheet"/>
+    <link href="{{ asset('caption.css','css')}}" rel="stylesheet"/>
 {% endblock %}
 
 {% block header %}
@@ -20,23 +20,43 @@
 {% endblock %}
 
 {% block content %}
-<div class="container">
-    <h1 class="page-header text-header">Populares
-    </h1>
-    <div class="divider"></div>
-    <div class="container">
-        <div class="responsive row row-flex row-flex-wrap" id="gallery_pop">
-        </div>
-    </div>
-    <h1 class="page-header text-header">Recientes
-    </h1>
-    <div class="divider"></div>
-    <div class="container">
-        <div class="responsive row row-flex row-flex-wrap" id="gallery_recent">
-        </div>
-    </div>
+    {{ parent() }}
+    <div class ="container" >
+        <h1 class="page-header text-header">Populares</h1>
+        <div class="divider"></div>
+        <div  class="container" id = "imagesPop" data-content="{{ images.populares }}">
+            <div class="responsive row row-flex row-flex-wrap" id="gallery_pop" data-content="{{ images.size_pop }}">
+                {% for img in images.populares %}
+                    {{  block("individualImage",  "image.twig") }}
+                {% endfor %}
+            </div>
+            <div class="addDiv">
+                <a class="add ml10" id="add5MorePopular" title="Añadir 5 mas" href="/getFiveMorePop">
+                    <i class="glyphicon glyphicon-plus"></i>
+                </a>
+            </div>
 
-</div>
+
+        </div>
+
+        <h1 class="page-header text-header">Recientes
+        </h1>
+        <div class="divider"></div>
+        <div class="container" id="imagesRec" data-content="{{ images.recientes }}">
+            <div class="responsive row row-flex row-flex-wrap" id="gallery_recent" data-content="{{ images.size_rec }}">
+                {% for img in images.recientes %}
+                    {{  block("individualImage",  "image.twig") }}
+                {% endfor %}
+
+            </div>
+            <div class="addDiv">
+                <a class="add ml10" id="add5MoreRecent" title="Añadir 5 mas" href="/getFiveMoreRec">
+                    <i class="glyphicon glyphicon-plus"></i>
+                </a>
+            </div>
+
+        </div>
+    </div>
 
 
 {% endblock %}

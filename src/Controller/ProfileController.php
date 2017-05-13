@@ -12,11 +12,14 @@ use PwGram\Model\Profile;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use PwGram\Model\Image;
 
 class ProfileController
 {
-    public function profileOwner(Application $app,$username){
+    public function profileOwner(Request $request,Application $app,$username){
         $response=new Response();
+
+        $img = new Image($request,$app);
         $sql = "SELECT * FROM user WHERE username = ?";
         $get = $app['db']->fetchAssoc($sql,array($username));
 
@@ -24,7 +27,9 @@ class ProfileController
             $content = $app['twig']->render('error.twig',[
                 'message' => '404 NOT FOUND',
                 'app' => ['username' => ""],
-                'img' => $app['session']->get('img')
+                'img' => $app['session']->get('img'),
+                'idUser' => $app['session']->get('id')
+
 
             ]);
             $response->setContent($content);
@@ -35,8 +40,23 @@ class ProfileController
             }else{
                 $edit = false;
             }
+            $_POST['myData']=$get['id'];
             $img_path = $get['img_path'];
             $img_path = str_replace(".jpg","_100.jpg",$img_path);
+            $pr = new Profile($request,$app);
+            $list = json_decode($img->getListUserImages());
+            $unameList = array();
+            foreach( $list as $img){
+                $uname = $pr->getUsername($img->user_id);
+                $valor =json_decode($uname);
+                array_push($unameList,$valor[0]->username);
+
+            }
+
+            if($app['session']->get('id')==0){
+                $priv=0;
+            }
+
             $content=$app['twig']->render('profile.twig', array(
                 'app' => [
                     'user' =>[
@@ -52,6 +72,7 @@ class ProfileController
                         ]
                     ],
                     'name'=>$app['app.name'],
+                    'idUser' => $app['session']->get('id'),
                     'client' =>[
                         'edit' => $edit,
                     ],
@@ -60,7 +81,10 @@ class ProfileController
 
 
                 ],
-
+                'images' => [
+                    'list_images' => $list,
+                    'uname_pop' => $unameList
+                ],
             ));
 
             $response->setStatusCode($response::HTTP_OK);

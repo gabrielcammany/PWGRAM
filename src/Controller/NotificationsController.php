@@ -36,7 +36,9 @@ class NotificationsController
             'app' => [
                 'name'=>$app['app.name'],
                 'username' => $app['session']->get('username'),
-                'img' => $app['session']->get('img')
+                'img' => $app['session']->get('img'),
+                'idUser'   => $app['session']->get('id')
+
 
             ],
         ));
