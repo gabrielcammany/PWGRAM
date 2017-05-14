@@ -3,6 +3,13 @@
     padding-bottom: 30px;
 }
 
+#inputComment{
+    color: black;
+    max-width: 100%;
+    height: 150px;
+    max-height: 400px;
+    word-wrap: break-word;
+}
 
 a.linkText{
     text-align: center;
@@ -19,11 +26,21 @@ a.linkText:hover {
 .fixed-table-toolbar .search input{
     border: 1px solid grey;
 }
-
-#comentario{
-    color: black !important;
-}
-
 #changeComment{
     margin-top: 5%;
 }
+
+p.textComment {
+    max-width: 500px;
+    margin-right: 15%;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+.textColumn{
+    max-width: 500px;
+}
+
+.card-views{
+    max-width: 350px!important;
+}
+

@@ -28,7 +28,7 @@
             <div class="profile-content">
                 <div class="container">
                     <div class="row">
-                        <h2 class="page-header text-header">Comentarios de mis imagenes
+                        <h2 class="page-header text-header">Mis comentarios
                         </h2>
                         <div class="divider"></div>
                         <div >
@@ -40,7 +40,7 @@
                                     <tr>
                                         <th data-formatter="imglink" data-field="image_id" data-sortable="true" data-events="actionEvents">¿En que imagen?</th>
                                         <th data-field="created_at" data-sortable="true" data-events="actionEvents">¿Hace cuanto?</th>
-                                        <th data-field="text" data-sortable="true" data-events="actionEvents">Comentario</th>
+                                        <th class="textColumn" data-formatter="textFormat" data-field="text" data-sortable="true" data-events="actionEvents">Comentario</th>
                                         <th data-field="actionEdit" data-formatter="editlink" data-events="actionEvents">Editar</th>
                                         <th data-field="actionRemove" data-formatter="actionFormatter" data-events="actionEvents">Eliminar</th>
                                     </tr>
@@ -71,7 +71,7 @@
                                     <section id="formAddImage">
                                         <form enctype="multipart/form-data" method="post" id="formEditComment" class="selector">
                                             <h5>Edita tu comentario por uno nuevo:</h5>
-                                            <input id="comentario" class="form-control" type="text" name="comentario-image" data-content="">
+                                            <textarea id="inputComment" class="form-control" type="text" name="comentario-image" data-content=""></textarea>
                                             <input class="btn btn-default btn-register" type="submit" value="Guardar Cambios" name="editComment" id="changeComment" >
                                         </form>
                                     </section>

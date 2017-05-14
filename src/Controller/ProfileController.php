@@ -50,8 +50,15 @@ class ProfileController
                 $uname = $pr->getUsername($img->user_id);
                 $valor =json_decode($uname);
                 array_push($unameList,$valor[0]->username);
-
             }
+
+           /* $listComments = json_decode($img->getListCommentsUserImages($get['id']));
+            $unameListComments = array();
+            foreach( $listComments as $img){
+                $unameListComments = $pr->getUsername($img->user_id);
+                $valor =json_decode($uname);
+                array_push($unameListComments,$valor[0]->username);
+            }*/
 
             if($app['session']->get('id')==0){
                 $priv=0;
@@ -84,6 +91,7 @@ class ProfileController
                 'images' => [
                     'list_images' => $list,
                     'uname_pop' => $unameList
+
                 ],
             ));
 

@@ -135,6 +135,7 @@ $app->get('/comentarios','PwGram\\Controller\\CommentsController::showUserCommen
 $app->post('/addComment','PwGram\\Controller\\CommentsController::addCommentImage')->before($beforeLogged);
 $app->post('/deleteComment','PwGram\\Controller\\CommentsController::deleteCommentImage')->before($beforeLogged);
 $app->post('/updateCommentBox','PwGram\\Controller\\CommentsController::getLastMessages')->before($beforeLogged);
+$app->post('/moreCommentsBox','PwGram\\Controller\\CommentsController::getMoreMessages');
 $app->post('/getUserComments','PwGram\\Controller\\CommentsController::getUserComments');
 $app->post('/commentRemove','PwGram\\Controller\\CommentsController::removeComent')->before($beforeLogged);
 $app->post('/commentedit','PwGram\\Controller\\CommentsController::editComment');

@@ -17,7 +17,6 @@ class HelloController{
             $uname =$pr->getUsername($img->user_id);
             $valor =json_decode($uname);
             array_push($popList,$valor[0]->username);
-
         }
 
         $rec = json_decode($image->getListImages());
@@ -27,17 +26,18 @@ class HelloController{
             $valor =json_decode($uname);
             array_push($recList,$valor[0]->username);
         }
+        $size_pop = count($pop);
+        $size_rec = count($rec);
 
         $content=$app['twig']->render('home.twig', array(
             'app' => $app['defaultParams'](1),
             'images' => [
                 'populares' => $pop,
                 'recientes' => $rec,
-                'size_pop'  => sizeof($pop),
-                'size_rec'  => sizeof($rec),
+                'poplength'  => $size_pop,
+                'size_rec'  => $size_rec,
                 'uname_pop' => $popList,
                 'uname_rec' => $recList,
-                'show' => 5
             ],
         ));
         $response=new Response();

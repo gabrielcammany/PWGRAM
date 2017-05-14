@@ -23,10 +23,10 @@
                         <div class='row' >
                             <div class='col likeButton' align='center'>
                                 {% if img.liked == 1 %}
-                                    <a class='btn btn-simple btn-just-icon' ><img class="likeImg" src='../assets/img/icons/like_filled.png' width='30' height='30' data-content="{{ img.id }}"/>
+                                    <a class='btn btn-simple btn-just-icon' ><img class="likeImg" id="like{{ img.id }}" src='../assets/img/icons/like_filled.png' width='30' height='30' data-content="{{ img.id }}_{{ img.user_id }}"/>
                                     </a>
                                 {% else %}
-                                    <a class='btn btn-simple btn-just-icon'><img class="likeImg" src='../assets/img/icons/like.png' width='30' height='30' data-content="{{ img.id }}"/>
+                                    <a class='btn btn-simple btn-just-icon'><img class="likeImg" id="like{{ img.id }}" src='../assets/img/icons/like.png' width='30' height='30' data-content="{{ img.id }}_{{ img.user_id }}"/>
                                     </a>
                                 {% endif %}
                             </div>
@@ -45,36 +45,7 @@
 
                         </div>
                     {% endif %}
-                        <div id='comentaris{{ img.id }}'>
-                        {% if img.comments %}
-                            {% for comment in img.comments %}
-                               <ul class="comments-list" id="comments-list{{ img.id }}">
-                                    <li class="comment">
-                                        <a class="pull-left" href="#">
-                                            <img class="avatar" src="../{{ comment[2]  }}">
-                                        </a>
-                                        <div class="comment-body">
-                                            <div class="comment-heading">
-                                                <h4 class="user">{{ comment[0] }}</h4>
-                                                <h5 class="time"> {{ comment[3]  }}</h5>
-                                            </div>
-                                            <p>{{ comment[1]  }}</p>
-                                        </div>
-                                    </li>
-                                </ul>
-                            {% endfor %}
-                        {% else %}
-                            <ul class="comments-list" id="comments-list{{ img.id }}">
-                                <li class="comment">
-                                    <div class="comment-body">
-                                        <div class="comment-heading">
-                                            <h4 class="noComments">No hay ningún comentario</h4>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
-                        {% endif %}
-                    </div>
+                    {{  block("commentsList",  "listComments.twig") }}
                 </div>
             </div>
         </div>

@@ -89,11 +89,9 @@ class ImageController
                     'image_id'=> $data[2],
                     'img' => $app['session']->get('img'),
                     'idUser'   => $app['session']->get('id')
-
-
                 ],
                 'enableEdit' => $edit,
-                'image'=> $infoImage[0],
+                'img'=> $infoImage[0],
                 'comments' => $infoImage[0]->comments,
                 'numComments' => count($infoImage[0]->comments)
             ));
@@ -201,7 +199,7 @@ class ImageController
                 $name = json_decode($userName);
                 array_push($popList, $name[0]->username);
             }
-            $content = $app['twig']->render('images.twig', array(
+            $content = $app['twig']->render('showMoreimages.twig', array(
                 'app' => $app['defaultParams'](1),
                 'images' => [
                     'content' => $result,
@@ -222,6 +220,34 @@ class ImageController
 
     public function getFiveRec(Request $request,Application $app){
         $image = new Image($request,$app);
-        return $image->getFiveRec();
+        $profile = new Profile($request,$app);
+        $result = json_decode($image->getFiveRec());
+        if($result != 0 && $result != 1) {
+
+
+            $recList = array();
+
+            foreach ($result as $img) {
+                $userName = $profile->getUsername($img->user_id);
+                $name = json_decode($userName);
+                array_push($recList, $name[0]->username);
+            }
+            $content = $app['twig']->render('images.twig', array(
+                'app' => $app['defaultParams'](1),
+                'images' => [
+                    'content' => $result,
+                    'size_pop' => sizeof($result),
+                    'uname_pop' => $recList,
+                ],
+            ));
+
+            $response = new Response();
+            $response->setStatusCode($response::HTTP_OK);
+            $response->headers->set('Content-Type', 'text/html');
+            $response->setContent($content);
+            return $response;
+        }else{
+            return $result;
+        }
     }
 }

@@ -81,7 +81,7 @@ class Comments
             $data = json_decode($_POST['data']);
             $sql = 'SELECT text,user_id,created_at,image_id FROM comment WHERE image_id = ?  ORDER BY created_at DESC LIMIT 3;';
             $result = $this->app['db']->fetchAll($sql,array(
-                $data->image_id
+                $data
             ));
            /* $db = new \PDO('mysql:host=localhost;dbname=pwgram', "root", "gabriel");
             $stmt = $db->prepare('SELECT text,user_id,created_at,image_id FROM comment WHERE image_id = ?  ORDER BY created_at DESC LIMIT 3;');
@@ -191,6 +191,30 @@ class Comments
         }
     }
 
+    public function getMore(){
+        $result = "1";
+        if(!empty($_POST['data'])) {
+            $data = json_decode($_POST['data']);
+            $sql = 'SELECT text,user_id,created_at,image_id FROM comment WHERE image_id = '.$data->image_id.' ORDER BY created_at DESC LIMIT '.$data->size.', '.($data->size+4);
+            $result = $this->app['db']->fetchAll($sql);
+            if(count($result) != 0) {
+                $sql = 'SELECT id,username,img_path FROM user WHERE id IN (?);';
+                $array = array();
+                $limit = count($result);
+                for ($i = 0; $i < $limit; $i++) {
+                    $array[$i] = $result[$i]["user_id"];
+                }
+                $stmt = $this->app['db']->executeQuery($sql,array($array),array(Connection::PARAM_INT_ARRAY));
+                $result3 = $stmt->fetchAll();
+                for ($i = 0; $i < count($result); $i++) {
+                    $index = array_search($result[$i]["user_id"], array_column($result3,"id"));
+                    $result[$i]["username"] = $result3[$index]["username"];
+                    $result[$i]["img_path"] = $result3[$index]["img_path"];
+                }
+            }
+        }
+        return json_encode($result);
+    }
 
 }
 

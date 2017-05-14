@@ -64,3 +64,17 @@ A#link_username{
     width: 10%;
     height: 10%;
 }
+
+p.textComment {
+    max-width: 82%;
+    max-height: 100%;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    overflow: auto;
+}
+
+.listCommentsImage{
+    max-height: 300px;
+    overflow: auto;
+}
+

@@ -23,8 +23,8 @@ function listeners() {
                 e.preventDefault();
 
                 var object = Object();
-                object.comment = $('#comentario').val();
-                object.id = $('#comentario').attr('data-content');
+                object.comment = $('#inputComment').val();
+                object.id = $('#inputComment').attr('data-content');
 
                 $.ajax({
                     type: 'post',
@@ -70,6 +70,14 @@ function editlink(value, row, index) {
         '</a>'
     ].join('');
 }
+function textFormat(value, row, index) {
+    return [
+        '<p class="textComment">'
+        +value+
+        '</p>',
+    ].join('');
+}
+
 
 function fillTable() {
     $.ajax({
@@ -154,8 +162,8 @@ function openEditModal(row){
 }
 function showEditForm(row){
     $('#editComments').fadeIn('fast');
-    $('#comentario').val(row.text);
-    $('#comentario').attr('data-content',row.id);
+    $('#inputComment').val(row.text);
+    $('#inputComment').attr('data-content',row.id);
     $('.modal-title').html('Editar comentario');
     $('.error').removeClass('alert alert-danger').html('');
 }
@@ -165,8 +173,8 @@ function listenerChange(row,index) {
         e.preventDefault();
 
         var object = Object();
-        object.comment = $('#comentario').val();
-        object.id = $('#comentario').attr('data-content');
+        object.comment = $('#inputComment').val();
+        object.id = $('#inputComment').attr('data-content');
 
         $.ajax({
             type: 'post',

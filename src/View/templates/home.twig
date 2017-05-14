@@ -25,7 +25,7 @@
         <h1 class="page-header text-header">Populares</h1>
         <div class="divider"></div>
         <div  class="container" id = "imagesPop" data-content="{{ images.populares }}">
-            <div class="responsive row row-flex row-flex-wrap" id="gallery_pop" data-content="{{ images.size_pop }}">
+            <div class="responsive row row-flex row-flex-wrap" id="gallery_pop" data-content="{{ images.poplength }}">
                 {% for img in images.populares %}
                     {{  block("individualImage",  "image.twig") }}
                 {% endfor %}

@@ -36,14 +36,6 @@ input#titleimage{
     background-color: white;
     color: black;
 }
-/*
-input#titleimage.form-control :focus{
-    border-radius: 3px;
-    background-color: rgba(0, 0, 0, 0.09);
-    box-shadow: 0 1px 0px 0px rgba(0, 0, 0, 0.09) inset;
-    color: #FFFFFF;
-}
-*/
 
 .edit .modal-dialog{
     margin: auto;
@@ -51,4 +43,10 @@ input#titleimage.form-control :focus{
     margin-top: 150px !important;
     max-width: 400px;
     min-width: 350px;
+}
+
+p.textComment {
+    max-width: 100% ;
+    white-space: pre-wrap;
+    word-wrap: break-word;
 }

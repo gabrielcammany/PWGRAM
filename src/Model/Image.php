@@ -183,18 +183,8 @@ class Image
         return json_encode($result);
     }
 
-    public function getListRecentsUserImages($id){
-        $sql = 'SELECT * FROM image WHERE user_id=? ORDER BY created_at DESC';
-        $result = $this->app['db']->fetchAll($sql,array(
-            $id
-        ));
-        $result = $this->checkLikes($result);
-        $result = $this->addComments($result);
-        return json_encode($result);
-    }
-
     public function getListPopularImages(){
-        $sql = 'SELECT * FROM image ORDER BY visits DESC LIMIT 5';
+        $sql = 'SELECT * FROM image WHERE private=0 ORDER BY visits DESC LIMIT 5';
         $result = $this->app['db']->fetchAll($sql,array(0));
         $result = $this->checkLikes($result);
         $result = $this->addComments($result);
@@ -339,7 +329,7 @@ class Image
      * @return string -> Numero de likes actualizado
      */
     public function newLike(){
-        $result = "0";
+        $likes = 0;
         if(!empty($_POST['data'])) {
             $data = json_decode($_POST['data']);
             $id = $this->app['session']->get('id');
@@ -353,14 +343,11 @@ class Image
                 if($result[0]["COUNT(id)"]==0){
                     $likes = $this->app['db']->fetchColumn('SELECT likes FROM image WHERE id=?',array($data->image_id));
                     //var_dump($likes);
-                    $likes = intval($likes);
+                    $likes = intval($likes)+1;
                     $get = $this->app['db']->executeUpdate(
                         'UPDATE image SET likes = likes + 1 WHERE id=?',
                         array($data->image_id)
                     );
-                   if($get == 0){
-
-                   }
                     $date = date('Y/m/d H:i:s');
                     $this->app['db']->insert('notification',array(
                         'user_id' => $data->user_id,
@@ -370,13 +357,6 @@ class Image
                         'created_at' => $date
                     ));
                 }
-                $likes = intval(
-                    $this->app['db']->fetchColumn('SELECT likes FROM image WHERE id=?',array($data->image_id))
-                );
-                /*$stmt = $db->prepare('SELECT likes FROM image WHERE id=?;');
-                $stmt->bindParam(1, $data->image_id, \PDO::PARAM_STR);
-                $stmt->execute();
-                $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);*/
             }catch (\Exception $e){
                 $likes = $e->getMessage();
             }
@@ -394,12 +374,6 @@ class Image
                 $id,
                 $data->image_id
             ));
-            /*$db = new PDO('mysql:host=localhost;dbname=pwgram', "root", "gabriel");
-            $stmt = $db->prepare('SELECT COUNT(id) FROM notification WHERE user_fired_event=? AND post_id=?;');
-            $stmt->bindParam(1,$id, \PDO::PARAM_STR);
-            $stmt->bindParam(2,$data->image_id, \PDO::PARAM_STR);
-            $stmt->execute();
-            $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);*/
             if($result[0]["COUNT(id)"]!=0){
                 $likes = intval(
                     $this->app['db']->fetchColumn('SELECT likes FROM image WHERE id=?',array(
@@ -413,19 +387,11 @@ class Image
                 if($get == 0){
                     
                 }
-               /* $stmt = $db->prepare('UPDATE image SET likes = likes - 1 WHERE id=?;');
-                $stmt->bindParam(1, $data->image_id, \PDO::PARAM_STR);
-                $stmt->execute();*/
                 $this->app['db']->delete('notification',
                     array(
                         'user_fired_event' => $id,
                         'post_id' => $data->image_id
                     ));
-
-               /* $stmt = $db->prepare('DELETE FROM notification WHERE user_fired_event=? AND post_id=?;');
-                $stmt->bindParam(1, $id, \PDO::PARAM_STR);
-                $stmt->bindParam(2, $data->image_id, \PDO::PARAM_STR);
-                $stmt->execute();*/
             }
             $likes = intval(
                 $this->app['db']->fetchColumn(
@@ -435,10 +401,6 @@ class Image
                     )
                 )
             );
-            /*$stmt = $db->prepare('SELECT likes FROM image WHERE id=?;');
-            $stmt->bindParam(1, $data->image_id, \PDO::PARAM_STR);
-            $stmt->execute();
-            $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);*/
         }
         return json_encode(array(array('likes'=>$likes)));
     }
@@ -458,11 +420,6 @@ class Image
                     $_POST['id']
                 )
             );
-           /* $db = new PDO('mysql:host=localhost;dbname=pwgram', "root", "gabriel");
-            $stmt = $db->prepare('SELECT * FROM image WHERE id=?;');
-            $stmt->bindParam(1, $_POST['id'], \PDO::PARAM_STR);
-            $stmt->execute();
-            $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);*/
             $result = $this->addComments($result);
             $result = $this->checkLikes($result);
             return json_encode($result);
@@ -481,18 +438,6 @@ class Image
                 $this->app['db']->delete('image',array('id' => $_POST['id']));
                 $this->app['db']->delete('comment',array('id' => $_POST['id']));
                 $this->app['db']->delete('notification',array('id' => $_POST['id']));
-                /*$db = new PDO('mysql:host=localhost;dbname=pwgram', "root", "gabriel");
-                $stmt = $db->prepare('DELETE FROM image WHERE id=?;');
-                $stmt->bindParam(1, $_POST['id'], \PDO::PARAM_STR);
-                $stmt->execute();
-
-                $stmt = $db->prepare('DELETE FROM comment WHERE image_id=?;');
-                $stmt->bindParam(1, $_POST['id'], \PDO::PARAM_STR);
-                $stmt->execute();
-
-                $stmt = $db->prepare('DELETE FROM notification WHERE post_id=?;');
-                $stmt->bindParam(1, $_POST['id'], \PDO::PARAM_STR);
-                $stmt->execute();*/
                 return 1;
             }
         }
@@ -542,12 +487,60 @@ class Image
 
             $stmt = $this->app['db']->executeQuery('SELECT * FROM image');
             $result = $stmt->fetchAll();
+           // var_dump($_POST['myData']);
+
             if(count($result)-$_POST['myData'] >= 5) {
                 $query = $this->app['db']
                     ->createQueryBuilder()
                     ->select('*')
                     ->from('image')
+                    ->where('private=0')
                     ->orderBY('visits','DESC')
+                    ->setMaxResults(5)
+                    ->setFirstResult(intval($_POST['myData']));
+                $stmt = $query->execute();
+                $result = $stmt->fetchAll();
+                $result = $this->checkLikes($result);
+                $result = $this->addComments($result);
+            }else if(count($result)-$_POST['myData'] > 0){
+                $resta = count($result)-$_POST['myData'];
+                $query = $this->app['db']
+                    ->createQueryBuilder()
+                    ->select('*')
+                    ->from('image')
+                    ->where('private=0')
+                    ->orderBY('visits','DESC')
+                    ->setMaxResults($resta)
+                    ->setFirstResult(intval($_POST['myData']));
+                $stmt = $query->execute();
+                $result = $stmt->fetchAll();
+                $result = $this->checkLikes($result);
+                $result = $this->addComments($result);
+            }else{
+                $result = 0;
+            }
+
+        }else{
+            $result = 1;
+        }
+        return json_encode($result);
+
+    }
+
+    public function getFiveRec(){
+        if(!empty($_POST['myData'])){
+
+            $stmt = $this->app['db']->executeQuery('SELECT * FROM image');
+            $result = $stmt->fetchAll();
+            // var_dump($_POST['myData']);
+
+            if(count($result)-$_POST['myData'] >= 5) {
+                $query = $this->app['db']
+                    ->createQueryBuilder()
+                    ->select('*')
+                    ->from('image')
+                    ->where('private=0')
+                    ->orderBY('created_at','DESC')
                     ->setMaxResults(5)
                     ->setFirstResult(intval($_POST['myData']));
                 $stmt = $query->execute();
@@ -561,7 +554,8 @@ class Image
                     ->createQueryBuilder()
                     ->select('*')
                     ->from('image')
-                    ->orderBY('visits','DESC')
+                    ->where('private=0')
+                    ->orderBY('created_at','DESC')
                     ->setMaxResults($resta)
                     ->setFirstResult(intval($_POST['myData']));
                 $stmt = $query->execute();
@@ -586,10 +580,6 @@ class Image
             $result = 1;
         }
         return json_encode($result);
-
-    }
-
-    public function getFiveRec(){
 
     }
 }

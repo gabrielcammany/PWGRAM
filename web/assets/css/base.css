@@ -286,7 +286,7 @@ a.titlePost:active {
     display: inline;
 }
 .post .post-footer .comments-list .comment .comment-body {
-    margin-left: 50px;
+    padding-left: 50px;
 }
 .post .post-footer .comments-list .comment > .comments-list {
     margin-left: 50px;
@@ -372,14 +372,8 @@ li.comment{
     margin-left: -20px;
     margin-right: 20px;
 }
-
-
-
-
-
 .img_gallery{
     margin: 15px!important;
-
 }
 
 span {
