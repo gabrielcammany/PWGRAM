@@ -69,7 +69,7 @@ class Image
             if($this->validateImage($img) && $this->validateTitle($title)) {
 
                 $date = date('Y/m/d H:i:s');
-                $img_path = 'assets/img/users/'.strtolower($this->app['session']->get('username')).'/'.str_replace("/","-",$date).'.jpg';
+                $img_path = 'assets/img/users/'.$this->app['session']->get('id').'/'.str_replace("/","-",$date).'.jpg';
                 $img_path = str_replace(" ","_",$img_path);
                 $this->base64_to_jpeg($img, $img_path);
                 $this->app['db']->insert('image',array(
@@ -152,35 +152,45 @@ class Image
         }
     }
 
-    public function getListPopularUserImages($id){
-        $sql = 'SELECT * FROM image WHERE user_id=? ORDER BY visits DESC';
-        $result = $this->app['db']->fetchAll($sql,array(
-            $id
-        ));
-        $result = $this->checkLikes($result);
-        $result = $this->addComments($result);
-        return json_encode($result);
+    public function getListPopularUserImages(){
+
+        if(isset($_POST['myData'])) {
+            $id = json_decode($_POST['myData'], true);
+            $sql = 'SELECT * FROM image WHERE user_id=? ORDER BY visits DESC';
+            $result = $this->app['db']->fetchAll($sql, array(
+                $id
+            ));
+            $result = $this->checkLikes($result);
+            $result = $this->addComments($result);
+            return json_encode($result);
+        }
     }
 
 
-    public function getListCommentsUserImages($id){
-        $sql = 'SELECT * FROM image WHERE user_id=? ORDER BY comments DESC';
-        $result = $this->app['db']->fetchAll($sql,array(
-            $id
-        ));
-        $result = $this->checkLikes($result);
-        $result = $this->addComments($result);
-        return json_encode($result);
+    public function getListCommentsUserImages(){
+        if(isset($_POST['myData'])) {
+            $id = json_decode($_POST['myData'],true);
+            $sql = 'SELECT * FROM image WHERE user_id=? ORDER BY comments DESC';
+            $result = $this->app['db']->fetchAll($sql, array(
+                $id
+            ));
+            $result = $this->checkLikes($result);
+            $result = $this->addComments($result);
+            return json_encode($result);
+        }
     }
 
-    public function getListLikesUserImages($id){
-        $sql = 'SELECT * FROM image WHERE user_id=? ORDER BY likes DESC';
-        $result = $this->app['db']->fetchAll($sql,array(
-            $id
-        ));
-        $result = $this->checkLikes($result);
-        $result = $this->addComments($result);
-        return json_encode($result);
+    public function getListLikesUserImages(){
+        if(isset($_POST['myData'])) {
+            $id = json_decode($_POST['myData'], true);
+            $sql = 'SELECT * FROM image WHERE user_id=? ORDER BY likes DESC';
+            $result = $this->app['db']->fetchAll($sql, array(
+                $id
+            ));
+            $result = $this->checkLikes($result);
+            $result = $this->addComments($result);
+            return json_encode($result);
+        }
     }
 
     public function getListPopularImages(){
@@ -221,58 +231,45 @@ class Image
     }
 
     function addComments($result){
-        //$query = str_repeat("?,", count($result)-1) . "?";
-        $sql = 'SELECT user_id,image_id,text,created_at FROM comment WHERE image_id IN (?) ORDER BY created_at DESC';
-        $array = array();
-       // $stmt = $db->prepare('SELECT user_id,image_id,text,created_at FROM comment WHERE image_id IN ('.$query.'); ORDER BY created_at DESC');
-        $limit = count($result);
-        //$j = 0;
-        for($i = 0;$i<$limit;$i++){
-            $array[$i] = $result[$i]["id"];
-          /*  $stmt->bindParam($i, $result[$j]["id"], \PDO::PARAM_STR);
-            $j++;*/
-        }
-        //$stmt->execute();
-        //$result2 = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        $stmt = $this->app['db']->executeQuery($sql,array($array),array(Connection::PARAM_INT_ARRAY));
-        $result2 = $stmt->fetchAll();
-
-        //var_dump(count($result2));
-        if(count($result2) != 0){
-           // $query = str_repeat("?,", count($result2)-1) . "?";
-            $sql = 'SELECT id,username,img_path FROM user WHERE id IN (?);';
-           // $stmt = $db->prepare('SELECT id,username,img_path FROM user WHERE id IN ('.$query.');');
-            $limit = count($result2);
+        if(count($result) != 0) {
+            $sql = 'SELECT user_id,image_id,text,created_at FROM comment WHERE image_id IN (?) ORDER BY created_at DESC';
             $array = array();
-            //$j = 0;
-            for($i = 0;$i<$limit;$i++){
-                $array[$i] = $result2[$i]["user_id"];
-                $result2[$i]["created_at"] = $this->app['time']($result2[$i]["created_at"]);
-                /*$stmt->bindParam($i, $result2[$j]["user_id"], \PDO::PARAM_STR);
-                $j++;*/
+            $limit = count($result);
+            for ($i = 0; $i < $limit; $i++) {
+                $array[$i] = $result[$i]["id"];
             }
-            //$stmt->execute();
-            //$result3 = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-            $stmt = $this->app['db']->executeQuery($sql,array($array),array(Connection::PARAM_INT_ARRAY));
-            $result3 = $stmt->fetchAll();
-            $commentsList = array();
-            for ($i = 0; $i < count($result); $i++) {
-                for ($j = 0; $j < count($result2); $j++) {
-                    if ($result[$i]["id"] == $result2[$j]["image_id"]) {
-                        $commentsContent = array();
-                        $resultSearch = $result3[(array_search($result2[$j]["user_id"], array_column($result3,"id")))];
-                        array_push($commentsContent,$resultSearch["username"]);
-                        array_push($commentsContent,$result2[$j]["text"]);
-                        array_push($commentsContent,$resultSearch["img_path"]);
-                        array_push($commentsContent,$result2[$j]["created_at"]);
-                        array_push($commentsList,$commentsContent);
-                    }
+            $stmt = $this->app['db']->executeQuery($sql, array($array), array(Connection::PARAM_INT_ARRAY));
+            $result2 = $stmt->fetchAll();
+            if (count($result2) != 0) {
+                $sql = 'SELECT id,username,img_path FROM user WHERE id IN (?);';
+                $limit = count($result2);
+                $array = array();
+                //$j = 0;
+                for ($i = 0; $i < $limit; $i++) {
+                    $array[$i] = $result2[$i]["user_id"];
+                    $result2[$i]["created_at"] = $this->app['time']($result2[$i]["created_at"]);
                 }
-                $result[$i]["comments"] = $commentsList;
+                $stmt = $this->app['db']->executeQuery($sql, array($array), array(Connection::PARAM_INT_ARRAY));
+                $result3 = $stmt->fetchAll();
                 $commentsList = array();
+                for ($i = 0; $i < count($result); $i++) {
+                    for ($j = 0; $j < count($result2); $j++) {
+                        if ($result[$i]["id"] == $result2[$j]["image_id"]) {
+                            $commentsContent = array();
+                            $resultSearch = $result3[(array_search($result2[$j]["user_id"], array_column($result3, "id")))];
+                            array_push($commentsContent, $resultSearch["username"]);
+                            array_push($commentsContent, $result2[$j]["text"]);
+                            array_push($commentsContent, $resultSearch["img_path"]);
+                            array_push($commentsContent, $result2[$j]["created_at"]);
+                            array_push($commentsList, $commentsContent);
+                        }
+                    }
+                    $result[$i]["comments"] = $commentsList;
+                    $commentsList = array();
+                }
+            } else {
+                $result[0]["comments"] = $result2;
             }
-        }else{
-            $result[0]["comments"] = $result2;
         }
         return $result;
     }
@@ -341,9 +338,9 @@ class Image
                     $data->image_id
                 ));
                 if($result[0]["COUNT(id)"]==0){
-                    $likes = $this->app['db']->fetchColumn('SELECT likes FROM image WHERE id=?',array($data->image_id));
+                    //$likes = $this->app['db']->fetchColumn('SELECT likes FROM image WHERE id=?',array($data->image_id));
                     //var_dump($likes);
-                    $likes = intval($likes)+1;
+                    //$likes = intval($likes)+1;
                     $get = $this->app['db']->executeUpdate(
                         'UPDATE image SET likes = likes + 1 WHERE id=?',
                         array($data->image_id)
@@ -375,11 +372,11 @@ class Image
                 $data->image_id
             ));
             if($result[0]["COUNT(id)"]!=0){
-                $likes = intval(
+               /* $likes = intval(
                     $this->app['db']->fetchColumn('SELECT likes FROM image WHERE id=?',array(
                         $data->image_id
                     ))
-                );
+                );*/
                 $get = $this->app['db']->executeUpdate(
                     'UPDATE image SET likes = likes - 1 WHERE id=?',
                     array($data->image_id)
@@ -428,20 +425,24 @@ class Image
     }
 
     public function dropImage(){
-        if(isset($_POST['id'])&&isset($_POST['path'])) {
-            $aux = explode('.',$_POST['path']);
-            $path1= $_POST['path'];
-            $path2= $aux[0].'_100.jpg';
-            $path3= $aux[0].'_400.jpg';
-
-            if(unlink($path1) && unlink($path2) && unlink($path3)){
-                $this->app['db']->delete('image',array('id' => $_POST['id']));
-                $this->app['db']->delete('comment',array('id' => $_POST['id']));
-                $this->app['db']->delete('notification',array('id' => $_POST['id']));
-                return 1;
+        if(isset($_POST['id'])) {
+            $result = $this->app['db']->fetchAll(
+                'SELECT img_path FROM image WHERE id='.$_POST['id']
+            );
+            if(!empty($result)) {
+                $path1 = $result[0]["img_path"];
+                $aux = explode('.', $path1);
+                $path2 = $aux[0] . '_100.jpg';
+                $path3 = $aux[0] . '_400.jpg';
+                if (unlink($path1) && unlink($path2) && unlink($path3)) {
+                    $this->app['db']->delete('image', array('id' => $_POST['id']));
+                    $this->app['db']->delete('comment', array('id' => $_POST['id']));
+                    $this->app['db']->delete('notification', array('id' => $_POST['id']));
+                    return 1;
+                }
             }
         }
-        return 0;
+        return json_encode($result);
     }
 
     public function editImage(){
@@ -485,11 +486,18 @@ class Image
     public function getFivePop(){
         if(!empty($_POST['myData'])){
 
-            $stmt = $this->app['db']->executeQuery('SELECT * FROM image');
-            $result = $stmt->fetchAll();
-           // var_dump($_POST['myData']);
+            /*$stmt = $this->app['db']->executeQuery('SELECT COUNT(id) FROM image WHERE private = 0');
+            $result = $stmt->fetchAll();*/
+            $result = $this->app['db']->fetchColumn(
+                'SELECT COUNT(id) FROM image WHERE private = ?',
+                array(
+                    0
+                )
+            );
+            //var_dump(($result));
+            //var_dump(($_POST['myData']));
 
-            if(count($result)-$_POST['myData'] >= 5) {
+            if(intval($result)-intval($_POST['myData']) >= 5) {
                 $query = $this->app['db']
                     ->createQueryBuilder()
                     ->select('*')
@@ -502,8 +510,8 @@ class Image
                 $result = $stmt->fetchAll();
                 $result = $this->checkLikes($result);
                 $result = $this->addComments($result);
-            }else if(count($result)-$_POST['myData'] > 0){
-                $resta = count($result)-$_POST['myData'];
+            }else if(intval($result)-intval($_POST['myData']) > 0){
+                $resta = intval($result)-intval($_POST['myData']);
                 $query = $this->app['db']
                     ->createQueryBuilder()
                     ->select('*')
@@ -530,11 +538,16 @@ class Image
     public function getFiveRec(){
         if(!empty($_POST['myData'])){
 
-            $stmt = $this->app['db']->executeQuery('SELECT * FROM image');
-            $result = $stmt->fetchAll();
-            // var_dump($_POST['myData']);
+            /*$stmt = $this->app['db']->executeQuery('SELECT * FROM image WHERE private = 0');
+            $result = $stmt->fetchAll();*/
+            $result = $this->app['db']->fetchColumn(
+                'SELECT COUNT(id) FROM image WHERE private = ?',
+                array(
+                    0
+                )
+            );
 
-            if(count($result)-$_POST['myData'] >= 5) {
+            if(intval($result)-intval($_POST['myData']) >= 5) {
                 $query = $this->app['db']
                     ->createQueryBuilder()
                     ->select('*')
@@ -547,9 +560,8 @@ class Image
                 $result = $stmt->fetchAll();
                 $result = $this->checkLikes($result);
                 $result = $this->addComments($result);
-
-            }elseif(count($result)-$_POST['myData'] > 0){
-                $resta = count($result)-$_POST['myData'];
+            }else if(intval($result)-intval($_POST['myData']) > 0){
+                $resta = intval($result)-intval($_POST['myData']);
                 $query = $this->app['db']
                     ->createQueryBuilder()
                     ->select('*')
@@ -560,18 +572,8 @@ class Image
                     ->setFirstResult(intval($_POST['myData']));
                 $stmt = $query->execute();
                 $result = $stmt->fetchAll();
-
-
-                /*$result = $this->app['db']->fetchAll(
-                    'SELECT * FROM image ORDER BY visits DESC LIMIT ? OFFSET ?',
-                    array(
-                        $resta,
-                        $_POST['myData']
-                    )
-                );*/
                 $result = $this->checkLikes($result);
                 $result = $this->addComments($result);
-
             }else{
                 $result = 0;
             }
@@ -580,6 +582,7 @@ class Image
             $result = 1;
         }
         return json_encode($result);
+
 
     }
 }

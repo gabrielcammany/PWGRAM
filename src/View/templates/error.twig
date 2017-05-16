@@ -1,15 +1,41 @@
 {% extends "base_gabri.twig" %}
-{% block title %}Error Page{% endblock %}
+{% block title %}Página error {{ numError }}{% endblock %}
 {% block head %}
     {{ parent() }}
-    <style type="text/css">
-        h1{text-transform: uppercase;}
-    </style>
 {% endblock %}
 {% block content %}
-    <h1>Oops! An error has occurred</h1>
-    <div>
-        <h2> The server returned a {{ message }}</h2>
+    <div class="container">
+        <!-- Jumbotron -->
+        <div class="jumbotron">
+            <h1><i class="fa fa-frown-o red"></i>  {{ numError }} {{ message }}</h1>
+            {% if numError == 403 %}
+                <p class="lead">No tienes permisos para acceder a la pagina <em><span id="display-domain"></span></em>.</p>
+                <p><a class="btn btn-default btn-lg" href="../"><span class="green">Quieres volver al inicio?</span></a>
+            {% elseif numError == 404 %}
+                <p class="lead">No hemos podido encontrar la pagina que estas intentando acceder... <em><span id="display-domain"></span></em></p>
+                <p><a class="btn btn-default btn-lg" href="../"><span class="green">Quieres volver al inicio?</span></a>
+            {% endif %}
+            </p>
+        </div>
+    </div>
+    <div class="container">
+        <div class="body-content">
+            <div class="row">
+                <div class="col-md-6">
+                    <h2>Que ha pasado?</h2>
+                    {% if numError == 403 %}
+                        <p class="lead">El error 403 implica que la pagina que estas buscando no esta en tu alcance...</p>
+                    {% elseif numError == 404 %}
+                        <p class="lead">El error 404 implica que la pagina que estas buscando no existe...</p>
+                    {% endif %}
+                </div>
+                <div class="col-md-6">
+                    <h2>Que puedo hacer por ti?</h2>
+                    <p class="lead">Si eres un visitante</p>
+                    <p>Navega a la pagina anterior y comprueba que estas en el lugar correcto. Si necesitas asistencia no dudes en contactar al servicio técnico.</p>
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock %}
 {% block footer %}{% endblock %}

@@ -7,17 +7,17 @@ $(function() {
     $('#btnEditProfile').show();
     $('#gallery_pop').show();
     $('#containerInfoUser').hide();
-
 });
+
+
 
 $('#update_info').click(function (e) {
     e.preventDefault();
 
     if(validaUsername($('#inputNombreUsuario').val())&&validaEmail($('#inputCorreoUsuario').val())&&validateDate($('#inputDateUsuario').val())&&validatePasswordRegistration($('#inputPassword').val(),$('#inputConfirmPass').val())){
-       // console.log('@@ ');
+       
         var reg = {};
 
-        reg.email = $('#inputCorreoUsuario').val();
         reg.pass = $('#inputPassword').val();
         reg.date = $('#inputDateUsuario').val();
         reg.confirm_pass = $('#inputConfirmPass').val();
@@ -41,18 +41,6 @@ $('#update_info').click(function (e) {
         shakeModalRegistration();
     }
 });
-
-
-function validaEmail(v1){
-    var usernameRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    if(usernameRegex.test(v1)){
-        return true;
-    }else{
-        status=3;
-        return false;
-    }
-
-}
 
 function validaUsername(v1){
     var usernameRegex = /^[a-zA-Z0-9]+([-_\.][a-zA-Z0-9]+)*[a-zA-Z0-9]$/;

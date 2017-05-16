@@ -250,7 +250,7 @@ function status_modal( $response){
             //log_in(' ',$('#username').val(),$('#password_reg').val())
             break;
         case '2':
-            $('.error').addClass('alert alert-danger').html("Usuario existente");
+            $('.error').addClass('alert alert-danger').html("Nombre de usuario o email ya existentes");
             break;
         case '3':
             $('.error').addClass('alert alert-danger').html("Formato de email incorrecto");
@@ -295,7 +295,7 @@ function status_modal( $response){
             $('.error').addClass('alert alert-danger').html("Username o contrasena incorrecta");
             break;
         default:
-            $('.error').addClass('alert alert-danger').html("Error desconocido" + $response);
+            $('.error').addClass('alert alert-danger').html("Error desconocido " + $response);
             break;
     }
 }

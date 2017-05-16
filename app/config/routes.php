@@ -77,6 +77,62 @@ $beforeLogged = function (Request $request, Application $app){
     }
 };
 
+
+
+$beforeImage = function (Request $request, Application $app){
+    $response=new Response();
+    $actual_link = $_SERVER['REQUEST_URI'];
+    $data = explode('/',$actual_link);
+    $actualUser = $app['session']->get('id');
+
+    $result = $app['db']->fetchAssoc(
+        'SELECT user_id, private FROM image WHERE id = ?',
+        array($data[2])
+    );
+
+    $edit = false;
+    if($actualUser == $result['user_id']){
+        $edit = true;
+    }
+    if(!empty($result)){
+        if($result['private'] == 1 && !$edit){
+            $content = $app['twig']->render('error.twig', [
+                'message' => 'No tienes permisos para acceder',
+                'numError' => 403,
+                'app' => [
+                    'name'=>$app['app.name'],
+                    'username' => $app['session']->get('username'),
+                    'image_id'=> $data[2],
+                    'img' => $app['session']->get('img'),
+                    'idUser'   => $app['session']->get('id')
+
+                ]
+            ]);
+            $response->setContent($content);
+            $response->setStatusCode(403);
+            return $response;
+        }
+    }else{
+        $content = $app['twig']->render('error.twig', [
+            'message' => 'Página no encontrada',
+            'numError' => 404,
+            'app' => [
+                'name'=>$app['app.name'],
+                'username' => $app['session']->get('username'),
+                'image_id'=> $data[2],
+                'img' => $app['session']->get('img'),
+                'idUser'   => $app['session']->get('id')
+
+            ]
+        ]);
+        $response->setContent($content);
+        $response->setStatusCode(404);
+        return $response;
+
+    }
+
+};
+
 /**
  * Rutas para ir a las diferentes paginas, la primera es general para la pagina principal
  */
@@ -115,7 +171,7 @@ $app->post('/uploadNewImage','PwGram\\Controller\\ImageController::addNewImage')
  * Rutas relacionadas con editar o eliminar una imagen
  */
 
-$app->get('/image/{id}','PwGram\\Controller\\ImageController::renderImage');
+$app->get('/image/{id}','PwGram\\Controller\\ImageController::renderImage')->before($beforeImage);
 $app->post('/getInfoImage','PwGram\\Controller\\ImageController::getImageInfo');
 $app->post('/deleteImage','PwGram\\Controller\\ImageController::deleteImage')->before($beforeLogged);
 $app->post('/editImageInfo','PwGram\\Controller\\ImageController::editImageInfo')->before($beforeLogged);
@@ -152,7 +208,17 @@ $app->post('/notificationSeen','PwGram\\Controller\\NotificationsController::set
 $app->post('/getUserCommentInfo','PwGram\\Controller\\ProfileController::getUserInfo');
 
 
-
+$app->error(function (\Exception $exception,Request $request) use ($app){
+    $response = new Response();
+    $content = $app['twig']->render('error.twig', [
+        'message' => 'Error',
+        'numError' => 404,
+        'app' => $app['defaultParams'](1)
+    ]);
+    $response->setContent($content);
+    $response->setStatusCode(Response::HTTP_NOT_FOUND);
+    return $response;
+});
 
 /**
  * RUTAS A BORRAR!!!!!

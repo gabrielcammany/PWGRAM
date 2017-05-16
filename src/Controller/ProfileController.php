@@ -20,7 +20,7 @@ class ProfileController
         $response=new Response();
 
         $img = new Image($request,$app);
-        $sql = "SELECT * FROM user WHERE username = ?";
+        $sql = "SELECT id,img_path,posts,comments,email,birthdate FROM user WHERE username = ?";
         $get = $app['db']->fetchAssoc($sql,array($username));
 
         if(!$get){
@@ -29,58 +29,55 @@ class ProfileController
                 'app' => ['username' => ""],
                 'img' => $app['session']->get('img'),
                 'idUser' => $app['session']->get('id')
-
-
             ]);
             $response->setContent($content);
             $response->setStatusCode(Response::HTTP_NOT_FOUND);
-        }else{
-            if($get['id'] == $app['session']->get('id')){
+        }else {
+            if ($get['id'] == $app['session']->get('id')) {
                 $edit = true;
-            }else{
+            } else {
                 $edit = false;
             }
-            $_POST['myData']=$get['id'];
-            $img_path = $get['img_path'];
-            $img_path = str_replace(".jpg","_100.jpg",$img_path);
-            $pr = new Profile($request,$app);
+            $_POST['myData'] = $get['id'];
+            //echo $get['id'];
+            $img_path_100 = str_replace(".jpg", "_100.jpg", $get['img_path']);
+            $img_path_400 = str_replace(".jpg", "_400.jpg", $get['img_path']);
+            $pr = new Profile($request, $app);
             $list = json_decode($img->getListUserImages());
             $unameList = array();
-            foreach( $list as $img){
-                $uname = $pr->getUsername($img->user_id);
-                $valor =json_decode($uname);
-                array_push($unameList,$valor[0]->username);
+            $listComments = "";
+
+            $listLikes = "";
+            if ($list != null) {
+                foreach ($list as $image) {
+                    $uname = $pr->getUsername($image->user_id);
+                    $valor = json_decode($uname);
+                    array_push($unameList, $valor[0]->username);
+                }
+                $img = new Image($request, $app);
+                $listComments = json_decode($img->getListCommentsUserImages());
+
+                $img = new Image($request, $app);
+                $listLikes = json_decode($img->getListLikesUserImages());
+
             }
-
-           /* $listComments = json_decode($img->getListCommentsUserImages($get['id']));
-            $unameListComments = array();
-            foreach( $listComments as $img){
-                $unameListComments = $pr->getUsername($img->user_id);
-                $valor =json_decode($uname);
-                array_push($unameListComments,$valor[0]->username);
-            }*/
-
-            if($app['session']->get('id')==0){
-                $priv=0;
-            }
-
-            $content=$app['twig']->render('profile.twig', array(
+            $content = $app['twig']->render('profile.twig', array(
                 'app' => [
-                    'user' =>[
-                        'name' =>$username,
-                        'posts' =>$get['posts'],
-                        'comments' =>$get['comments'],
+                    'user' => [
+                        'name' => $username,
+                        'posts' => $get['posts'],
+                        'comments' => $get['comments'],
                         'id' => $get['id'],
                         'email' => $get['email'],
-                        'date' => str_replace("-","/",$get['birthdate']),
+                        'date' => str_replace("-", "/", $get['birthdate']),
                         'img_path' => [
-                            'cien' => $img_path,
-                            'cuatro' => '../assets/img/users/'.strtolower($username).'/profileImage_400.jpg'
+                            'cien' => $img_path_100,
+                            'cuatro' => $img_path_400,
                         ]
                     ],
-                    'name'=>$app['app.name'],
+                    'name' => $app['app.name'],
                     'idUser' => $app['session']->get('id'),
-                    'client' =>[
+                    'client' => [
                         'edit' => $edit,
                     ],
                     'username' => $app['session']->get('username'),
@@ -90,13 +87,15 @@ class ProfileController
                 ],
                 'images' => [
                     'list_images' => $list,
-                    'uname_pop' => $unameList
+                    'uname_pop' => $unameList,
+                    'list_comments' => $listComments,
+                    'list_likes'=> $listLikes
 
                 ],
             ));
-
-            $response->setStatusCode($response::HTTP_OK);
         }
+        $response->setStatusCode($response::HTTP_OK);
+        //}
 
         $response->headers->set('Content-Type','text/html');
         $response->setContent($content);

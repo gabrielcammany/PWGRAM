@@ -32,26 +32,21 @@ class Update
                 if (!is_array($value)) {
                     switch ($i) {
                         case 0:
-                            $email = $value;
-                            break;
-                        case 1:
                             $pass = $value;
                             break;
-                        case 2:
+                        case 1:
                             $date = $value;
-
+                            break;
+                        case 2:
+                            $confirm_pass = $value;
                             break;
                         case 3:
-                            $confirm_pass = $value;
-
-                            break;
-                        case 4:
                             $username = $value;
                             break;
-                        case 5:
+                        case 4:
                             $img = $value;
                             break;
-                        case 6:
+                        case 5:
                             $id = $value;
                             break;
                     }
@@ -60,7 +55,7 @@ class Update
 
             }
 
-            if($this->validaUsername($username)&&$this->validaEmail($email)&&$this->validateDate($date)&&$this->validatePasswordRegistration($pass,$confirm_pass)){
+            if($this->validaUsername($username)&&$this->validateDate($date)&&$this->validatePasswordRegistration($pass,$confirm_pass)){
                 $img_path= 'assets/img/users/'.strtolower($username).'/profileImage.jpg';
                 if(strcmp('../assets/img/users/'.strtolower($username).'/profileImage_100.jpg',$img) != 0){
                     $this->imgClass->base64_to_jpeg($img, $img_path);
@@ -74,15 +69,15 @@ class Update
                 }else {
 
                     if (empty($pass) && empty($confirm_pass)) {
-                        $sql = "UPDATE user SET email=?,password=?,birthdate=?,username=?,img_path=?,password=? WHERE id=?";
-                        $get = $this->app['db']->executeUpdate($sql, array($email, $pass, $date, $username, $img_path,$get['password'], $id));
+                        $sql = "UPDATE user SET password=?,birthdate=?,username=?,img_path=?,password=? WHERE id=?";
+                        $get = $this->app['db']->executeUpdate($sql, array($pass, $date, $username, $img_path,$get['password'], $id));
                         if($get == 0){
                             $this->status =2;
                         }
                     } else {
                         $hashed_pass = password_hash($pass, PASSWORD_DEFAULT);
-                        $sql = "UPDATE user SET email=?,password=?,birthdate=?,username=?,img_path=?,password=? WHERE id=?";
-                        $get = $this->app['db']->executeUpdate($sql, array($email, $pass, $date, $username, $img_path, $hashed_pass, $id));
+                        $sql = "UPDATE user SET password=?,birthdate=?,username=?,img_path=?,password=? WHERE id=?";
+                        $get = $this->app['db']->executeUpdate($sql, array($pass, $date, $username, $img_path, $hashed_pass, $id));
                         if($get == 0){
                             $this->status = 2;
                         }
@@ -93,15 +88,6 @@ class Update
 
         }
         return $this->status;
-    }
-
-    function validaEmail($v1){
-        if(filter_var($v1,FILTER_VALIDATE_EMAIL)){
-            return true;
-        }else{
-            $this->status = 3;//formato de email incorrecto
-            return false;
-        }
     }
 
     public function validaUsername($v1){

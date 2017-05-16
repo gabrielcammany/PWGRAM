@@ -1,7 +1,3 @@
-var $main_image;
-$(function() {
-
-});
 
 $('#deleteImage').on('click',   function(e){
     e.preventDefault();
@@ -15,16 +11,13 @@ $('#deleteImage').on('click',   function(e){
             closeOnConfirm: false
         },
         function(){
-        console.log('#@#'+$main_image[0].img_path);
-
             $.ajax({
                 type: 'post',
                 url: '/deleteImage',
-                data: {id: $('#main_image').attr('data-content'),path: $main_image[0].img_path},
+                data: {id: $('#main_image').attr('data-content')},
                 success: function ($response) {
-                    console.log('##'+$response);
-                    if($response!=0) {
-                        $main_image = JSON.parse($response);
+                    if($response.length !=0) {
+                        main_image = JSON.parse($response);
                         swal("Deleted!", "Su imagen ha sido eliminada.", "success");
                         window.location='../';
                     }else{
@@ -33,7 +26,7 @@ $('#deleteImage').on('click',   function(e){
                 }
 
             });
-    });
+        });
 });
 
 $('#editImage').on('click',function(e){

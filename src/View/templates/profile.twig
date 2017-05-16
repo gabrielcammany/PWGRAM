@@ -28,7 +28,7 @@
             <header id="headerID">
 
                 <div id="ImgID">
-                    <img src="{{ app.user.img_path.cuatro }}" class="img-rounded img-responsive" id="ImgSrcID">f
+                    <img src="../{{ app.user.img_path.cuatro }}" class="img-rounded img-responsive" id="ImgSrcID">
                 </div>
 
                 <div id="infoUser">
@@ -49,32 +49,39 @@
         </article>
     </div>
 
-    <div class="dropdown">
-        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Ordenar
-            <span class="caret"></span></button>
-        <ul class="dropdown-menu">
-            <li class="active liSort" data-content="Recientes"><a href="#">Recientes</a></li>
-            <li class="liSort" data-content="Comentarios"><a href="#">Comentarios</a></li>
-        </ul>
-    </div>
 
     <div class="container">
-
+        <br>
+        {% if images.list_images is empty %}
+        <div align="center">
+            <p>No hay imágenes disponibles</p>
+        </div>
+        {%  else %}
+        <div class="dropdown">
+            Ordenar por
+            <button class="btn btn-default dropdown-toggle" id="dropdownButton" type="button" data-toggle="dropdown">
+                <span class="caret"></span></button>
+            <ul class="dropdown-menu" id="sortingList">
+                <li data-content="Recientes"><a>Recientes</a></li>
+                <li data-content="Comentarios"><a>Comentarios</a></li>
+                <li data-content="Likes"><a>Likes</a></li>
+            </ul>
+        </div>
         <div class="error"></div>
-
-            <div class="responsive row row-flex row-flex-wrap" id="gallery_pop">
-
-                {% for img in images.list_images %}
-                    {% if  app.client.edit  %}
-                        {{  block("individualImage",  "image.twig") }}
-                    {% elseif img.private==0 %}
-                        {{  block("individualImage",  "image.twig") }}
-                    {% endif %}
-                {% endfor %}
-             </div>
-           <!-- <div id="galleryComments" hidden>
+            <div id="galleryRecents">
                 <div class="responsive row row-flex row-flex-wrap" id="gallery_pop">
-                  {#
+
+                    {% for img in images.list_images %}
+                        {% if  app.client.edit  %}
+                            {{  block("individualImage",  "image.twig") }}
+                        {% elseif img.private==0 %}
+                            {{  block("individualImage",  "image.twig") }}
+                        {% endif %}
+                    {% endfor %}
+                 </div>
+            </div>
+            <div id="galleryComments" hidden>
+                <div class="responsive row row-flex row-flex-wrap" id="gallery_pop">
                    {% for img in images.list_comments %}
                         {% if  app.client.edit  %}
                             {{  block("individualImage",  "image.twig") }}
@@ -82,10 +89,23 @@
                             {{  block("individualImage",  "image.twig") }}
                         {% endif %}
                     {% endfor %}
-                  #}
+
                 </div>
             </div>
-            -->
+
+            <div id="galleryLikes" hidden>
+                <div class="responsive row row-flex row-flex-wrap" id="gallery_pop">
+
+                    {% for img in images.list_likes %}
+                        {% if  app.client.edit  %}
+                            {{  block("individualImage",  "image.twig") }}
+                        {% elseif img.private==0 %}
+                            {{  block("individualImage",  "image.twig") }}
+                        {% endif %}
+                    {% endfor %}
+
+                </div>
+            </div>
         {% if  app.client.edit  %}
         <div class="wrapper" id="containerInfoUser" data-content="{{ app.user.name }}?{{ app.user.email }}?{{ app.user.date }}?{{ app.user.img_path }}" hidden>
            <article id="articleForm">
@@ -109,14 +129,6 @@
                        </aside>
                        <div  class="divInput">
                            <input type="text" class="inputs" id="inputNombreUsuario" aria-required="false">
-                       </div>
-                   </div>
-                   <div class="divCampo">
-                       <aside>
-                           <label>Correo</label>
-                       </aside>
-                       <div  class="divInput">
-                           <input type="email" class="inputs" id="inputCorreoUsuario" aria-required="false">
                        </div>
                    </div>
                    <div class="divCampo">
@@ -156,6 +168,8 @@
            </article>
         </div>
         {% endif %}
+
+        {% endif %}
     </div>
 {% endblock %}
 
@@ -165,7 +179,8 @@
 
 {% block scripts %}
     {{ parent() }}
-    <script src="{{ asset('/profile.js','js')}}"></script>
+
+    <script src="{{ asset('/profilePublic.js','js')}}"></script>
     {% if  app.client.edit  %}
         <script src="{{ asset('/profileOwner.js','js')}}"></script>
     {% endif %}

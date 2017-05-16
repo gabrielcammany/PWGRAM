@@ -39,3 +39,5 @@ $app->register(new Silex\Provider\DoctrineServiceProvider(),array(
         'password' => 'gabriel'
     ),
 ));
+
+//$app->register(new Silex\Provider\Monolog)

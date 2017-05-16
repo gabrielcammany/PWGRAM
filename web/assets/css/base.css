@@ -37,8 +37,8 @@ body{
 }
 
 #user_acces_icon{
-    max-width: 30px;
-    max-height: 30px;
+    width: 35px;
+    height: 35px;
     margin-right: 10px;
     margin-top: -5px;
 }

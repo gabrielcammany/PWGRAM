@@ -1,8 +1,6 @@
 /**
  * Created by Xps_Sam on 17/04/2017.
  */
-var popular = 5;
-var recent = 5;
 
 function showEditForm(){
     $('#edit_modal .editBox').fadeOut('fast',function(){
@@ -23,11 +21,12 @@ function openEditModal(){
 
 $('#add5MorePopular').on('click',function (e) {
     e.preventDefault();
-    console.log(popular);
+    console.log( $('#gallery_pop').children().length);
+    //console.log("HIJOS: " + );
     $.ajax({
         type: 'post',
         url: '/getFiveMorePop',
-        data: {myData: popular},
+        data: {myData: $('#gallery_pop').children().length},
         success: function (result) {
             if(result != 0 && result != 1){
                 $('#gallery_pop').append(result);
@@ -39,7 +38,7 @@ $('#add5MorePopular').on('click',function (e) {
                     e.preventDefault();
                     actionCommentListenerImage(this,'#gallery_pop','#gallery_recent');
                 });
-                popular = popular + 5;
+              //  popular = popular + 5;
             }else{
                 $('#add5MorePopular i').hide();
                 $('#add5MorePopular').hide();
@@ -50,12 +49,13 @@ $('#add5MorePopular').on('click',function (e) {
 
 $('#add5MoreRecent').on('click',function (e) {
     e.preventDefault();
+    console.log($('#gallery_recent').children().length);
     $.ajax({
         type: 'post',
         url: '/getFiveMoreRec',
-        data: {myData: recent},
+        data: {myData: $('#gallery_recent').children().length},
         success: function (result) {
-            console.log((result));
+            //console.log((result));
             if(result != 0 && result != 1){
                 $('#gallery_recent').append(result);
                 $('#gallery_recent img.likeImg').on('click',function(e){
@@ -67,7 +67,7 @@ $('#add5MoreRecent').on('click',function (e) {
                     actionCommentListenerImage(this,'#gallery_recent','#gallery_pop');
                 });
 
-                recent = recent + 5;
+                //recent = recent + 5;
             }else{
                 $('#add5MoreRecent i').hide();
                 $('#add5MoreRecent').hide();
@@ -76,40 +76,12 @@ $('#add5MoreRecent').on('click',function (e) {
     })
 });
 
-$('#gallery_pop .moreCommentsBtn').on('click',function (e) {
-    e.preventDefault();
-    var dataSend = {};
-    dataSend.image_id = $(this).attr('data-content');
-    dataSend.size = ($("#comentaris"+$(this).attr('data-content')).children().size()-1);
-    $.ajax({
-        type: 'post',
-        url: '/moreCommentsBox',
-        data: {data:JSON.stringify(dataSend)},
-        success: function ($response) {
-            console.log($response);
-            var response = JSON.parse($response);
-            for(var i = 0;i<response.length && i<3;i++){
-                var comentari = new Array();
-                comentari.push(new Array())
-                comentari[0].push(response[i].username);
-                comentari[0].push(response[i].text);
-                comentari[0].push(response[i].img_path);
-                comentari[0].push(response[i].created_at);
-                var append = getImageComments(comentari,dataSend.image_id,true);
-                $("#gallery_pop #comentaris"+dataSend.image_id+" #ulMoreCommentsBtn").before(append);
-            }
-            if(response.length < 4){
-                $("#gallery_pop #comentaris"+dataSend.image_id+" #ulMoreCommentsBtn").hide();
-            }
-        }
-    });
-});
 
 $('#gallery_recent .moreCommentsBtn').on('click',function (e) {
     e.preventDefault();
     var dataSend = {};
     dataSend.image_id = $(this).attr('data-content');
-    dataSend.size = ($("#comentaris"+$(this).attr('data-content')).children().size()-1);
+    dataSend.size = ($("#gallery_recent #comentaris"+$(this).attr('data-content')).children().size()-1);
     $.ajax({
         type: 'post',
         url: '/moreCommentsBox',
@@ -125,10 +97,38 @@ $('#gallery_recent .moreCommentsBtn').on('click',function (e) {
                 comentari[0].push(response[i].img_path);
                 comentari[0].push(response[i].created_at);
                 var append = getImageComments(comentari,dataSend.image_id,true);
-                $("#gallery_recent #comentaris"+dataSend.image_id+" #ulMoreCommentsBtn").before(append);
+                $("#gallery_recent #comentaris"+dataSend.image_id).append(append);
             }
             if(response.length < 4){
-                $("#gallery_recent #comentaris"+dataSend.image_id+" #ulMoreCommentsBtn").hide();
+                $("#gallery_recent #ulMoreCommentsBtn"+dataSend.image_id).hide();
+            }
+        }
+    });
+});
+
+$('#gallery_pop .moreCommentsBtn').on('click',function (e) {
+    e.preventDefault();
+    var dataSend = {};
+    dataSend.image_id = $(this).attr('data-content');
+    dataSend.size = ($("#gallery_pop #comentaris"+$(this).attr('data-content')).children().size()-1);
+    $.ajax({
+        type: 'post',
+        url: '/moreCommentsBox',
+        data: {data:JSON.stringify(dataSend)},
+        success: function ($response) {
+            var response = JSON.parse($response);
+            for(var i = 0;i<response.length && i<3;i++){
+                var comentari = new Array();
+                comentari.push(new Array())
+                comentari[0].push(response[i].username);
+                comentari[0].push(response[i].text);
+                comentari[0].push(response[i].img_path);
+                comentari[0].push(response[i].created_at);
+                var append = getImageComments(comentari,dataSend.image_id,true);
+                $("#gallery_pop #comentaris"+dataSend.image_id).append(append);
+            }
+            if(response.length < 4){
+                $("#gallery_pop #ulMoreCommentsBtn"+dataSend.image_id).hide();
             }
         }
     });

@@ -12,12 +12,12 @@
     {% for comment in img.comments|slice(0,end) %}
         <ul class="comments-list">
             <li class="comment">
-                <a class="pull-left" href="#">
-                    <img class="avatar" src="../{{ comment[2]  }}">
+                <a class="pull-left" href="../profile/{{ comment[0] }}">
+                    <img class="avatar" src="../{{ comment[2]}}">
                 </a>
                 <div class="comment-body">
                     <div class="comment-heading">
-                        <h4 class="user">{{ comment[0] }}</h4>
+                        <h4 class="user" ><a href="../profile/{{ comment[0] }}">{{ comment[0] }}</a></h4>
                         <h5 class="time"> {{ comment[3]  }}</h5>
                     </div>
                     <p class="textComment">{{ comment[1]  }}</p>
@@ -35,12 +35,12 @@
             </li>
         </ul>
     {% endfor %}
+</div>
     {% if img.comments|length > 3 and enableEdit is not defined %}
-        <ul class="comments-list" id="ulMoreCommentsBtn">
+        <ul class="comments-list" id="ulMoreCommentsBtn{{ img.id }}">
             <li class="comment">
                 <input style="width: 100%" class="btn btn-default btn-register moreCommentsBtn" type="submit" data-content="{{ img.id }}" value="Ver más comentarios">
             </li>
         </ul>
     {% endif %}
-</div>
 {% endblock %}

@@ -35,8 +35,8 @@ function actionFormatter(value, row, index) {
 
 function imglink(value, row, index) {
     return [
-        '<a class="imgNotification linkText" href="/image/'+value+'" title="Imagen">'
-         +value+
+        '<a class="imgNotification linkText" href="/image/'+value.split("_")[0]+'" title="Imagen">'
+         +value.split("_")[1]+
         '</a>',
     ].join('');
 }
@@ -98,7 +98,6 @@ function fillTable() {
                     } else {
                         list[i].event_id = "Comentario"
                     }
-                    list[i].post_id = ((list[i].post_id).split("_"))[1];
                 }
                 mainlist = list;
                 if(refillTable){

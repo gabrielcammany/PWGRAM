@@ -24,9 +24,6 @@ class ConfirmController
                 'username' => $app['session']->get('username'),
                 'img' => $app['session']->get('img'),
                 'idUser'   => $app['session']->get('id')
-
-
-
             ],
         ));
         $response=new Response();

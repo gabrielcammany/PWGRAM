@@ -13,7 +13,7 @@ use PwGram\Model;
 class SignUp
 {
     private $request;
-    private $status=0;
+    private $status = 0;
     private $app;
 
     public function __construct($request,$app)
@@ -50,38 +50,30 @@ class SignUp
                             break;
                         case 5:
                             $img = $value;
+                            break;
                     }
                     $i++;
                 }
             }
-
-          //  $db = new \PDO('mysql:host=localhost;dbname=pwgram', "root", "gabriel");
-            //$db = new \PDO('mysql:host=localhost;dbname=pwgram', "homestead", "secret");
-            $vResult = $this->validation_user($username);
+            $vResult = $this->validation_user($username,$email);
 
             if(!$vResult){
 
-                if($this->validaEmail($email)&&$this->validateDate($date)&&$this->validatePasswordRegistration($pass,$confirm_pass)){
-                    //if($this->uploadFile($img)) {
+                if($this->validateDate($date)&&$this->validatePasswordRegistration($pass,$confirm_pass)){
                     $img_path='assets/img/tmp/'.$username.'.jpg';
                     $this->app['session']->set('username',$username);
+                    $image = new Image($this->request,$this->app);
+                    $image->base64_to_jpeg($img,$img_path);
                     $hashed_pass = password_hash($pass, PASSWORD_DEFAULT);
                     $this->app['db']->insert('user',
                         array(
                             'email' => $email,
                             'password' => $hashed_pass,
                             'birthdate' => $date,
-                            'username' => $username,
+                            'username' => strtolower($username),
                             'img_path' => $img_path,
                             'active' => 0
                         ));
-                    /*$stmt = $db->prepare('INSERT INTO user(email,password,birthdate,username,img_path,active) values(?,?,?,?,?,0)');
-                    $stmt->bindParam(1, $email, \PDO::PARAM_STR);
-                    $stmt->bindParam(2, $hashed_pass, \PDO::PARAM_STR);
-                    $stmt->bindParam(3, $date, \PDO::PARAM_STR);
-                    $stmt->bindParam(4, $username, \PDO::PARAM_STR);
-                    $stmt->bindParam(5, $img_path, \PDO::PARAM_STR);
-                    $stmt->execute();*/
                     $this->status = 1;
                     $this->sendEmail($email,$username);
                 }
@@ -91,20 +83,23 @@ class SignUp
     }
 
 
-    function validation_user($v1){
-        $result = $this->app['db']->fetchAssoc(
-            'SELECT * FROM user WHERE username=?',
-            array($v1)
-        );
-       /* $stmt = $db->prepare('SELECT * FROM user WHERE username=?');
-        $stmt->bindParam(1,$v1,\PDO::PARAM_STR);
-        $stmt->execute();
-        $result = $stmt->fetch(\PDO::FETCH_ASSOC);*/
-        if(sizeof($result['id'])== 0) {
-
+    function validation_user($v1,$email){
+        if($this->validaEmail($email)){
+            $result = $this->app['db']->fetchColumn(
+                'SELECT COUNT(id) FROM user WHERE username=? OR email=?',
+                array(
+                    $v1,
+                    $email
+                )
+            );
+            if(!empty($result)) {
+                $this->status = 2;
+                return 0;
+            }
+        }else{
+            $this->status = 3;
             return 0;
         }
-        $this->status = 2;//el usuario si existe
         return 1;
 
     }

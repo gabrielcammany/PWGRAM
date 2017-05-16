@@ -25,36 +25,45 @@
         <h1 class="page-header text-header">Populares</h1>
         <div class="divider"></div>
         <div  class="container" id = "imagesPop" data-content="{{ images.populares }}">
-            <div class="responsive row row-flex row-flex-wrap" id="gallery_pop" data-content="{{ images.poplength }}">
-                {% for img in images.populares %}
-                    {{  block("individualImage",  "image.twig") }}
-                {% endfor %}
-            </div>
-            <div class="addDiv">
-                <a class="add ml10" id="add5MorePopular" title="Añadir 5 mas" href="/getFiveMorePop">
-                    <i class="glyphicon glyphicon-plus"></i>
-                </a>
-            </div>
-
-
+            {% if images.populares|length > 0 %}
+                <div class="responsive row row-flex row-flex-wrap" id="gallery_pop" data-content="{{ images.poplength }}">
+                    {% for img in images.populares %}
+                        {{  block("individualImage",  "image.twig") }}
+                    {% endfor %}
+                </div>
+                <div class="addDiv">
+                    <a class="add ml10" id="add5MorePopular" title="Añadir 5 mas" href="/getFiveMorePop">
+                        <i class="glyphicon glyphicon-plus"></i>
+                    </a>
+                </div>
+            {% else %}
+                No hay imágenes disponibles
+            {% endif %}
         </div>
 
         <h1 class="page-header text-header">Recientes
         </h1>
         <div class="divider"></div>
         <div class="container" id="imagesRec" data-content="{{ images.recientes }}">
-            <div class="responsive row row-flex row-flex-wrap" id="gallery_recent" data-content="{{ images.size_rec }}">
-                {% for img in images.recientes %}
-                    {{  block("individualImage",  "image.twig") }}
-                {% endfor %}
-
-            </div>
-            <div class="addDiv">
-                <a class="add ml10" id="add5MoreRecent" title="Añadir 5 mas" href="/getFiveMoreRec">
-                    <i class="glyphicon glyphicon-plus"></i>
-                </a>
-            </div>
-
+            {% if images.recientes|length > 0 %}
+                <div class="responsive row row-flex row-flex-wrap" id="gallery_recent" data-content="{{ images.size_rec }}">
+                    {% for img in images.recientes %}
+                        {{  block("individualImage",  "image.twig") }}
+                    {% endfor %}
+                    <a id="add5MorePopular" href="/getFiveMoreRecent">
+                        <div class='col-md-3 portfolio-item img_gallery panel panel-default flex-col outer' id="eachFigure" href="/getFiveMoreRec">
+                            <div class="col-sm-15 divLinia">
+                                <div class="panel panel-white post panel-shadow divLinia">
+                                    <div id='divLinia' class="post-footer divLinia">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            {% else %}
+                No hay imágenes disponibles
+            {% endif %}
         </div>
     </div>
 

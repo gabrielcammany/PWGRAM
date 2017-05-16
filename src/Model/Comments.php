@@ -50,7 +50,7 @@ class Comments
                     if($result[0]["COUNT(id)"]==0){
                         $date = date('Y/m/d H:i:s');
                         $this->app['db']->insert('comment',array(
-                            'text' => $data->text,
+                            'text' => htmlentities($data->text),
                             'user_id' => $id,
                             'image_id' => $data->image_id,
                             'created_at' => $date
@@ -153,7 +153,11 @@ class Comments
                     'user_id' => $id,
                     'image_id' => $data
                 ));
-                $done = $this->app['db']->executeUpdate(
+                $this->app['db']->delete('notification',array(
+                    'user_id' => $id,
+                    'post_id' => $data
+                ));
+                $this->app['db']->executeUpdate(
                     'UPDATE image SET comments = comments -1 WHERE id = ?',
                     array($data)
                 );
@@ -173,7 +177,7 @@ class Comments
             $update = $this->app['db']->executeUpdate(
                 'UPDATE comment SET text = ? WHERE id = ?',
                 array(
-                    $json->comment,
+                    htmlentities($json->comment),
                     $json->id
                 )
             );

@@ -177,7 +177,7 @@ function getImageComments(comentaris,i_image,reverse) {
                 +"<h4 class=\"user\">"+comentaris[i_comments][0]+"</h4>"
                 +"<h5 class=\"time\"> "+time+"</h5>"
                 +"</div>"
-                +"<p>"+comentaris[i_comments][1]+"</p>"
+                +"<p class=\"textComment\">"+comentaris[i_comments][1]+"</p>"
                 +"</div>"
                 +"</li></ul>";
         }
@@ -248,35 +248,34 @@ function actionCommentListenerImage(button,id_tag,div_tag_aux) {
 }
 
 function setLikeListenerImage(image,div_tag,div_tag_aux) {
-        var data = {};
-        data.user_id = ($(image).attr('data-content').split("_"))[1];
-        data.image_id = ($(image).attr('data-content').split("_"))[0];
-        if($(image).attr('src')=='../assets/img/icons/like.png'){
-            $.ajax({
-                type: 'post',
-                url: '/incLike',
-                data: {data:JSON.stringify(data)},
-                success: function ($response) {
-                    $(div_tag+' #like'+data.image_id).attr('src','../assets/img/icons/like_filled.png');
-                    $(div_tag+' .label_like'+data.image_id).text('Like: '+JSON.parse($response)[0]["likes"]);
-                    $(div_tag_aux+' #like'+data.image_id).attr('src','../assets/img/icons/like_filled.png');
-                    $(div_tag_aux+' .label_like'+data.image_id).text('Like: '+JSON.parse($response)[0]["likes"]);
-                }
-            });
-        } else {
-            $.ajax({
-                type: 'post',
-                url: '/removeLike',
-                data: {data:JSON.stringify(data)},
-                success: function ($response) {
-                    $(div_tag+' #like'+data.image_id).attr('src','../assets/img/icons/like.png')
-                    $(div_tag+' .label_like'+data.image_id).text('Like: '+JSON.parse($response)[0]["likes"]);
-                    $(div_tag_aux+' #like'+data.image_id).attr('src','../assets/img/icons/like.png')
-                    $(div_tag_aux+' .label_like'+data.image_id).text('Like: '+JSON.parse($response)[0]["likes"]);
-                }
-            });
-        }
-
+    var data = {};
+    data.user_id = ($(image).attr('data-content').split("_"))[1];
+    data.image_id = ($(image).attr('data-content').split("_"))[0];
+    if($(image).attr('src')=='../assets/img/icons/like.png'){
+        $.ajax({
+            type: 'post',
+            url: '/incLike',
+            data: {data:JSON.stringify(data)},
+            success: function ($response) {
+                $(div_tag+' #like'+data.image_id).attr('src','../assets/img/icons/like_filled.png');
+                $(div_tag+' .label_like'+data.image_id).text('Like: '+JSON.parse($response)[0]["likes"]);
+                $(div_tag_aux+' #like'+data.image_id).attr('src','../assets/img/icons/like_filled.png');
+                $(div_tag_aux+' .label_like'+data.image_id).text('Like: '+JSON.parse($response)[0]["likes"]);
+            }
+        });
+    } else {
+        $.ajax({
+            type: 'post',
+            url: '/removeLike',
+            data: {data:JSON.stringify(data)},
+            success: function ($response) {
+                $(div_tag+' #like'+data.image_id).attr('src','../assets/img/icons/like.png')
+                $(div_tag+' .label_like'+data.image_id).text('Like: '+JSON.parse($response)[0]["likes"]);
+                $(div_tag_aux+' #like'+data.image_id).attr('src','../assets/img/icons/like.png')
+                $(div_tag_aux+' .label_like'+data.image_id).text('Like: '+JSON.parse($response)[0]["likes"]);
+            }
+        });
+    }
 }
 /**
  Estos son los listeners de like y comentario de la galeria

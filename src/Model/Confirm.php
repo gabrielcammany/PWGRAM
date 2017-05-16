@@ -41,15 +41,22 @@ class Confirm
             $this->status = 1;
         }else if(md5(($result['email'].$username."b2891fceefe96e96c97d7b7a014fe2eb")) != $token ){
             $this->status = 2;
-        }else if(mkdir('assets/img/users/'.strtolower($username),0777)){
+        }else if(mkdir('assets/img/users/'.$result['id'],0777)){
             //localStorage.getItem();
+            $path = $result['img_path'];
+            $image = new Image($this->request,$this->app);
+            copy($path,'assets/img/users/'.$result['id'].'/'.$username.'.jpg');
+
             $this->app['db']->update('user',
                 array(
                 'active' => 1
                 ),
                 array(
-                    'username' => $username
+                    'id' => $result['id']
                 ));
+
+
+
             /*$stmt = $db->prepare('UPDATE user SET active=1 WHERE username=?');
             $stmt->bindParam(1, $username, \PDO::PARAM_STR);
             $stmt->execute();*/
