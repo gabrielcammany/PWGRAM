@@ -45,8 +45,12 @@ A#link_username{
 }
 
 
-.label_like{
-    margin-top: 30px;
+p.label_like{
+    margin-top: 80px !important;
+}
+
+.numLikes{
+    font-weight: 700 !important;
 }
 
 .addDiv{

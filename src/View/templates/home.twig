@@ -26,7 +26,8 @@
         <div class="divider"></div>
         <div  class="container" id = "imagesPop" data-content="{{ images.populares }}">
             {% if images.populares|length > 0 %}
-                <div class="responsive row row-flex row-flex-wrap" id="gallery_pop" data-content="{{ images.poplength }}">
+                <div class="responsive row row-flex row-flex-wrap" id="gallery_pop">
+                    {% set tag = "gallery_pop" %}
                     {% for img in images.populares %}
                         {{  block("individualImage",  "image.twig") }}
                     {% endfor %}
@@ -46,12 +47,14 @@
         <div class="divider"></div>
         <div class="container" id="imagesRec" data-content="{{ images.recientes }}">
             {% if images.recientes|length > 0 %}
-                <div class="responsive row row-flex row-flex-wrap" id="gallery_recent" data-content="{{ images.size_rec }}">
+                <div class="responsive row row-flex row-flex-wrap" id="gallery_recent">
+                    {% set tag = "gallery_recent" %}
                     {% for img in images.recientes %}
                         {{  block("individualImage",  "image.twig") }}
                     {% endfor %}
-                    <a id="add5MorePopular" href="/getFiveMoreRecent">
+                    <a id="add5MorePopular" href="#">
                         <div class='col-md-3 portfolio-item img_gallery panel panel-default flex-col outer' id="eachFigure" href="/getFiveMoreRec">
+
                             <div class="col-sm-15 divLinia">
                                 <div class="panel panel-white post panel-shadow divLinia">
                                     <div id='divLinia' class="post-footer divLinia">

@@ -38,13 +38,13 @@
             </div>
             <div class = "col-sm-4 right_container" id="content" align="center" >
                 <h2 id='title'>{{ img.title }}</h2>
-                <p><h2><A href="/profile/{{ img.user_id }}" id='link_username' data-content="{{ app.username }}">{{ img.user_id }}</A></h2></p>
+                <p><h2><A href="/profile/{{ usernamePost }}" id='link_username' data-content="{{ usernamePost }}">{{ usernamePost }}</A></h2></p>
                 <p id='label_like'>Likes: {{ img.likes }}</p>
                 <p id='label_visits'>Visitas: {{ img.visits }}</p>
                 <p id='label_time'>Hace: {{ img.created_at }}</p>
                 <div class="col-sm-15 divLinia">
                     <div class="panel panel-white post panel-shadow divLinia">
-                        <div id='statusError{{ img.id }}' class="alert alert-danger statusError" role="alert" hidden>
+                        <div id='statusError{{ img.id }}content' class="alert alert-danger statusError" role="alert" hidden>
                             <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
                             <span class="sr-only">Error:</span>
                             Solo puedes añadir un comentario en la imagen
@@ -54,14 +54,14 @@
                                 {% if app.idUser is not null %}
                                 <div class='col likeButton' align='center'>
                                     {% if img.liked == 1 %}
-                                        <a class='btn btn-simple btn-just-icon' ><img class="likeImg" id="like{{ img.id }}" src='../assets/img/icons/like_filled.png' width='30' height='30' data-content="{{ img.id }}_{{ img.user_id }}"></a>
+                                        <a class='btn btn-simple btn-just-icon' ><img class="likeImg" id="like{{ img.id }}content" src='../assets/img/icons/like_filled.png' width='30' height='30' data-content="{{ img.id }}_{{ img.user_id }}"></a>
                                     {% else %}
-                                        <a class='btn btn-simple btn-just-icon'><img class="likeImg" id="like{{ img.id }}" src='../assets/img/icons/like.png' width='30' height='30' data-content="{{ img.id }}_{{ img.user_id }}"></a>
+                                        <a class='btn btn-simple btn-just-icon'><img class="likeImg" id="like{{ img.id }}content" src='../assets/img/icons/like.png' width='30' height='30' data-content="{{ img.id }}_{{ img.user_id }}"></a>
                                     {% endif %}
                                 </div>
                                 <div class='col'>
                                     <div class="input-group" id="inputCommentGroup" >
-                                        <input id='commentInput{{ img.id }}' class="form-control" placeholder="Añadir un comentario" type="text" data-content="{{ img.user_id }}">
+                                        <input id='commentInput{{ img.id }}content' class="form-control" placeholder="Añadir un comentario" type="text" data-content="{{ img.user_id }}">
                                         <span class="input-group-addon" id ="commentButton" data-content="{{ img.id }}">
                                     <a>
                                         <i class="fa fa-edit">
@@ -72,6 +72,7 @@
                                 </div>
                                 {% endif %}
                             </div>
+                            {% set tag = "content" %}
                             {{  block("commentsList",  "listComments.twig") }}
                         </div>
                     </div>

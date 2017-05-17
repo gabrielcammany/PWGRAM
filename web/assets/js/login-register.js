@@ -1,4 +1,4 @@
-/*
+ /*
  *
  * login-register modal
  * Autor: Creative Tim
@@ -102,12 +102,15 @@ $('#registerUser').click(function(e){
         reg.username = $('#usernameReg').val();
         if(img_path)reg.img = 1;
         if(!img_path)reg.img = 0;
+        reg.img_src = $('#perfil_reg').attr('src');
+       // console.log(reg.img_src);
         var stringData = JSON.stringify(reg);
         $.ajax({
             type: 'post',
             url: '/signup',
             data: {myData:stringData},
             success: function ($response) {
+                console.log($response);
                 //Determinar resposta server
                 status_modal($response);
                 //Evitar que es faci shake quan es registra.

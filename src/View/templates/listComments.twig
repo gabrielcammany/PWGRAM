@@ -1,7 +1,7 @@
 {% block commentsList %}
-<div id='comentaris{{ img.id }}' class="listCommentsImage">
+<div id='comentaris{{ img.id }}{{ tag }}' class="listCommentsImage">
     {% if enableEdit is defined %}
-        {% set end = img.comments|length %}
+        {% set end = img.commentsList|length %}
     {% else %}
         {% if limit is defined %}
             {% set end = limit %}
@@ -9,38 +9,43 @@
             {% set end = 3 %}
         {% endif %}
     {% endif %}
-    {% for comment in img.comments|slice(0,end) %}
-        <ul class="comments-list">
-            <li class="comment">
-                <a class="pull-left" href="../profile/{{ comment[0] }}">
-                    <img class="avatar" src="../{{ comment[2]}}">
-                </a>
-                <div class="comment-body">
-                    <div class="comment-heading">
-                        <h4 class="user" ><a href="../profile/{{ comment[0] }}">{{ comment[0] }}</a></h4>
-                        <h5 class="time"> {{ comment[3]  }}</h5>
+
+    {% if img.commentsList is defined %}
+        {% for comment in img.commentsList|slice(0,end) %}
+            <ul class="comments-list">
+                <li class="comment">
+                    <a class="pull-left" href="../profile/{{ comment[0] }}">
+                        <img class="avatar" src="../{{ comment[2]}}">
+                    </a>
+                    <div class="comment-body">
+                        <div class="comment-heading">
+                            <h4 class="user" ><a href="../profile/{{ comment[0] }}">{{ comment[0] }}</a></h4>
+                            <h5 class="time"> {{ comment[3]  }}</h5>
+                        </div>
+                        <p class="textComment">{{ comment[1]  }}</p>
                     </div>
-                    <p class="textComment">{{ comment[1]  }}</p>
-                </div>
-            </li>
-        </ul>
-    {% else %}
-        <ul class="comments-list">
-            <li class="comment">
-                <div class="comment-body">
-                    <div class="comment-heading">
-                        <h4 class="noComments">No hay ningún comentario</h4>
+                </li>
+            </ul>
+        {% else %}
+            <ul class="comments-list">
+                <li class="comment">
+                    <div class="comment-body">
+                        <div class="comment-heading">
+                            <h4 class="noComments">No hay ningún comentario</h4>
+                        </div>
                     </div>
-                </div>
-            </li>
-        </ul>
-    {% endfor %}
+                </li>
+            </ul>
+        {% endfor %}
+    {% endif %}
 </div>
-    {% if img.comments|length > 3 and enableEdit is not defined %}
-        <ul class="comments-list" id="ulMoreCommentsBtn{{ img.id }}">
-            <li class="comment">
-                <input style="width: 100%" class="btn btn-default btn-register moreCommentsBtn" type="submit" data-content="{{ img.id }}" value="Ver más comentarios">
-            </li>
-        </ul>
+    {% if img.commentsList is defined %}
+        {% if img.commentsList|length > 3 and enableEdit is not defined %}
+            <ul class="comments-list" id="ulMoreCommentsBtn{{ img.id }}{{ tag }}">
+                <li class="comment">
+                    <input style="width: 100%" class="btn btn-default btn-register moreCommentsBtn" type="submit" data-content="{{ img.id }}" value="Ver más comentarios">
+                </li>
+            </ul>
+        {% endif %}
     {% endif %}
 {% endblock %}

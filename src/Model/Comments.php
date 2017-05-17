@@ -39,14 +39,10 @@ class Comments
                         $id,
                         $data->image_id
                     ));
-
                     $done = $this->app['db']->executeUpdate(
                         'UPDATE image SET comments = comments + 1 WHERE id = ?',
                         array($data->image_id)
                     );
-                    if($done != 0){
-
-                    }
                     if($result[0]["COUNT(id)"]==0){
                         $date = date('Y/m/d H:i:s');
                         $this->app['db']->insert('comment',array(
@@ -158,7 +154,7 @@ class Comments
                     'post_id' => $data
                 ));
                 $this->app['db']->executeUpdate(
-                    'UPDATE image SET comments = comments -1 WHERE id = ?',
+                    'UPDATE image SET comments = comments - 1 WHERE id = ?',
                     array($data)
                 );
             }catch (\Exception $e){

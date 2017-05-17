@@ -87,9 +87,12 @@
                             </li>
                             <li class="dropdown">
                                 <a id="userNameDropdown" href="#" class="dropdown-toggle dropDownNav" data-toggle="dropdown" role="button" aria-expanded="false">
-
-                                         <img id="user_acces_icon" src="../../{{ app.img }}" class="img-circle" data-content="{{ app.username }}" data-target="{{ app.img }}">{{ app.username }}</a>
-
+                                    {% if app.img %}
+                                         <img id="user_acces_icon" src="../../{{ app.img }}" class="img-circle" data-content="{{ app.username }}" data-target="{{ app.img }}">
+                                    {% else %}
+                                        <img id="user_acces_icon" src="{{ asset('../assets/img/default/default_profile_100.png') }}" class="img-circle" data-content="{{ app.username }}" data-target="{{ app.img }}">
+                                    {% endif %}
+                                    {{ app.username }}</a>
                                 <ul class="dropdown-menu" role="menu">
                                     <li>
                                         <a href="/profile/{{ app.username }}" id="profile">
@@ -149,7 +152,7 @@
                                             <img id="perfil_reg" name="imageProfile" src="/assets/img/default/default_profile_400.png" class="img-responsive img-raised">
                                             <!-- <img id="perfil_reg" src="#" class="img-circle img-responsive img-raised">-->
                                             <label class="btn btn-default btn-file btn-group-justified" id="labelButtonSelect">
-                                                Seleccionar una imagen <input type="file" style="display: none;" id="btnSelectImage">
+                                                Seleccionar una imagen <input type="file" style="display: none;" id="btnSelectImage" name="img_src">
                                             </label>
                                         </div>
                                         <input id="usernameReg" class="form-control" type="text" placeholder="Nombre de usuario" name="username">

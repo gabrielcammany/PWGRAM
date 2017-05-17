@@ -90,6 +90,10 @@ $beforeImage = function (Request $request, Application $app){
         array($data[2])
     );
 
+    $username = $app['db']->fetchAssoc(
+        'SELECT username FROM user WHERE id = ?',
+        array($result['user_id'])
+    );
     $edit = false;
     if($actualUser == $result['user_id']){
         $edit = true;
@@ -104,8 +108,8 @@ $beforeImage = function (Request $request, Application $app){
                     'username' => $app['session']->get('username'),
                     'image_id'=> $data[2],
                     'img' => $app['session']->get('img'),
-                    'idUser'   => $app['session']->get('id')
-
+                    'idUser'   => $app['session']->get('id'),
+                    'user'=>$username
                 ]
             ]);
             $response->setContent($content);
@@ -123,7 +127,8 @@ $beforeImage = function (Request $request, Application $app){
                 'img' => $app['session']->get('img'),
                 'idUser'   => $app['session']->get('id')
 
-            ]
+            ],
+
         ]);
         $response->setContent($content);
         $response->setStatusCode(404);
@@ -206,7 +211,7 @@ $app->post('/notificationSeen','PwGram\\Controller\\NotificationsController::set
 
 //Esta no se donde va porque dice comment info pero coje el username y la image_path
 $app->post('/getUserCommentInfo','PwGram\\Controller\\ProfileController::getUserInfo');
-
+/*
 
 $app->error(function (\Exception $exception,Request $request) use ($app){
     $response = new Response();
@@ -218,9 +223,4 @@ $app->error(function (\Exception $exception,Request $request) use ($app){
     $response->setContent($content);
     $response->setStatusCode(Response::HTTP_NOT_FOUND);
     return $response;
-});
-
-/**
- * RUTAS A BORRAR!!!!!
- */
-$app->get('/samu','PwGram\\Controller\\HelloController::indexSamu');
+});*/

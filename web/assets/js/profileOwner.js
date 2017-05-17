@@ -14,7 +14,7 @@ $(function() {
 $('#update_info').click(function (e) {
     e.preventDefault();
 
-    if(validaUsername($('#inputNombreUsuario').val())&&validaEmail($('#inputCorreoUsuario').val())&&validateDate($('#inputDateUsuario').val())&&validatePasswordRegistration($('#inputPassword').val(),$('#inputConfirmPass').val())){
+    if(validaUsername($('#inputNombreUsuario').val())&&validateDate($('#inputDateUsuario').val())&&validatePasswordRegistration($('#inputPassword').val(),$('#inputConfirmPass').val())){
        
         var reg = {};
 
@@ -116,7 +116,7 @@ function status_modal( $response){
                 timer:2000,
                 showConfirmButton: false
             });
-            window.location.reload();
+            window.location = '../profile/'+ $('#inputNombreUsuario').val()+'?eraseCache=true';
             break;
         case '2':
             $('.error').addClass('alert alert-danger').html("No se ha podido actualizar tu perfil");
@@ -207,7 +207,7 @@ $('#btnEditProfile').on('click',function (e) {
     $('#btnEditProfile').hide();
     $('#gallery_pop').hide();
     $('#containerInfoUser').show();
-    var info = $('#containerInfoUser').attr('data-content').split("?");;
+    var info = $('#containerInfoUser').attr('data-content').split('?');
     $('#inputNombreUsuario').val(info[0]);
     $('#inputCorreoUsuario').val(info[1]);
     $('#inputDateUsuario').val(info[2]);

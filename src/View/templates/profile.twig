@@ -71,6 +71,7 @@
             <div id="galleryRecents">
                 <div class="responsive row row-flex row-flex-wrap" id="gallery_pop">
 
+                    {% set tag = "gallery_pop" %}
                     {% for img in images.list_images %}
                         {% if  app.client.edit  %}
                             {{  block("individualImage",  "image.twig") }}
@@ -106,8 +107,10 @@
 
                 </div>
             </div>
+
+        {% endif %}
         {% if  app.client.edit  %}
-        <div class="wrapper" id="containerInfoUser" data-content="{{ app.user.name }}?{{ app.user.email }}?{{ app.user.date }}?{{ app.user.img_path }}" hidden>
+        <div class="wrapper" id="containerInfoUser" data-content="{{ app.user.name }}?{{ app.user.email }}?{{ app.user.date }}?{{ app.user.img_path }}" >
            <article id="articleForm">
                <div id="contenedorImagen">
                    <aside>
@@ -167,7 +170,6 @@
                </form>
            </article>
         </div>
-        {% endif %}
 
         {% endif %}
     </div>

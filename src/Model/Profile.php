@@ -26,11 +26,6 @@ class Profile
             'SELECT username,img_path FROM user WHERE  id=?',
             array($id)
         );
-        /*$db = new PDO('mysql:host=localhost;dbname=pwgram', "root", "gabriel");
-        $stmt = $db->prepare('SELECT username,img_path FROM user WHERE  id=?;');
-        $stmt->bindParam(1, $id, \PDO::PARAM_STR);
-        $stmt->execute();
-        $result = $stmt->fetchAll(\PDO::FETCH_ASSOC)*/;
         return json_encode($result);
     }
 

@@ -43,17 +43,20 @@ class Confirm
             $this->status = 2;
         }else if(mkdir('assets/img/users/'.$result['id'],0777)){
             //localStorage.getItem();
-            $path = $result['img_path'];
-            $image = new Image($this->request,$this->app);
-            copy($path,'assets/img/users/'.$result['id'].'/'.$username.'.jpg');
-
+            //$path = $result['img_path'];
+            //$image = new Image($this->request,$this->app);
+            copy(__DIR__.'/../../web/assets/img/tmp/'.$username.'.png','assets/img/users/'.$result['id'].'/'.$result['id'].'.jpg');
+            $img=new Image($this->request,$this->app);
+            $img->resize_process('assets/img/users/'.$result['id'].'/'.$result['id'].'.jpg');
             $this->app['db']->update('user',
                 array(
-                'active' => 1
+                    'active' => 1,
+                    'img_path' => 'assets/img/users/'.$result['id'].'/'.$result['id'].'.jpg'
                 ),
                 array(
                     'id' => $result['id']
-                ));
+                )
+            );
 
 
 

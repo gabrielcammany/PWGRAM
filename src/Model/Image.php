@@ -35,7 +35,9 @@ class Image
             $img= $data['image'];
             $username = $data['username'];
             //$this->base64_to_jpeg($img_data, '/assets/img/tmp/'.$this->app['session']->get('username').'jpg');
-            $img_path = 'assets/img/tmp/'.$username.'.jpg';
+
+            $img_path = 'assets/img/tmp/'.$data['id'].'.jpg';
+            //echo($img_path);
             $this->base64_to_jpeg($img, $img_path);
         }
         return 1;
@@ -264,11 +266,11 @@ class Image
                             array_push($commentsList, $commentsContent);
                         }
                     }
-                    $result[$i]["comments"] = $commentsList;
+                    $result[$i]["commentsList"] = $commentsList;
                     $commentsList = array();
                 }
             } else {
-                $result[0]["comments"] = $result2;
+                $result[0]["commentsList"] = $result2;
             }
         }
         return $result;
@@ -326,80 +328,62 @@ class Image
      * @return string -> Numero de likes actualizado
      */
     public function newLike(){
-        $likes = 0;
+        $likes = -1;
         if(!empty($_POST['data'])) {
             $data = json_decode($_POST['data']);
             $id = $this->app['session']->get('id');
-
-            try{
-                $sql = 'SELECT COUNT(id) FROM notification WHERE user_fired_event=? AND post_id=?';
-                $result = $this->app['db']->fetchAll($sql,array(
-                    $id,
-                    $data->image_id
+            $sql = 'SELECT COUNT(id) FROM notification WHERE user_fired_event=? AND post_id=? AND event_id=1;';
+            $result = $this->app['db']->fetchAll($sql,array(
+                $id,
+                $data->image_id
+            ));
+            if($result[0]["COUNT(id)"]==0){
+                $get = $this->app['db']->executeUpdate(
+                    'UPDATE image SET likes = likes + 1 WHERE id=?',
+                    array($data->image_id)
+                );
+                $sql = 'SELECT likes FROM image WHERE id='.$data->image_id;
+                $result = $this->app['db']->fetchAll($sql);
+                $date = date('Y/m/d H:i:s');
+                $this->app['db']->insert('notification',array(
+                    'user_id' => $data->user_id,
+                    'user_fired_event' => $id,
+                    'event_id' => 1,
+                    'post_id' => $data->image_id,
+                    'created_at' => $date
                 ));
-                if($result[0]["COUNT(id)"]==0){
-                    //$likes = $this->app['db']->fetchColumn('SELECT likes FROM image WHERE id=?',array($data->image_id));
-                    //var_dump($likes);
-                    //$likes = intval($likes)+1;
-                    $get = $this->app['db']->executeUpdate(
-                        'UPDATE image SET likes = likes + 1 WHERE id=?',
-                        array($data->image_id)
-                    );
-                    $date = date('Y/m/d H:i:s');
-                    $this->app['db']->insert('notification',array(
-                        'user_id' => $data->user_id,
-                        'user_fired_event' => $id,
-                        'event_id' => 1,
-                        'post_id' => $data->image_id,
-                        'created_at' => $date
-                    ));
-                }
-            }catch (\Exception $e){
-                $likes = $e->getMessage();
+                $likes = $result[0]["likes"];
             }
-
         }
-        return json_encode(/*$result*/array(array('likes'=>$likes)));
+        return json_encode($likes);
     }
 
     public function dislike(){
+        $likes = -1;
         if(!empty($_POST['data'])) {
             $data = json_decode($_POST['data']);
             $id = $this->app['session']->get('id');
-            $sql = 'SELECT COUNT(id) FROM notification WHERE user_fired_event=? AND post_id=?';
+            $sql = 'SELECT COUNT(id) FROM notification WHERE user_fired_event=? AND post_id=? AND event_id=1;';
             $result = $this->app['db']->fetchAll($sql,array(
                 $id,
                 $data->image_id
             ));
             if($result[0]["COUNT(id)"]!=0){
-               /* $likes = intval(
-                    $this->app['db']->fetchColumn('SELECT likes FROM image WHERE id=?',array(
-                        $data->image_id
-                    ))
-                );*/
                 $get = $this->app['db']->executeUpdate(
                     'UPDATE image SET likes = likes - 1 WHERE id=?',
                     array($data->image_id)
                 );
-                if($get == 0){
-                    
-                }
+                $sql = 'SELECT likes FROM image WHERE id='.$data->image_id;
+                $result = $this->app['db']->fetchAll($sql);
                 $this->app['db']->delete('notification',
                     array(
                         'user_fired_event' => $id,
                         'post_id' => $data->image_id
-                    ));
+                ));
+                $likes = $result[0]["likes"];
             }
-            $likes = intval(
-                $this->app['db']->fetchColumn(
-                    'SELECT likes FROM image WHERE id=?',
-                    array(
-                        $data->image_id
-                    )
-                )
-            );
         }
-        return json_encode(array(array('likes'=>$likes)));
+        return json_encode($likes);
     }
 
     public function getInfoUnicImage(){
@@ -419,7 +403,7 @@ class Image
             );
             $result = $this->addComments($result);
             $result = $this->checkLikes($result);
-            return json_encode($result);
+            return $result;
         }
         return 0;
     }
@@ -427,7 +411,7 @@ class Image
     public function dropImage(){
         if(isset($_POST['id'])) {
             $result = $this->app['db']->fetchAll(
-                'SELECT img_path FROM image WHERE id='.$_POST['id']
+                'SELECT img_path,user_id FROM image WHERE id='.$_POST['id']
             );
             if(!empty($result)) {
                 $path1 = $result[0]["img_path"];
@@ -436,8 +420,11 @@ class Image
                 $path3 = $aux[0] . '_400.jpg';
                 if (unlink($path1) && unlink($path2) && unlink($path3)) {
                     $this->app['db']->delete('image', array('id' => $_POST['id']));
-                    $this->app['db']->delete('comment', array('id' => $_POST['id']));
-                    $this->app['db']->delete('notification', array('id' => $_POST['id']));
+                    $this->app['db']->delete('comment', array('image_id' => $_POST['id']));
+                    $this->app['db']->delete('notification', array('post_id' => $_POST['id']));
+                    //$this->app['db']->update('user', array('posts' => 'posts-1'),array('id'  =>$result[0]['user_id']));
+                    echo ($result[0]['user_id']);
+                    $this->app['db']->executeUpdate('UPDATE user SET posts = posts - 1 WHERE id = ?',array($result[0]['user_id']));
                     return 1;
                 }
             }

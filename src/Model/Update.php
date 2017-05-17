@@ -12,7 +12,7 @@ namespace PwGram\Model;
 class Update
 {
     private $request;
-    private $status=0;
+    private $status;
     private $imgClass;
     private $app;
 
@@ -26,6 +26,7 @@ class Update
 
     public function updateUser(){
         if(isset($_POST['myData'])) {
+            $this->status = 0;
             $json = json_decode($_POST['myData']);
             $i = 0;
             foreach ($json as $key => $value) {
@@ -56,8 +57,8 @@ class Update
             }
 
             if($this->validaUsername($username)&&$this->validateDate($date)&&$this->validatePasswordRegistration($pass,$confirm_pass)){
-                $img_path= 'assets/img/users/'.strtolower($username).'/profileImage.jpg';
-                if(strcmp('../assets/img/users/'.strtolower($username).'/profileImage_100.jpg',$img) != 0){
+                $img_path= 'assets/img/users/'.$id.'/profileImage.jpg';
+                if(strcmp('../assets/img/users/'.$id.'/profileImage_100.jpg',$img) != 0){
                     $this->imgClass->base64_to_jpeg($img, $img_path);
                     $this->imgClass->resize_process($img_path);
                 }
@@ -70,7 +71,7 @@ class Update
 
                     if (empty($pass) && empty($confirm_pass)) {
                         $sql = "UPDATE user SET password=?,birthdate=?,username=?,img_path=?,password=? WHERE id=?";
-                        $get = $this->app['db']->executeUpdate($sql, array($pass, $date, $username, $img_path,$get['password'], $id));
+                        $get = $this->app['db']->executeUpdate($sql, array($pass, $date, $username, $img_path,$get['password'], $id))   ;
                         if($get == 0){
                             $this->status =2;
                         }
@@ -83,6 +84,8 @@ class Update
                         }
                     }
                     $this->status = 1;
+                    $this->app['session']->set('username',$username);
+                    $this->app['session']->set('img',$img_path);
                 }
             }
 

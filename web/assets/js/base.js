@@ -174,7 +174,7 @@ function getImageComments(comentaris,i_image,reverse) {
                 +"</a>"
                 +"<div class=\"comment-body\">"
                 +"<div class=\"comment-heading\">"
-                +"<h4 class=\"user\">"+comentaris[i_comments][0]+"</h4>"
+                +"<h4 class=\"user\"><a href=\"../profile/"+comentaris[i_comments][0]+"\">"+comentaris[i_comments][0]+"</a></h4>"
                 +"<h5 class=\"time\"> "+time+"</h5>"
                 +"</div>"
                 +"<p class=\"textComment\">"+comentaris[i_comments][1]+"</p>"
@@ -197,10 +197,11 @@ function getImageComments(comentaris,i_image,reverse) {
 function actionCommentListenerImage(button,id_tag,div_tag_aux) {
         var dataSend = {};
         dataSend.image_id = $(button).attr('data-content');
-        dataSend.text = $(id_tag+' #commentInput'+$(button).attr('data-content')).val();
-        dataSend.user_id = $(id_tag+' #commentInput'+$(button).attr('data-content')).attr('data-content');
+        dataSend.text = $('#commentInput'+$(button).attr('data-content')+id_tag).val();
+        dataSend.user_id = $('#commentInput'+$(button).attr('data-content')+id_tag).attr('data-content');
+        console.log(dataSend);
         if(dataSend.text != ""){
-            $(id_tag+" #commentInput"+dataSend.image_id).css('border-color','rgb(204, 204, 204)');
+            $("#commentInput"+dataSend.image_id+id_tag).css('border-color','rgb(204, 204, 204)');
             $.ajax({
                 type: 'post',
                 url: '/addComment',
@@ -208,11 +209,13 @@ function actionCommentListenerImage(button,id_tag,div_tag_aux) {
                 success: function ($response) {
                     var response = JSON.parse($response);
                     if(response[0]["COUNT(id)"] == "1"){
-                        $(id_tag+" #commentInput"+dataSend.image_id).css('border-color','red');
-                        $(id_tag+" #statusError"+dataSend.image_id).fadeTo(3000, 700).slideUp(700, function(){
-                            $(id_tag+" #statusError"+dataSend.image_id).slideUp(700);
-                            $(id_tag+" #commentInput"+dataSend.image_id).css('border-color','rgb(204, 204, 204)');
-                        });
+                        $("#commentInput"+dataSend.image_id+id_tag).css('border-color','red');
+                        $("#statusError"+dataSend.image_id+id_tag).fadeTo(3000, 700).slideUp(700,
+                            function(){
+                                $("#statusError"+dataSend.image_id+id_tag).slideUp(700);
+                                $("#commentInput"+dataSend.image_id+id_tag).css('border-color','rgb(204, 204, 204)');
+                            }
+                        );
                     }else{
                         $.ajax({
                             type: 'post',
@@ -221,8 +224,8 @@ function actionCommentListenerImage(button,id_tag,div_tag_aux) {
                             success: function ($response) {
                                 console.log("He passat per aqui");
                                 var response = JSON.parse($response);
-                                $(id_tag+" #comentaris"+dataSend.image_id).html("");
-                                $(div_tag_aux+" #comentaris"+dataSend.image_id).html("");
+                                $("#comentaris"+dataSend.image_id+id_tag).html("");
+                                $("#comentaris"+dataSend.image_id+div_tag_aux).html("");
                                 for(var i = 0;i<response.length;i++){
                                     var comentari = new Array();
                                     comentari.push(new Array())
@@ -231,18 +234,18 @@ function actionCommentListenerImage(button,id_tag,div_tag_aux) {
                                     comentari[0].push(response[i].img_path);
                                     comentari[0].push(response[i].created_at);
                                     var append = getImageComments(comentari,dataSend.image_id,true);
-                                    $(id_tag+" #comentaris"+dataSend.image_id).append(append);
-                                    $(div_tag_aux+" #comentaris"+dataSend.image_id).append(append);
+                                    $("#comentaris"+dataSend.image_id+id_tag).append(append);
+                                    $("#comentaris"+dataSend.image_id+div_tag_aux).append(append);
                                 }
-                                $(id_tag+" #commentInput"+dataSend.image_id).val("");
+                                $("#commentInput"+dataSend.image_id+id_tag).val("");
                             }
                         });
                     }
                 }
             });
         }else{
-            $(id_tag+' #commentInput'+$(button).attr('data-content')).attr('placeholder','El comentario esta vacio!');
-            $(id_tag+' #commentInput'+$(button).attr('data-content')).css('border-color','red');
+            $('#commentInput'+$(button).attr('data-content')+id_tag).attr('placeholder','El comentario esta vacio!');
+            $('#commentInput'+$(button).attr('data-content')+id_tag).css('border-color','red');
         }
 
 }
@@ -257,10 +260,14 @@ function setLikeListenerImage(image,div_tag,div_tag_aux) {
             url: '/incLike',
             data: {data:JSON.stringify(data)},
             success: function ($response) {
-                $(div_tag+' #like'+data.image_id).attr('src','../assets/img/icons/like_filled.png');
-                $(div_tag+' .label_like'+data.image_id).text('Like: '+JSON.parse($response)[0]["likes"]);
-                $(div_tag_aux+' #like'+data.image_id).attr('src','../assets/img/icons/like_filled.png');
-                $(div_tag_aux+' .label_like'+data.image_id).text('Like: '+JSON.parse($response)[0]["likes"]);
+                console.log($response);
+                result = JSON.parse($response);
+                if(result != -1){
+                    $('#like'+data.image_id+div_tag).attr('src','../assets/img/icons/like_filled.png');
+                    $('#label_like'+data.image_id+div_tag).text('Like: '+result);
+                    $('#like'+data.image_id+div_tag_aux).attr('src','../assets/img/icons/like_filled.png');
+                    $('#label_like'+data.image_id+div_tag_aux).text('Like: '+result);
+                }
             }
         });
     } else {
@@ -269,10 +276,14 @@ function setLikeListenerImage(image,div_tag,div_tag_aux) {
             url: '/removeLike',
             data: {data:JSON.stringify(data)},
             success: function ($response) {
-                $(div_tag+' #like'+data.image_id).attr('src','../assets/img/icons/like.png')
-                $(div_tag+' .label_like'+data.image_id).text('Like: '+JSON.parse($response)[0]["likes"]);
-                $(div_tag_aux+' #like'+data.image_id).attr('src','../assets/img/icons/like.png')
-                $(div_tag_aux+' .label_like'+data.image_id).text('Like: '+JSON.parse($response)[0]["likes"]);
+                result = JSON.parse($response);
+                console.log(result);
+                if(result != -1) {
+                    $('#like' + data.image_id+div_tag).attr('src', '../assets/img/icons/like.png')
+                    $('#label_like' + data.image_id+div_tag).text('Like: ' + result);
+                    $('#like' + data.image_id+div_tag_aux).attr('src', '../assets/img/icons/like.png')
+                    $('#label_like' + data.image_id+div_tag_aux).text('Like: ' + result);
+                }
             }
         });
     }
@@ -285,13 +296,13 @@ if($('#gallery_pop').length!=0) {
     $('#gallery_pop img.likeImg').on('click', function (e) {
         e.preventDefault();
         //console.log($(this).attr('data-content'));
-        setLikeListenerImage(this, '#gallery_pop', '#gallery_recent');
+        setLikeListenerImage(this, 'gallery_pop', 'gallery_recent');
     });
 
     $('#gallery_pop #commentButton').on('click', function (e) {
         e.preventDefault();
         //console.log($('#gallery_pop #commentInput'+$(this).attr('data-content')).val());
-        actionCommentListenerImage(this, '#gallery_pop', '#gallery_recent');
+        actionCommentListenerImage(this, 'gallery_pop', 'gallery_recent');
     });
 }
 
@@ -299,13 +310,13 @@ if($('#content').length!=0){
     $('#content img.likeImg').on('click',function(e){
         e.preventDefault();
         //console.log($(this).attr('data-content'));
-        setLikeListenerImage(this,'#content');
+        setLikeListenerImage(this,'content');
     });
 
     $('#content #commentButton').on('click',function (e){
         e.preventDefault();
         //console.log($('#gallery_recent #commentInput'+$(this).attr('data-content')).val());
-        actionCommentListenerImage(this,'#content');
+        actionCommentListenerImage(this,'content');
     });
 }
 
@@ -313,13 +324,13 @@ if($('#gallery_recent').length!=0){
     $('#gallery_recent #commentButton').on('click',function (e){
     e.preventDefault();
     //console.log($('#gallery_recent #commentInput'+$(this).attr('data-content')).val());
-    actionCommentListenerImage(this,'#gallery_recent','#gallery_pop');
+    actionCommentListenerImage(this,'gallery_recent','gallery_pop');
     });
 
     $('#gallery_recent img.likeImg').on('click',function(e){
         e.preventDefault();
         //console.log($(this).attr('data-content'));
-        setLikeListenerImage(this,'#gallery_recent','#gallery_pop');
+        setLikeListenerImage(this,'gallery_recent','gallery_pop');
     });
 }
 

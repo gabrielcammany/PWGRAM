@@ -45,56 +45,56 @@ class ImageController
             'SELECT user_id, private FROM image WHERE id = ?',
             array($data[2])
         );
-            $edit = false;
-            if($actualUser == $result['user_id']){
-                $edit = true;
+        $username = $app['db']->fetchAssoc(
+            'SELECT username FROM user WHERE id = ?',
+            array($result['user_id'])
+        );
+        $edit = false;
+        if($actualUser == $result['user_id']){
+            $edit = true;
+        }
+        if ($result['private'] != 0 && !$edit){
+            $content = $app['twig']->render('error.twig', [
+                'message' => '403 Forbidden',
+                'app' => [
+                    'name'=>$app['app.name'],
+                    'username' => $app['session']->get('username'),
+                    'image_id'=> $data[2],
+                    'img' => $app['session']->get('img'),
+                    'idUser'   => $app['session']->get('id')
+
+
+                ]
+            ]);
+            $response->setStatusCode(Response::HTTP_FORBIDDEN);
+        }else{
+            $_POST['id']=$data[2];
+            $img = new Image($request,$app);
+            $infoImage = $img->getInfoUnicImage();
+            $path = $infoImage[0]["img_path"];
+            $array = explode('/',$path);
+            $infoImage[0]["user_id"] = $array[3];
+            for ($i = 0; $i < intval($infoImage[0]["comments"]); $i++) {
+                str_replace(".jpg", "_100.jpg", $infoImage[0]["commentsList"][$i][2]);
             }
-            if ($result['private'] != 0 && !$edit){
-                $content = $app['twig']->render('error.twig', [
-                    'message' => '403 Forbidden',
-                    'app' => [
-                        'name'=>$app['app.name'],
-                        'username' => $app['session']->get('username'),
-                        'image_id'=> $data[2],
-                        'img' => $app['session']->get('img'),
-                        'idUser'   => $app['session']->get('id')
+            $infoImage[0]["created_at"] = $app['time']($infoImage[0]["created_at"]);
+            $content=$app['twig']->render('unicImage.twig', array(
+                'app' => [
+                    'name'=>$app['app.name'],
+                    'username' => $app['session']->get('username'),
+                    'image_id'=> $data[2],
+                    'img' => $app['session']->get('img'),
+                    'idUser'   => $app['session']->get('id')
+                ],
+                'enableEdit' => $edit,
+                'img'=> $infoImage[0],
+                'comments' => $infoImage[0]["commentsList"],
+                'numComments' => $infoImage[0]["comments"],
+                'usernamePost'=> $username["username"]
+            ));
+            $response->setStatusCode($response::HTTP_OK);
 
-                    ]
-                ]);
-                $response->setStatusCode(Response::HTTP_FORBIDDEN);
-            }else{
-                $_POST['id']=$data[2];
-                $img = new Image($request,$app);
-                $infoImage = $img->getInfoUnicImage();
-                $infoImage = json_decode($infoImage);
-                $path = $infoImage[0]->img_path;
-                $array = explode('/',$path);
-                $infoImage[0]->user_id = $array[3];
-               // var_dump(count($infoImage[0]->comments));
-                if(count($infoImage[0]->comments) != 0) {
-                    for ($i = 0; $i < count($infoImage[0]->comments); $i++) {
-                        str_replace(".jpg", "_100.jpg", $infoImage[0]->comments[$i][2]);
-                        //$infoImage[0]->comments[$i][3] = $app['time']($infoImage[0]->comments[$i][3]);
-                    }
-                }
-
-                $infoImage[0]->created_at = $app['time']($infoImage[0]->created_at);
-                $content=$app['twig']->render('unicImage.twig', array(
-                    'app' => [
-                        'name'=>$app['app.name'],
-                        'username' => $app['session']->get('username'),
-                        'image_id'=> $data[2],
-                        'img' => $app['session']->get('img'),
-                        'idUser'   => $app['session']->get('id')
-                    ],
-                    'enableEdit' => $edit,
-                    'img'=> $infoImage[0],
-                    'comments' => $infoImage[0]->comments,
-                    'numComments' => count($infoImage[0]->comments)
-                ));
-                $response->setStatusCode($response::HTTP_OK);
-
-            }
+        }
         $response->headers->set('Content-Type','text/html');
         $response->setContent($content);
         return $response;

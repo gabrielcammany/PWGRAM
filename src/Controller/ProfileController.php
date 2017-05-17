@@ -39,27 +39,27 @@ class ProfileController
                 $edit = false;
             }
             $_POST['myData'] = $get['id'];
-            //echo $get['id'];
             $img_path_100 = str_replace(".jpg", "_100.jpg", $get['img_path']);
             $img_path_400 = str_replace(".jpg", "_400.jpg", $get['img_path']);
-            $pr = new Profile($request, $app);
             $list = json_decode($img->getListUserImages());
-            $unameList = array();
             $listComments = "";
 
             $listLikes = "";
             if ($list != null) {
-                foreach ($list as $image) {
-                    $uname = $pr->getUsername($image->user_id);
-                    $valor = json_decode($uname);
-                    array_push($unameList, $valor[0]->username);
-                }
                 $img = new Image($request, $app);
                 $listComments = json_decode($img->getListCommentsUserImages());
 
                 $img = new Image($request, $app);
                 $listLikes = json_decode($img->getListLikesUserImages());
-
+                foreach( $listComments as $img){
+                    $img->username = $username;
+                }
+                foreach( $listLikes as $img){
+                    $img->username = $username;
+                }
+                foreach( $list as $img){
+                    $img->username = $username;
+                }
             }
             $content = $app['twig']->render('profile.twig', array(
                 'app' => [
@@ -82,16 +82,13 @@ class ProfileController
                     ],
                     'username' => $app['session']->get('username'),
                     'img' => $app['session']->get('img')
-
-
                 ],
                 'images' => [
                     'list_images' => $list,
-                    'uname_pop' => $unameList,
                     'list_comments' => $listComments,
                     'list_likes'=> $listLikes
 
-                ],
+                ]
             ));
         }
         $response->setStatusCode($response::HTTP_OK);

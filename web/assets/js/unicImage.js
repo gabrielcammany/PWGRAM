@@ -16,6 +16,7 @@ $('#deleteImage').on('click',   function(e){
                 url: '/deleteImage',
                 data: {id: $('#main_image').attr('data-content')},
                 success: function ($response) {
+                    console.log($response);
                     if($response.length !=0) {
                         main_image = JSON.parse($response);
                         swal("Deleted!", "Su imagen ha sido eliminada.", "success");
@@ -24,7 +25,6 @@ $('#deleteImage').on('click',   function(e){
                         swal("Not Deleted!", "El path especificado no se encuentra.", "error");
                     }
                 }
-
             });
         });
 });

@@ -51,19 +51,32 @@ class SignUp
                         case 5:
                             $img = $value;
                             break;
+                        case 6:
+                            $img_src = $value;
+                            break;
                     }
                     $i++;
                 }
             }
+            //echo 'llego0';
             $vResult = $this->validation_user($username,$email);
-
             if(!$vResult){
-
+               // var_dump("LLEGO2");
                 if($this->validateDate($date)&&$this->validatePasswordRegistration($pass,$confirm_pass)){
-                    $img_path='assets/img/tmp/'.$username.'.jpg';
+                    //var_dump("LLEGO");
+                    $img_path= __DIR__.'/../../web/assets/img/tmp/'.$username.'.png';
                     $this->app['session']->set('username',$username);
-                    $image = new Image($this->request,$this->app);
-                    $image->base64_to_jpeg($img,$img_path);
+                   // var_dump($img);
+                    if($img == 0){
+                        copy(__DIR__.'/../../web/assets/img/default/default_profile_400.png',$img_path);
+
+                    }else{
+                        $image = new Image($this->request,$this->app);
+                        $image->base64_to_jpeg($img_src,$img_path);
+                    }
+
+                    /*$image = new Image($this->request,$this->app);
+                    $image->base64_to_jpeg($img,$img_path);*/
                     $hashed_pass = password_hash($pass, PASSWORD_DEFAULT);
                     $this->app['db']->insert('user',
                         array(
@@ -78,6 +91,7 @@ class SignUp
                     $this->sendEmail($email,$username);
                 }
             }
+            //var_dump($this->status);
             return $this->status;
         }
     }
