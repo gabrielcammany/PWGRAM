@@ -3,55 +3,60 @@
         <figure class='snip0016 img1 embed news'>
             <img class='img-responsive img_profile ' src='../{{ img.img_path }}' />
             <figcaption>
-                <p>
-                <div>
-                <h2>
-                <span>
-                    <A href='../image/{{ img.id }}'>{{ img.title }}</A>
-                </span>
-                    <A href='../profile/{{ img.username }}' id="link_username">{{ img.username }}</A>
-                </h2></div>
-                </p>
+                <div class="textImage">
+                    <h2>
+                        <span>
+                                <A href='../image/{{ img.id }}'>{{ img.title }}</A>
+                        </span>
+                    </h2>
+                </div>
+                <div class="textImage2">
+                    <h2>
+                            <A href='../profile/{{ img.username }}' id="link_username">{{ img.username }}</A>
+                    </h2>
+                </div>
+                <div class="textImage3">
                 <p class="label_like" id='label_like{{ img.id }}{{ tag }}'><label class="numLikes">Likes</label> {{ img.likes }}</p>
                 <p><label class="numLikes">Visits</label> {{ img.visits }}</p>
+                </div>
             </figcaption>
         </figure>
-        <div class="col-sm-15 divLinia">
-            <div class="panel panel-white post panel-shadow divLinia">
-                <div id='statusError{{ img.id }}{{ tag }}' class="alert alert-danger statusError" role="alert" hidden>
-                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-                    <span class="sr-only">Error:</span>
-                    Solo puedes añadir un comentario en la imagen
-                </div>
-                <div id='divLinia' class="post-footer divLinia">
-                    {% if app.idUser>0 %}
-                        <div class='row' >
-                            <div class='col likeButton' align='center'>
-                                {% if img.liked == 1 %}
-                                    <a class='btn btn-simple btn-just-icon' ><img class="likeImg" id="like{{ img.id }}{{ tag }}" src='../assets/img/icons/like_filled.png' width='30' height='30' data-content="{{ img.id }}_{{ img.user_id }}"/>
-                                    </a>
-                                {% else %}
-                                    <a class='btn btn-simple btn-just-icon'><img class="likeImg" id="like{{ img.id }}{{ tag }}" src='../assets/img/icons/like.png' width='30' height='30' data-content="{{ img.id }}_{{ img.user_id }}"/>
-                                    </a>
-                                {% endif %}
-                            </div>
-                            <div class='col'>
-                                <div class="input-group" id="inputCommentGroup" >
-                                    <input id='commentInput{{ img.id }}{{ tag }}' class="form-control" placeholder="Añadir un comentario" type="text" data-content="{{ img.user_id }}">
-                                    <span class="input-group-addon" id ="commentButton" data-content="{{ img.id }}">
-                                    <a>
-                                        <i class="fa fa-edit">
-                                        </i>
-                                    </a>
-                                </span>
+            <div class="col-sm-15 divLinia">
+                <div class="panel panel-white post panel-shadow divLinia">
+                    <div id='statusError{{ img.id }}{{ tag }}' class="alert alert-danger statusError" role="alert" hidden>
+                        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                        <span class="sr-only">Error:</span>
+                        Solo puedes añadir un comentario en la imagen
+                    </div>
+                    <div id='divLinia' class="post-footer divLinia">
+                        {% if app.idUser>0 %}
+                            <div class='row' >
+                                <div class='col likeButton' align='center'>
+                                    {% if img.liked == 1 %}
+                                        <a class='btn btn-simple btn-just-icon' ><img class="likeImg" id="like{{ img.id }}{{ tag }}" src='../assets/img/icons/like_filled.png' width='30' height='30' data-content="{{ img.id }}_{{ img.user_id }}"/>
+                                        </a>
+                                    {% else %}
+                                        <a class='btn btn-simple btn-just-icon'><img class="likeImg" id="like{{ img.id }}{{ tag }}" src='../assets/img/icons/like.png' width='30' height='30' data-content="{{ img.id }}_{{ img.user_id }}"/>
+                                        </a>
+                                    {% endif %}
+                                </div>
+                                <div class='col'>
+                                    <div class="input-group" id="inputCommentGroup" >
+                                        <input id='commentInput{{ img.id }}{{ tag }}' class="form-control" placeholder="Añadir un comentario" type="text" data-content="{{ img.user_id }}">
+                                        <span class="input-group-addon" id ="commentButton" data-content="{{ img.id }}">
+                                        <a>
+                                            <i class="fa fa-edit">
+                                            </i>
+                                        </a>
+                                    </span>
+                                    </div>
+
                                 </div>
 
                             </div>
-
-                        </div>
-                    {% endif %}
-                    {{  block("commentsList",  "listComments.twig") }}
-                </div>
+                        {% endif %}
+                        {{  block("commentsList",  "listComments.twig") }}
+                    </div>
                 </div>
             </div>
         </div>

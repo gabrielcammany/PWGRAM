@@ -43,6 +43,11 @@ class Comments
                         'UPDATE image SET comments = comments + 1 WHERE id = ?',
                         array($data->image_id)
                     );
+
+                    $this->app['db']->executeUpdate(
+                        'UPDATE user SET comments = comments +1 WHERE id = ?',
+                        array($id)
+                    );
                     if($result[0]["COUNT(id)"]==0){
                         $date = date('Y/m/d H:i:s');
                         $this->app['db']->insert('comment',array(
@@ -75,10 +80,8 @@ class Comments
         $result = "1";
         if(!empty($_POST['data'])) {
             $data = json_decode($_POST['data']);
-            $sql = 'SELECT text,user_id,created_at,image_id FROM comment WHERE image_id = ?  ORDER BY created_at DESC LIMIT 3;';
-            $result = $this->app['db']->fetchAll($sql,array(
-                $data
-            ));
+            $sql = 'SELECT text,user_id,created_at,image_id FROM comment WHERE image_id = '.$data->image_id.'  ORDER BY created_at DESC LIMIT '.($data->size+1);
+            $result = $this->app['db']->fetchAll($sql);
            /* $db = new \PDO('mysql:host=localhost;dbname=pwgram', "root", "gabriel");
             $stmt = $db->prepare('SELECT text,user_id,created_at,image_id FROM comment WHERE image_id = ?  ORDER BY created_at DESC LIMIT 3;');
             $stmt->bindParam(1, $data->image_id, \PDO::PARAM_STR);
@@ -157,6 +160,10 @@ class Comments
                     'UPDATE image SET comments = comments - 1 WHERE id = ?',
                     array($data)
                 );
+                $this->app['db']->executeUpdate(
+                    'UPDATE user SET comments = comments -1 WHERE id = ?',
+                    array($id)
+                );
             }catch (\Exception $e){
                 $result = 1;
             }
@@ -197,6 +204,9 @@ class Comments
             $data = json_decode($_POST['data']);
             $sql = 'SELECT text,user_id,created_at,image_id FROM comment WHERE image_id = '.$data->image_id.' ORDER BY created_at DESC LIMIT '.$data->size.', '.($data->size+4);
             $result = $this->app['db']->fetchAll($sql);
+            //return "hOLA";
+
+           // var_dump($result);
             if(count($result) != 0) {
                 $sql = 'SELECT id,username,img_path FROM user WHERE id IN (?);';
                 $array = array();

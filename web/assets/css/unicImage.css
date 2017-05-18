@@ -50,3 +50,11 @@ p.textComment {
     white-space: pre-wrap;
     word-wrap: break-word;
 }
+.infoImg {
+    font-weight: 700 !important;
+}
+#backgroundInfoImg{
+    background: #D2D2D2!important;
+    padding: 20px;
+    margin-bottom: 5px;
+}

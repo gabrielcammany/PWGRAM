@@ -16,10 +16,7 @@ class HelloController{
             $uname =$pr->getUsername($img->user_id);
             $img->username = json_decode($uname)[0]->username;
         }
-        foreach( $pop as $img){
-            $uname =$pr->getUsername($img->user_id);
-            $img->username = json_decode($uname)[0]->username;
-        }
+
         $rec = json_decode($image->getListImages());
         foreach( $rec as $img){
             $uname =$pr->getUsername($img->user_id);

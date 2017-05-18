@@ -2,7 +2,8 @@
  * Created by Gabriel on 23/04/2017.
  */
 
-
+var $image = $('.img-container > img');
+var loaded =   false;
 $(function() {
     var customBar = $('#customnavBar');
     var dropDown = $('#userNameDropdown');
@@ -40,7 +41,10 @@ $(function() {
                     });
             });
     });
-
+    var imgloaded = $('.loaded');
+    imgloaded.hide();
+    var imgnoloaded = $('.noloaded');
+    imgnoloaded.show();
 
 });
 
@@ -202,11 +206,13 @@ function actionCommentListenerImage(button,id_tag,div_tag_aux) {
         console.log(dataSend);
         if(dataSend.text != ""){
             $("#commentInput"+dataSend.image_id+id_tag).css('border-color','rgb(204, 204, 204)');
+            console.log("He passat pe22r aqui");
             $.ajax({
                 type: 'post',
                 url: '/addComment',
                 data: {data:JSON.stringify(dataSend)},
                 success: function ($response) {
+                    console.log("He passat per aqui");
                     var response = JSON.parse($response);
                     if(response[0]["COUNT(id)"] == "1"){
                         $("#commentInput"+dataSend.image_id+id_tag).css('border-color','red');
@@ -217,12 +223,15 @@ function actionCommentListenerImage(button,id_tag,div_tag_aux) {
                             }
                         );
                     }else{
+                        $('#commentsProfile').text( parseInt($('#commentsProfile').text())+1);
+                        var dataLast = {};
+                        dataLast.image_id = dataSend.image_id;
+                        dataLast.size = ($("#comentaris"+dataSend.image_id+id_tag).children().size());
                         $.ajax({
                             type: 'post',
                             url: '/updateCommentBox',
-                            data: {data:JSON.stringify(dataSend.image_id)},
+                            data: {data:JSON.stringify(dataLast)},
                             success: function ($response) {
-                                console.log("He passat per aqui");
                                 var response = JSON.parse($response);
                                 $("#comentaris"+dataSend.image_id+id_tag).html("");
                                 $("#comentaris"+dataSend.image_id+div_tag_aux).html("");
@@ -264,9 +273,10 @@ function setLikeListenerImage(image,div_tag,div_tag_aux) {
                 result = JSON.parse($response);
                 if(result != -1){
                     $('#like'+data.image_id+div_tag).attr('src','../assets/img/icons/like_filled.png');
-                    $('#label_like'+data.image_id+div_tag).text('Like: '+result);
+                    $('#label_like'+data.image_id+div_tag).html('<label class="numLikes">Likes</label> '+result);
                     $('#like'+data.image_id+div_tag_aux).attr('src','../assets/img/icons/like_filled.png');
-                    $('#label_like'+data.image_id+div_tag_aux).text('Like: '+result);
+                    $('#label_like'+data.image_id+div_tag_aux).text('<label class="numLikes">Likes</label> '+result);
+                    $('#label_like').html('<label class="numLikes">Likes</label> '+(parseInt($('#label_like').text().charAt($('#label_like').text().length-1))+1));
                 }
             }
         });
@@ -280,9 +290,10 @@ function setLikeListenerImage(image,div_tag,div_tag_aux) {
                 console.log(result);
                 if(result != -1) {
                     $('#like' + data.image_id+div_tag).attr('src', '../assets/img/icons/like.png')
-                    $('#label_like' + data.image_id+div_tag).text('Like: ' + result);
+                    $('#label_like' + data.image_id+div_tag).text('<label class="numLikes">Likes</label> '+result);
                     $('#like' + data.image_id+div_tag_aux).attr('src', '../assets/img/icons/like.png')
-                    $('#label_like' + data.image_id+div_tag_aux).text('Like: ' + result);
+                    $('#label_like' + data.image_id+div_tag_aux).text('<label class="numLikes">Likes</label> '+result);
+                    $('#label_like').html('<label class="numLikes">Likes</label> '+ (parseInt($('#label_like').text().charAt($('#label_like').text().length-1))-1));
                 }
             }
         });
@@ -334,4 +345,32 @@ if($('#gallery_recent').length!=0){
     });
 }
 
+$("#inputImage").change(function(){
 
+    if (this.files && this.files[0]) {
+        var reader = new FileReader();
+
+        reader.readAsDataURL(this.files[0]);
+        reader.onload = function (e) {
+            if(!loaded){
+                $image.cropper({
+                    aspectRatio: 1/ 1,
+                    viewMode: 2,
+                    preview: '.preview',
+                    responsive: true,
+                    mouseWheelZoom: true,
+                    touchDragZoom: true,
+                    modal: false,
+                    strict: true,
+                });
+                loaded = true;
+                var imgnoloaded = $('.noloaded');
+                var imgloaded = $('.loaded');
+                imgnoloaded.hide();
+                imgloaded.show();
+            }
+            $image.cropper('replace', e.target.result);
+        }
+
+    }
+});

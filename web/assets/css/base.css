@@ -384,3 +384,20 @@ span {
     margin-top: 10px;
     margin-bottom: 0px !important;
 }
+.preview {
+    overflow: hidden;
+    width: 200px;
+    height: 200px;
+    display:block;
+    margin:auto;
+}
+
+img#newImage{
+    max-width: 500px;
+    max-height: 300px;
+}
+
+.loginModalResize{
+    width: 500px;
+
+}

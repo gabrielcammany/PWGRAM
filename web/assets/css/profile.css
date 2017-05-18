@@ -65,14 +65,11 @@ aside{
 
 .divCampo{
     position: relative;
-    margin-bottom: 5%;
-    margin-left: 5%;
+    margin-top: 5px;
 }
 
 .divInput{
     position: relative;
-    margin-left: 25%;
-    margin-right: 25%;
     border: 1px groove;
 }
 
@@ -116,10 +113,8 @@ div.input-group-addon{
 }
 #divInputs{
     position: relative;
-    margin-left: 25%;
-    margin-right: 25%;
-    align-items: center;
     height: 100%;
+    margin-top: 5px;
 }
 
 #btnEditImage{
@@ -139,16 +134,17 @@ div.input-group-addon{
 }
 
 #backToProfile{
-    position: absolute;
+    position: relative;
     right: 0;
     height: 100%;
-    width: 25%;
+    width: 50%;
+    float: left;
 }
 #update_info{
-    position: absolute;
+    position: relative;
+    float: left;
     right: 0;
-    width: 25%;
-    margin-right: 30%;
+    width: 50%;
     height: 100%;
 }
 
@@ -167,5 +163,6 @@ footer {
     width: 100%;
     height: auto; //same height as the margin to the bottom of the body
 }
+
 
 

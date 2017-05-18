@@ -18,9 +18,7 @@ $app->register(new Silex\Provider\AssetServiceProvider(),array(
         'img'=>array('base_urls'=>array('http://silexapp.dev/assets/img')),
     ),
 ));
-$app->register(new PwGram\Providers\HelloServiceProvider(),array(
-    'hello.default_name' => 'Samuel',
-));
+
 $app->register(new PwGram\Providers\HomeServiceProvider(),array(
     'home.default_name' => 'Samuel',
 ));
@@ -40,4 +38,3 @@ $app->register(new Silex\Provider\DoctrineServiceProvider(),array(
     ),
 ));
 
-//$app->register(new Silex\Provider\Monolog)

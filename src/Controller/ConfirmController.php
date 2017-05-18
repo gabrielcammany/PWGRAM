@@ -17,12 +17,16 @@ class ConfirmController
 {
     public function confirmController(Application $app, Request $request, $username, $token){
         $login = new Confirm($request,$app);
+        $result = $app['db']->fetchColumn(
+            'SELECT id FROM user WHERE username = ?',
+            array($username)
+        );
         $content=$app['twig']->render('confirmed.twig', array(
             'app' => [
                 'name'=>$app['app.name'],
                 'status'=>$login->Confirm($token,$username),
                 'username' => $app['session']->get('username'),
-                'img' => $app['session']->get('img'),
+                'img' => '../assets/img/users/'.$result.'/profileImage.jpg',
                 'idUser'   => $app['session']->get('id')
             ],
         ));

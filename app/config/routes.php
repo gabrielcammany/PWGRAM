@@ -200,6 +200,9 @@ $app->post('/moreCommentsBox','PwGram\\Controller\\CommentsController::getMoreMe
 $app->post('/getUserComments','PwGram\\Controller\\CommentsController::getUserComments');
 $app->post('/commentRemove','PwGram\\Controller\\CommentsController::removeComent')->before($beforeLogged);
 $app->post('/commentedit','PwGram\\Controller\\CommentsController::editComment');
+$app->post('/getUserCommentInfo','PwGram\\Controller\\ProfileController::getUserInfo');
+
+
 /**
  * Rutas relacionadas con las notificaciones
  */
@@ -208,10 +211,6 @@ $app->post('/getUserNotifications','PwGram\\Controller\\NotificationsController:
 $app->get('/notificaciones','PwGram\\Controller\\NotificationsController::showUserNotifications')->before($beforeLogged);
 $app->post('/getNumNotifications','PwGram\\Controller\\NotificationsController::getNotificationsNumber');
 $app->post('/notificationSeen','PwGram\\Controller\\NotificationsController::setNotificationSeen');
-
-//Esta no se donde va porque dice comment info pero coje el username y la image_path
-$app->post('/getUserCommentInfo','PwGram\\Controller\\ProfileController::getUserInfo');
-/*
 
 $app->error(function (\Exception $exception,Request $request) use ($app){
     $response = new Response();
@@ -223,4 +222,4 @@ $app->error(function (\Exception $exception,Request $request) use ($app){
     $response->setContent($content);
     $response->setStatusCode(Response::HTTP_NOT_FOUND);
     return $response;
-});*/
+});

@@ -77,8 +77,21 @@ p.textComment {
     overflow: auto;
 }
 
+.textImage {
+    display:block;
+    height: 50%;
+    overflow: hidden;
+}
+
+.textImage2 {
+    display:block;
+}
+.textImage3 {
+    display:block;
+    height: 40%;
+}
+
 .listCommentsImage{
     max-height: 300px;
     overflow: auto;
 }
-

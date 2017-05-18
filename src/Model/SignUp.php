@@ -58,15 +58,11 @@ class SignUp
                     $i++;
                 }
             }
-            //echo 'llego0';
             $vResult = $this->validation_user($username,$email);
             if(!$vResult){
-               // var_dump("LLEGO2");
                 if($this->validateDate($date)&&$this->validatePasswordRegistration($pass,$confirm_pass)){
-                    //var_dump("LLEGO");
                     $img_path= __DIR__.'/../../web/assets/img/tmp/'.$username.'.png';
                     $this->app['session']->set('username',$username);
-                   // var_dump($img);
                     if($img == 0){
                         copy(__DIR__.'/../../web/assets/img/default/default_profile_400.png',$img_path);
 
@@ -74,9 +70,6 @@ class SignUp
                         $image = new Image($this->request,$this->app);
                         $image->base64_to_jpeg($img_src,$img_path);
                     }
-
-                    /*$image = new Image($this->request,$this->app);
-                    $image->base64_to_jpeg($img,$img_path);*/
                     $hashed_pass = password_hash($pass, PASSWORD_DEFAULT);
                     $this->app['db']->insert('user',
                         array(
@@ -84,9 +77,22 @@ class SignUp
                             'password' => $hashed_pass,
                             'birthdate' => $date,
                             'username' => strtolower($username),
-                            'img_path' => $img_path,
+                            'img_path' => 'assets/img/tmp/'.$username.'.png',
                             'active' => 0
                         ));
+
+                    $id = $this->app['db']->fetchColumn(
+                        'SELECT id FROM user WHERE username = ?',
+                        array($username)
+                    );
+                    $this->app['db']->update('user',
+                        array(
+                            'img_path' => 'assets/img/users/'.$id.'/profileImage.jpg'
+                        ),
+                        array(
+                            'id' => $id
+                        )
+                    );
                     $this->status = 1;
                     $this->sendEmail($email,$username);
                 }
@@ -100,21 +106,22 @@ class SignUp
     function validation_user($v1,$email){
         if($this->validaEmail($email)){
             $result = $this->app['db']->fetchColumn(
-                'SELECT COUNT(id) FROM user WHERE username=? OR email=?',
+                'SELECT username FROM user WHERE username=? OR email=?',
                 array(
                     $v1,
                     $email
                 )
             );
-            if(!empty($result)) {
+            //var_dump(!empty($result));
+            if(!empty($result)){
                 $this->status = 2;
-                return 0;
+                return false;
             }
         }else{
             $this->status = 3;
-            return 0;
+            return false;
         }
-        return 1;
+        return true;
 
     }
     function validaEmail($v1){

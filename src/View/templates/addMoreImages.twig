@@ -1,0 +1,9 @@
+{% if images.populares %}
+    {% set tag = "gallery_pop" %}
+{% else %}
+    {% set tag = "gallery_recent" %}
+{% endif %}
+
+{% for img in images.content %}
+    {{  block("individualImage",  "image.twig") }}
+{% endfor %}

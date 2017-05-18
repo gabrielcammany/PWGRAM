@@ -25,16 +25,11 @@ class Confirm
 
     public function confirm($token,$username)
     {
-        $sql = 'SELECT * FROM user WHERE username=?';
+        $sql = 'SELECT id,active,email,username FROM user WHERE username=?';
         $result = $this->app['db']->fetchAssoc($sql,array(
             $username
         ));
-        /*$db = new \PDO('mysql:host=localhost;dbname=pwgram', "root", "gabriel");
-        $stmt = $db->prepare('SELECT * FROM user WHERE username=?');
-        $stmt->bindParam(1, $username, \PDO::PARAM_STR);
-        $stmt->execute();
-        $result = $stmt->fetch(\PDO::FETCH_ASSOC);*/
-       // echo $result['active'];
+
         if(sizeof($result['id']) == 0){
             $this->status = 0;
         }else if($result['active'] == 1){
@@ -42,16 +37,14 @@ class Confirm
         }else if(md5(($result['email'].$username."b2891fceefe96e96c97d7b7a014fe2eb")) != $token ){
             $this->status = 2;
         }else if(mkdir('assets/img/users/'.$result['id'],0777)){
-            //localStorage.getItem();
-            //$path = $result['img_path'];
-            //$image = new Image($this->request,$this->app);
-            copy(__DIR__.'/../../web/assets/img/tmp/'.$username.'.png','assets/img/users/'.$result['id'].'/'.$result['id'].'.jpg');
+
+            copy(__DIR__.'/../../web/assets/img/tmp/'.$username.'.png','assets/img/users/'.$result['id'].'/profileImage.jpg');
             $img=new Image($this->request,$this->app);
-            $img->resize_process('assets/img/users/'.$result['id'].'/'.$result['id'].'.jpg');
+            $img->resize_process('assets/img/users/'.$result['id'].'/profileImage.jpg');
             $this->app['db']->update('user',
                 array(
                     'active' => 1,
-                    'img_path' => 'assets/img/users/'.$result['id'].'/'.$result['id'].'.jpg'
+                    'img_path' => 'assets/img/users/'.$result['id'].'/profileImage.jpg'
                 ),
                 array(
                     'id' => $result['id']
@@ -66,6 +59,7 @@ class Confirm
             $this->status = 3;
             $this->app['session']->set('id',$result['id']);
             $this->app['session']->set('username',$result['username']);
+            $this->app['session']->set('img','assets/img/users/'.$result['id'].'/profileImage.jpg');
 
         }else{
             $this->status = 4;

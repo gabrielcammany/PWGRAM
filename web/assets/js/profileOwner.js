@@ -2,14 +2,35 @@
  * Created by Xps_Sam on 19/04/2017.
  */
 
+var $image = $('.img-container > img');
+var loaded =   false;
 var user_info;
 $(function() {
     $('#btnEditProfile').show();
     $('#gallery_pop').show();
     $('#containerInfoUser').hide();
+
+
+    var imgloaded = $('.loaded');
+    imgloaded.hide();
+    var imgnoloaded = $('.noloaded');
+    imgnoloaded.show();
 });
 
+function showEditProfileForm(){
+    $('#editProfile').fadeIn('fast')
+        $('.modal-title').html('Editar Perfil');
 
+    $('.error').removeClass('alert alert-danger').html('');
+}
+
+function openEditProfileModal(){
+    showEditProfileForm();
+    setTimeout(function(){
+        $('#editProfile').modal('show');
+    }, 230);
+
+}
 
 $('#update_info').click(function (e) {
     e.preventDefault();
@@ -22,7 +43,7 @@ $('#update_info').click(function (e) {
         reg.date = $('#inputDateUsuario').val();
         reg.confirm_pass = $('#inputConfirmPass').val();
         reg.username = $('#inputNombreUsuario').val();
-        reg.img = $('#idImgBtn').attr('src');
+        reg.img = $('#newImage').attr('src');
         reg.id = $('#userName').attr('data-content');
         var stringData = JSON.stringify(reg);
         $.ajax({
@@ -204,13 +225,8 @@ $("#btnSelectImage").change(function(){
 
 $('#btnEditProfile').on('click',function (e) {
     e.preventDefault();
-    $('#btnEditProfile').hide();
-    $('#gallery_pop').hide();
+    openEditProfileModal();
     $('#containerInfoUser').show();
-    var info = $('#containerInfoUser').attr('data-content').split('?');
-    $('#inputNombreUsuario').val(info[0]);
-    $('#inputCorreoUsuario').val(info[1]);
-    $('#inputDateUsuario').val(info[2]);
 });
 
 $('#backToProfile').on('click',function (e) {

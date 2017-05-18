@@ -1,4 +1,4 @@
-{% extends "base_gabri.twig" %}
+{% extends "base.twig" %}
 
 {% block head %}
     {{ parent() }}
@@ -32,11 +32,11 @@
                         {{  block("individualImage",  "image.twig") }}
                     {% endfor %}
                 </div>
-                <div class="addDiv">
-                    <a class="add ml10" id="add5MorePopular" title="Añadir 5 mas" href="/getFiveMorePop">
-                        <i class="glyphicon glyphicon-plus"></i>
-                    </a>
-                </div>
+                    <div class="addDiv">
+                        <a class="add ml10" id="add5MorePopular" title="Añadir 5 mas" href="/getFiveMorePop">
+                            <i class="glyphicon glyphicon-plus"></i>
+                        </a>
+                    </div>
             {% else %}
                 No hay imágenes disponibles
             {% endif %}
@@ -52,7 +52,14 @@
                     {% for img in images.recientes %}
                         {{  block("individualImage",  "image.twig") }}
                     {% endfor %}
-                    <a id="add5MorePopular" href="#">
+                </div>
+
+                    <div class="addDiv">
+                            <a class="add ml10" id="add5MoreRecent" title="Añadir 5 mas" href="">
+                                <i class="glyphicon glyphicon-plus"></i>
+                            </a>
+                    </div>
+                    <!--<a id="add5MorePopular" href="#">
                         <div class='col-md-3 portfolio-item img_gallery panel panel-default flex-col outer' id="eachFigure" href="/getFiveMoreRec">
 
                             <div class="col-sm-15 divLinia">
@@ -62,8 +69,7 @@
                                 </div>
                             </div>
                         </div>
-                    </a>
-                </div>
+                    </a>-->
             {% else %}
                 No hay imágenes disponibles
             {% endif %}

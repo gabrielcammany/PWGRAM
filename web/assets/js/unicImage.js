@@ -33,6 +33,7 @@ $('#editImage').on('click',function(e){
     e.preventDefault();
     openEditModal();
 });
+
 $('#updateImage').click(function (e) {
     e.preventDefault();
     if(validateTitle($('#titleImage').val())) {

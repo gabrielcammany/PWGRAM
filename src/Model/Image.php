@@ -473,23 +473,19 @@ class Image
     public function getFivePop(){
         if(!empty($_POST['myData'])){
 
-            /*$stmt = $this->app['db']->executeQuery('SELECT COUNT(id) FROM image WHERE private = 0');
-            $result = $stmt->fetchAll();*/
             $result = $this->app['db']->fetchColumn(
                 'SELECT COUNT(id) FROM image WHERE private = ?',
                 array(
                     0
                 )
             );
-            //var_dump(($result));
-            //var_dump(($_POST['myData']));
 
             if(intval($result)-intval($_POST['myData']) >= 5) {
                 $query = $this->app['db']
                     ->createQueryBuilder()
                     ->select('*')
                     ->from('image')
-                    ->where('private=0')
+                    ->where('private=?')
                     ->orderBY('visits','DESC')
                     ->setMaxResults(5)
                     ->setFirstResult(intval($_POST['myData']));
@@ -499,6 +495,7 @@ class Image
                 $result = $this->addComments($result);
             }else if(intval($result)-intval($_POST['myData']) > 0){
                 $resta = intval($result)-intval($_POST['myData']);
+
                 $query = $this->app['db']
                     ->createQueryBuilder()
                     ->select('*')
@@ -507,8 +504,9 @@ class Image
                     ->orderBY('visits','DESC')
                     ->setMaxResults($resta)
                     ->setFirstResult(intval($_POST['myData']));
-                $stmt = $query->execute();
-                $result = $stmt->fetchAll();
+                    $stmt = $query->execute();
+                    $result = $stmt->fetchAll();
+
                 $result = $this->checkLikes($result);
                 $result = $this->addComments($result);
             }else{

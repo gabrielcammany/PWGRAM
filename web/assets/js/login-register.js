@@ -16,6 +16,7 @@ $(function () {
     $('#loginModal').modal('hide');
 });
 function showRegisterForm(){
+
     $('.loginBox').fadeOut('fast',function(){
         $('.registerBox').fadeIn('fast');
         $('.login-footer').fadeOut('fast',function(){
@@ -24,7 +25,6 @@ function showRegisterForm(){
         $('.modal-title').html('Creación de cuenta');
     }); 
     $('.error').removeClass('alert alert-danger').html('');
-       
 }
 function showLoginForm(){
     $('#loginModal .registerBox').fadeOut('fast',function(){
@@ -100,10 +100,10 @@ $('#registerUser').click(function(e){
         reg.date = $('#datepicker').val();
         reg.confirm_pass = $('#password_confirmation').val();
         reg.username = $('#usernameReg').val();
-        if(img_path)reg.img = 1;
-        if(!img_path)reg.img = 0;
-        reg.img_src = $('#perfil_reg').attr('src');
-       // console.log(reg.img_src);
+        if($image.cropper('getData').x!=0 && $image.cropper('getData').y!=0)reg.img = 1;
+        if($image.cropper('getData').x==0 && $image.cropper('getData').y==0)reg.img = 0;
+        reg.img_src = $('#newImage').attr('src');
+        console.log($image.cropper('getData'));
         var stringData = JSON.stringify(reg);
         $.ajax({
             type: 'post',
@@ -297,6 +297,9 @@ function status_modal( $response){
         case'12':
             $('.error').addClass('alert alert-danger').html("Username o contrasena incorrecta");
             break;
+        case'13':
+            $('.error').addClass('alert alert-danger').html("Cuenta no activada!");
+            break;
         default:
             $('.error').addClass('alert alert-danger').html("Error desconocido " + $response);
             break;
@@ -318,11 +321,12 @@ function uploadPicture() {
     });
 }
 
+
 /*
 Funció que espera a que el usuari realitzi algun canvi en el input per poder cridar a la funció encarregada
 de realitzar el canvi de la imatge de defecte per la seleccionada.
  */
-$("#btnSelectImage").change(function(){
+$("#inputImage").change(function(){
     if (this.files && this.files[0]) {
         var reader = new FileReader();
         reader.readAsDataURL(this.files[0]);
@@ -331,6 +335,7 @@ $("#btnSelectImage").change(function(){
         }
     }
     img_path=1;
+    console.log("HOLA");
 });
 
 

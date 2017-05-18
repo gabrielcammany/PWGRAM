@@ -95,7 +95,6 @@ function status_modal( $response){
             break;
         case '3':
             uploadPicture();
-            console.log("LLEGO AL 3");
             swal({
                 title: "Imagen Añadida",
                 type: "success",

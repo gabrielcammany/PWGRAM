@@ -21,8 +21,6 @@ function openEditModal(){
 
 $('#add5MorePopular').on('click',function (e) {
     e.preventDefault();
-    console.log( $('#gallery_pop').children().length);
-    //console.log("HIJOS: " + );
     $.ajax({
         type: 'post',
         url: '/getFiveMorePop',
@@ -55,7 +53,6 @@ $('#add5MoreRecent').on('click',function (e) {
         url: '/getFiveMoreRec',
         data: {myData: $('#gallery_recent').children().length},
         success: function (result) {
-            //console.log((result));
             if(result != 0 && result != 1){
                 $('#gallery_recent').append(result);
                 $('#gallery_recent img.likeImg').on('click',function(e){
@@ -81,7 +78,35 @@ $('#gallery_recent .moreCommentsBtn').on('click',function (e) {
     e.preventDefault();
     var dataSend = {};
     dataSend.image_id = $(this).attr('data-content');
-    dataSend.size = ($("#gallery_recent #comentaris"+$(this).attr('data-content')).children().size()-1);
+    dataSend.size = ($("#comentaris"+$(this).attr('data-content')+"gallery_recent").children().size());
+    $.ajax({
+        type: 'post',
+        url: '/moreCommentsBox',
+        data: {data:JSON.stringify(dataSend)},
+        success: function ($response) {
+            var response = JSON.parse($response);
+            for(var i = 0;i<response.length && i<3;i++){
+                var comentari = new Array();
+                comentari.push(new Array())
+                comentari[0].push(response[i].username);
+                comentari[0].push(response[i].text);
+                comentari[0].push(response[i].img_path);
+                comentari[0].push(response[i].created_at);
+                var append = getImageComments(comentari,dataSend.image_id,true);
+                $("#comentaris"+dataSend.image_id+"gallery_recent").append(append);
+            }
+            if(response.length < 4){
+                $("#ulMoreCommentsBtn"+dataSend.image_id+"gallery_recent").hide();
+            }
+        }
+    });
+});
+
+$('#gallery_pop .moreCommentsBtn').on('click',function (e) {
+    e.preventDefault();
+    var dataSend = {};
+    dataSend.image_id = $(this).attr('data-content');
+    dataSend.size = ($("#comentaris"+$(this).attr('data-content')+"gallery_pop").children().size());
     $.ajax({
         type: 'post',
         url: '/moreCommentsBox',
@@ -97,38 +122,10 @@ $('#gallery_recent .moreCommentsBtn').on('click',function (e) {
                 comentari[0].push(response[i].img_path);
                 comentari[0].push(response[i].created_at);
                 var append = getImageComments(comentari,dataSend.image_id,true);
-                $("#gallery_recent #comentaris"+dataSend.image_id).append(append);
+                $("#comentaris"+dataSend.image_id+"gallery_pop").append(append);
             }
             if(response.length < 4){
-                $("#gallery_recent #ulMoreCommentsBtn"+dataSend.image_id).hide();
-            }
-        }
-    });
-});
-
-$('#gallery_pop .moreCommentsBtn').on('click',function (e) {
-    e.preventDefault();
-    var dataSend = {};
-    dataSend.image_id = $(this).attr('data-content');
-    dataSend.size = ($("#gallery_pop #comentaris"+$(this).attr('data-content')).children().size()-1);
-    $.ajax({
-        type: 'post',
-        url: '/moreCommentsBox',
-        data: {data:JSON.stringify(dataSend)},
-        success: function ($response) {
-            var response = JSON.parse($response);
-            for(var i = 0;i<response.length && i<3;i++){
-                var comentari = new Array();
-                comentari.push(new Array())
-                comentari[0].push(response[i].username);
-                comentari[0].push(response[i].text);
-                comentari[0].push(response[i].img_path);
-                comentari[0].push(response[i].created_at);
-                var append = getImageComments(comentari,dataSend.image_id,true);
-                $("#gallery_pop #comentaris"+dataSend.image_id).append(append);
-            }
-            if(response.length < 4){
-                $("#gallery_pop #ulMoreCommentsBtn"+dataSend.image_id).hide();
+                $("#ulMoreCommentsBtn"+dataSend.image_id+"gallery_pop").hide();
             }
         }
     });

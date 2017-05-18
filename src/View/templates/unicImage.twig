@@ -36,12 +36,14 @@
                 </div>
                 {% endif %}
             </div>
-            <div class = "col-sm-4 right_container" id="content" align="center" >
+            <div class = "col-sm-4 right_container" id="content">
+                <div id="backgroundInfoImg">
                 <h2 id='title'>{{ img.title }}</h2>
                 <p><h2><A href="/profile/{{ usernamePost }}" id='link_username' data-content="{{ usernamePost }}">{{ usernamePost }}</A></h2></p>
-                <p id='label_like'>Likes: {{ img.likes }}</p>
-                <p id='label_visits'>Visitas: {{ img.visits }}</p>
-                <p id='label_time'>Hace: {{ img.created_at }}</p>
+                <p id='label_like'><label class="infoImg">Likes</label> {{ img.likes }}</p>
+                <p id='label_visits'><label class="infoImg">Visitas</label> {{ img.visits }}</p>
+                <p id='label_time'><label class="infoImg">Hace</label> {{ img.created_at }}</p>
+                </div>
                 <div class="col-sm-15 divLinia">
                     <div class="panel panel-white post panel-shadow divLinia">
                         <div id='statusError{{ img.id }}content' class="alert alert-danger statusError" role="alert" hidden>
@@ -98,7 +100,7 @@
                                     <section id="formAddImage">
                                         <form enctype="multipart/form-data" method="post" id="formNewImage" class="selector">
 
-                                            <input id="titleImage" class="form-control" placeholder="" type="text" name="title-image">
+                                            <input id="titleImage" class="form-control" placeholder="" type="text" name="title-image" value="{{ img.title }}">
                                             <input id="public" type="radio" name="radio" value="public" checked> Imagen Pública<br>
                                             <input id="private" type="radio" name="radio" value="private"> Imagen Privada<br>
                                             <input class="btn btn-default btn-register" type="submit" value="Guardar Cambios" name="newImage" id="updateImage" >

@@ -1,4 +1,4 @@
-{% extends "base_gabri.twig" %}
+{% extends "base.twig" %}
 
 {% block head %}
     {{ parent() }}
@@ -20,18 +20,63 @@
 {% endblock %}
 
 {% block content %}
-
     <div class="wrapper">
         <div class="main main-raised">
             <div class="profile-content">
                 <div class="container">
                     <div class=" row main_profile">
-                        <div class="profile user_profile" >
-                            <div id="validateText" class="name">
-                            </div>
-                        </div>
-                        <div class="description text-center user_profile" id="descriptionText">
-                        </div>
+                        {% if app.status == 0 %}
+                                <div class="profile user_profile" >
+                                    <div class="name">
+                                        <h3 class="title">Este usuario no existe!</h3>
+                                    </div>
+                                </div>
+                            <hr />
+                                <div class="description text-center user_profile">
+                                    <a href="/"><p>¿Estas seguro de que no te has equivocado de link?...</p></a>
+                                </div>
+                            {% elseif app.status == 1 %}
+                                <div class="profile text-center user_profile" >
+                                    <div class="name">
+                                        <h3 class="title">La cuenta ya esta activada!</h3>
+                                    </div>
+                                </div>
+                                <hr />
+                                <div class="description text-center user_profile">
+                                    <p>Tu usuario ya ha confirmado la cuenta :)</p>
+                                    <p><a class="btn btn-default btn-lg" href="../" style="font-size: 14px"><span class="green">Aprieta aqui y empieza a disfrutar de PwGram!</span></a>
+                                </div>
+                            {% elseif app.status == 2 %}
+                                <div class="profile user_profile" >
+                                    <div class="name">
+                                        <h3 class="title">El token de validación no es correcto... :(</h3>
+                                    </div>
+                                </div>
+                                <hr />
+                                <div class="description text-center user_profile">
+                                    <a href="/"><p>¿Estas seguro de que no te has equivocado de link?...</p></a>
+                                </div>
+                            {% elseif app.status == 3 %}
+                                <div class="profile user_profile" >
+                                    <div class="name">
+                                        <h3 class="title">Tu cuenta ha sido validada correctamente, enhorabuena!</h3>
+                                    </div>
+                                </div>
+                                <hr />
+                                <div class="description text-center user_profile">
+                                    <p><a class="btn btn-default btn-lg" href="../" style="font-size: 14px"><span class="green">Aprieta aqui y empieza a disfrutar de PwGram!</span></a>
+                                </div>
+                            {% else %}
+                                <div class="profile user_profile" >
+                                    <div class="name">
+                                        <h3 class="title">Ups, ha habido un error desconocido :0</h3>
+                                    </div>
+                                </div>
+                                <div class="description text-center user_profile">
+                                    <a href="/"><p>Codigo del error: {{ app.status }}</p></a>
+                                </div>
+                        {% endif %}
+
                     </div>
 
                 </div>
@@ -49,9 +94,4 @@
 
 {% block scripts %}
     {{ parent() }}
-    <script src="{{ asset('/confirm.js','js')}}"></script>
-    <script>
-        preparePage({{ app.status }});
-    </script>
-
 {% endblock %}

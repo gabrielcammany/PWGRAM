@@ -41,6 +41,7 @@ class ImageController
         $actual_link = $_SERVER['REQUEST_URI'];
         $data = explode('/',$actual_link);
         $actualUser = $app['session']->get('id');
+
         $result = $app['db']->fetchAssoc(
             'SELECT user_id, private FROM image WHERE id = ?',
             array($data[2])
@@ -53,50 +54,39 @@ class ImageController
         if($actualUser == $result['user_id']){
             $edit = true;
         }
-        if ($result['private'] != 0 && !$edit){
-            $content = $app['twig']->render('error.twig', [
-                'message' => '403 Forbidden',
-                'app' => [
-                    'name'=>$app['app.name'],
-                    'username' => $app['session']->get('username'),
-                    'image_id'=> $data[2],
-                    'img' => $app['session']->get('img'),
-                    'idUser'   => $app['session']->get('id')
 
-
-                ]
-            ]);
-            $response->setStatusCode(Response::HTTP_FORBIDDEN);
-        }else{
-            $_POST['id']=$data[2];
-            $img = new Image($request,$app);
-            $infoImage = $img->getInfoUnicImage();
-            $path = $infoImage[0]["img_path"];
-            $array = explode('/',$path);
-            $infoImage[0]["user_id"] = $array[3];
-            for ($i = 0; $i < intval($infoImage[0]["comments"]); $i++) {
-                str_replace(".jpg", "_100.jpg", $infoImage[0]["commentsList"][$i][2]);
-            }
-            $infoImage[0]["created_at"] = $app['time']($infoImage[0]["created_at"]);
-            $content=$app['twig']->render('unicImage.twig', array(
-                'app' => [
-                    'name'=>$app['app.name'],
-                    'username' => $app['session']->get('username'),
-                    'image_id'=> $data[2],
-                    'img' => $app['session']->get('img'),
-                    'idUser'   => $app['session']->get('id')
-                ],
-                'enableEdit' => $edit,
-                'img'=> $infoImage[0],
-                'comments' => $infoImage[0]["commentsList"],
-                'numComments' => $infoImage[0]["comments"],
-                'usernamePost'=> $username["username"]
-            ));
-            $response->setStatusCode($response::HTTP_OK);
-
+        $_POST['id']=$data[2];
+        $img = new Image($request,$app);
+        $infoImage = $img->getInfoUnicImage();
+        /*$path = $infoImage[0]["img_path"];
+        $array = explode('/',$path);
+        var_dump($array[3]);
+        var_dump($infoImage);
+        $infoImage[0]["user_id"] = $array[3];*/
+        for ($i = 0; $i < intval($infoImage[0]["comments"]); $i++) {
+            str_replace(".jpg", "_100.jpg", $infoImage[0]["commentsList"][$i][2]);
         }
+
+        $infoImage[0]["created_at"] = $app['time']($infoImage[0]["created_at"]);
+        $content=$app['twig']->render('unicImage.twig', array(
+            'app' => [
+                'name'=>$app['app.name'],
+                'username' => $app['session']->get('username'),
+                'image_id'=> $data[2],
+                'img' => $app['session']->get('img'),
+                'idUser'   => $app['session']->get('id')
+            ],
+            'enableEdit' => $edit,
+            'img'=> $infoImage[0],
+            'comments' => $infoImage[0]["commentsList"],
+            'numComments' => $infoImage[0]["comments"],
+            'usernamePost'=> $username["username"]
+        ));
+
+        $response->setStatusCode($response::HTTP_OK);
         $response->headers->set('Content-Type','text/html');
         $response->setContent($content);
+
         return $response;
     }
 
@@ -182,26 +172,22 @@ class ImageController
 
     public function getFivePop(Request $request,Application $app){
         $image = new Image($request,$app);
-        $profile = new Profile($request,$app);
+        $pr = new Profile($request,$app);
         $result = json_decode($image->getFivePop());
         if($result != 0 && $result != 1) {
 
-
-            $popList = array();
-
-            foreach ($result as $img) {
-                $userName = $profile->getUsername($img->user_id);
-                $name = json_decode($userName);
-                array_push($popList, $name[0]->username);
+            foreach( $result as $img){
+                $uname =$pr->getUsername($img->user_id);
+                $img->username = json_decode($uname)[0]->username;
             }
-            $content = $app['twig']->render('showMoreimages.twig', array(
+            $content = $app['twig']->render('addMoreImages.twig', array(
                 'app' => $app['defaultParams'](1),
                 'images' => [
                     'content' => $result,
-                    'size_pop' => sizeof($result),
-                    'uname_pop' => $popList,
+                    'populares' => true
                 ],
             ));
+
 
             $response = new Response();
             $response->setStatusCode($response::HTTP_OK);
@@ -213,35 +199,32 @@ class ImageController
         }
     }
 
-    public function getFiveRec(Request $request,Application $app){
-        $image = new Image($request,$app);
-        $profile = new Profile($request,$app);
+    public function getFiveRec(Request $request,Application $app)
+    {
+        $image = new Image($request, $app);
+        $pr = new Profile($request, $app);
         $result = json_decode($image->getFiveRec());
-        if($result != 0 && $result != 1) {
-
-
-            $popList = array();
+        if ($result != 0 && $result != 1) {
 
             foreach ($result as $img) {
-                $userName = $profile->getUsername($img->user_id);
-                $name = json_decode($userName);
-                array_push($popList, $name[0]->username);
+                $uname = $pr->getUsername($img->user_id);
+                $img->username = json_decode($uname)[0]->username;
             }
-            $content = $app['twig']->render('showMoreimages.twig', array(
+            $content = $app['twig']->render('addMoreImages.twig', array(
                 'app' => $app['defaultParams'](1),
                 'images' => [
                     'content' => $result,
-                    'size_pop' => sizeof($result),
-                    'uname_pop' => $popList,
+                    'populares' => false
                 ],
             ));
+
 
             $response = new Response();
             $response->setStatusCode($response::HTTP_OK);
             $response->headers->set('Content-Type', 'text/html');
             $response->setContent($content);
             return $response;
-        }else{
+        } else {
             return $result;
         }
     }
