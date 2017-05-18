@@ -16,7 +16,6 @@ $('#deleteImage').on('click',   function(e){
                 url: '/deleteImage',
                 data: {id: $('#main_image').attr('data-content')},
                 success: function ($response) {
-                    console.log($response);
                     if($response.length !=0) {
                         main_image = JSON.parse($response);
                         swal("Deleted!", "Su imagen ha sido eliminada.", "success");
@@ -43,7 +42,6 @@ $('#updateImage').click(function (e) {
         object.private = $('#private').is(":checked");
         object.public = $('#public').is(":checked");
         var stringData = JSON.stringify(object);
-        console.log('@@@ '+stringData+' @@@');
         $.ajax({
             type: 'post',
             url: '/editImageInfo',
@@ -86,7 +84,6 @@ $('#saveChanges').on('click',function(e){
         url: '/editImageInfo',
         data: {myData: $('#formEditImage').serializeArray()},
         success: function ($response) {
-            console.log('##'+$response);
         }
 
     });

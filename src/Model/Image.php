@@ -34,10 +34,8 @@ class Image
 
             $img= $data['image'];
             $username = $data['username'];
-            //$this->base64_to_jpeg($img_data, '/assets/img/tmp/'.$this->app['session']->get('username').'jpg');
 
             $img_path = 'assets/img/tmp/'.$data['id'].'.jpg';
-            //echo($img_path);
             $this->base64_to_jpeg($img, $img_path);
         }
         return 1;
@@ -46,7 +44,6 @@ class Image
 
     function base64_to_jpeg($base64_string, $output_file) {
         $ifp = fopen($output_file, "wb");
-        //echo '\n\n'.$base64_string.'\n';
         $data = explode(',', $base64_string);
 
         fwrite($ifp, base64_decode($data[1]));
@@ -82,20 +79,7 @@ class Image
                     'private' => $tinyint,
                     'created_at' => $date
                 ));
-                /*$db = new PDO('mysql:host=localhost;dbname=pwgram', "root", "gabriel");
-                $stmt = $db->prepare('INSERT INTO image (user_id,title,img_path,visits,private,created_at) VALUES (?,?,?,0,?,?)');
-                $stmt->bindParam(1, $id , \PDO::PARAM_STR);
-                $stmt->bindParam(2, $title, \PDO::PARAM_STR);
-                $stmt->bindParam(3, $img_path, \PDO::PARAM_STR);
-                $stmt->bindParam(4, $tinyint, \PDO::PARAM_STR);
-                $stmt->bindParam(5, $date, \PDO::PARAM_STR);
-                $stmt->execute();*/
-                //$sql = "SELECT posts FROM user WHERE id = ?";
-                //NO SE PORQUE
-                /*$posts = $this->app['db']->fetchColumn($sql,array(
-                    $id
-                ));
-                */
+
                 $get = $this->app['db']->executeUpdate(
                     'UPDATE user SET posts=posts+1 WHERE id=?',
                     array($id)
@@ -105,9 +89,7 @@ class Image
                 }else{
                     $this->status = 3;
                 }
-               /* $stmt = $db->prepare('UPDATE user SET posts=posts+1 WHERE id=?');
-                $stmt->bindParam(1, $id, \PDO::PARAM_STR);
-                $stmt->execute();*/
+
                 $this->cropImage($img_path,$imgData);
                 $this->resize_process($img_path,$imgData);
             }
@@ -422,8 +404,6 @@ class Image
                     $this->app['db']->delete('image', array('id' => $_POST['id']));
                     $this->app['db']->delete('comment', array('image_id' => $_POST['id']));
                     $this->app['db']->delete('notification', array('post_id' => $_POST['id']));
-                    //$this->app['db']->update('user', array('posts' => 'posts-1'),array('id'  =>$result[0]['user_id']));
-                    echo ($result[0]['user_id']);
                     $this->app['db']->executeUpdate('UPDATE user SET posts = posts - 1 WHERE id = ?',array($result[0]['user_id']));
                     return 1;
                 }
@@ -473,6 +453,8 @@ class Image
     public function getFivePop(){
         if(!empty($_POST['myData'])){
 
+            /*$stmt = $this->app['db']->executeQuery('SELECT * FROM image WHERE private = 0');
+            $result = $stmt->fetchAll();*/
             $result = $this->app['db']->fetchColumn(
                 'SELECT COUNT(id) FROM image WHERE private = ?',
                 array(
@@ -485,7 +467,7 @@ class Image
                     ->createQueryBuilder()
                     ->select('*')
                     ->from('image')
-                    ->where('private=?')
+                    ->where('private=0')
                     ->orderBY('visits','DESC')
                     ->setMaxResults(5)
                     ->setFirstResult(intval($_POST['myData']));
@@ -495,7 +477,6 @@ class Image
                 $result = $this->addComments($result);
             }else if(intval($result)-intval($_POST['myData']) > 0){
                 $resta = intval($result)-intval($_POST['myData']);
-
                 $query = $this->app['db']
                     ->createQueryBuilder()
                     ->select('*')
@@ -504,9 +485,8 @@ class Image
                     ->orderBY('visits','DESC')
                     ->setMaxResults($resta)
                     ->setFirstResult(intval($_POST['myData']));
-                    $stmt = $query->execute();
-                    $result = $stmt->fetchAll();
-
+                $stmt = $query->execute();
+                $result = $stmt->fetchAll();
                 $result = $this->checkLikes($result);
                 $result = $this->addComments($result);
             }else{

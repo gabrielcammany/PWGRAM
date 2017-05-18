@@ -35,6 +35,7 @@ class CommentsController
         return $notification->getLast();
 
     }
+
     public function getMoreMessages(Request $request,Application $app){
         $notification = new Comments($request,$app);
 

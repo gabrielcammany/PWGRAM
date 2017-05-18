@@ -19,10 +19,6 @@ $app->register(new Silex\Provider\AssetServiceProvider(),array(
     ),
 ));
 
-$app->register(new PwGram\Providers\HomeServiceProvider(),array(
-    'home.default_name' => 'Samuel',
-));
-
 $app->register(new PwGram\Providers\DefaultParamsServiceProvider());
 
 $app->register(new PwGram\Providers\TimeServiceProvider());

@@ -30,13 +30,7 @@ class Notifications
             'SELECT COUNT(id) FROM notification WHERE user_id = ? AND seen_by_user=0 AND NOT user_fired_event=?',
             array($id,$id)
         );
-        /*
-        $db = new \PDO('mysql:host=localhost;dbname=pwgram', "root", "gabriel");
-        $stmt = $db->prepare('SELECT COUNT(id) FROM notification WHERE user_id = ? AND seen_by_user=0 AND NOT user_fired_event=?;');
-        $stmt->bindParam(1, $id , \PDO::PARAM_STR);
-        $stmt->bindParam(2, $id , \PDO::PARAM_STR);
-        $stmt->execute();
-        $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);*/
+
         return json_encode($result);
     }
 
@@ -52,12 +46,7 @@ class Notifications
                         'id' => $id
                     )
                 );
-                var_dump($get);
-               /* $db = new \PDO('mysql:host=localhost;dbname=pwgram', "root", "gabriel");
-                $stmt = $db->prepare('UPDATE notification SET seen_by_user =1 WHERE id=?;');
-                $stmt->bindParam(1, $id, \PDO::PARAM_STR);
-                $stmt->execute();
-                $result = $stmt->rowCount();*/
+
             }catch(\Exception $e){
                 $get = false;
             }
@@ -76,30 +65,19 @@ class Notifications
                     $id
                 )
             );
-            /*$db = new \PDO('mysql:host=localhost;dbname=pwgram', "root", "gabriel");
-            $stmt = $db->prepare('SELECT * FROM notification WHERE user_id = ? AND seen_by_user=0 AND NOT user_fired_event=? ORDER BY created_at DESC LIMIT 4 ');
-            $stmt->bindParam(1, $id , \PDO::PARAM_STR);
-            $stmt->bindParam(2, $id , \PDO::PARAM_STR);
-            $stmt->execute();
-            $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);*/
+
             for($i = 0;$i<count($result);$i++){
                 $result2 = $this->app['db']->fetchColumn(
                     'SELECT username FROM user WHERE id = ?',
                     array($result[$i]["user_fired_event"])
                 );
-                /*$stmt = $db->prepare('SELECT username FROM user WHERE id = ?');
-                $stmt->bindParam(1, $result[$i]["user_fired_event"] , \PDO::PARAM_STR);
-                $stmt->execute();
-                $result2 = $stmt->fetchAll(\PDO::FETCH_ASSOC);*/
+
                 $result[$i]["user_fired_event"] = $result2;
                 $result3 = $this->app['db']->fetchColumn(
                     'SELECT title FROM image WHERE id = ?',
                     array($result[$i]["post_id"])
                 );
-                /*$stmt = $db->prepare('SELECT title FROM image WHERE id = ?');
-                $stmt->bindParam(1, $result[$i]["post_id"] , \PDO::PARAM_STR);
-                $stmt->execute();
-                $result3 = $stmt->fetchAll(\PDO::FETCH_ASSOC);*/
+
                 $result[$i]["post_id"] = $result[$i]["post_id"]."_".$result3;
             }
         }else{
@@ -107,30 +85,19 @@ class Notifications
                 'SELECT * FROM notification WHERE user_id = ? AND seen_by_user=? AND NOT user_fired_event=? ORDER BY created_at DESC',
                 array($id,0,$id)
             );
-            /*$db = new \PDO('mysql:host=localhost;dbname=pwgram', "root", "gabriel");
-            $stmt = $db->prepare('SELECT * FROM notification WHERE user_id = ? AND seen_by_user=0 AND NOT user_fired_event=? ORDER BY created_at DESC');
-            $stmt->bindParam(1, $id , \PDO::PARAM_STR);
-            $stmt->bindParam(2, $id , \PDO::PARAM_STR);
-            $stmt->execute();
-            $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);*/
+
             for($i = 0;$i<count($result);$i++){
                 $result2 = $this->app['db']->fetchColumn(
                     'SELECT username FROM user WHERE id = ?',
                     array($result[$i]["user_fired_event"])
                 );
-               /* $stmt = $db->prepare('SELECT username FROM user WHERE id = ?');
-                $stmt->bindParam(1, $result[$i]["user_fired_event"] , \PDO::PARAM_STR);
-                $stmt->execute();
-                $result2 = $stmt->fetchAll(\PDO::FETCH_ASSOC);*/
+
                 $result[$i]["user_fired_event"] = $result2;
                 $result2 = $this->app['db']->fetchColumn(
                     'SELECT title FROM image WHERE id = ?',
                     array($result[$i]["post_id"])
                 );
-                /*$stmt = $db->prepare('SELECT title FROM image WHERE id = ?');
-                $stmt->bindParam(1, $result[$i]["post_id"] , \PDO::PARAM_STR);
-                $stmt->execute();
-                $result2 = $stmt->fetchAll(\PDO::FETCH_ASSOC);*/
+
                 $result[$i]["post_id"] = $result[$i]["post_id"]."_".$result2;
             }
         }

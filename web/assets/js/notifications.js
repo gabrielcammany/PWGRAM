@@ -17,7 +17,6 @@ function listeners() {
         }
     };
     $('#tableNotifications').on('all.bs.table', function (e, name, args) {
-        //console.log('Event:', name, ', data:', args);
     })
         .on('refresh.bs.table', function (e, data) {
             updateTable();
@@ -54,7 +53,6 @@ function fillTable() {
         url: '/getUserNotifications',
         data: {"dropdown": 0},
         success: function (response) {
-            //console.log(response);
             list = (JSON).parse(response);
             list_aux = (JSON).parse(response);
             if(list.length != 0) {

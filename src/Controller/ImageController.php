@@ -171,13 +171,13 @@ class ImageController
     }
 
     public function getFivePop(Request $request,Application $app){
-        $image = new Image($request,$app);
-        $pr = new Profile($request,$app);
+        $image = new Image($request, $app);
+        $pr = new Profile($request, $app);
         $result = json_decode($image->getFivePop());
-        if($result != 0 && $result != 1) {
+        if ($result != 0 && $result != 1) {
 
-            foreach( $result as $img){
-                $uname =$pr->getUsername($img->user_id);
+            foreach ($result as $img) {
+                $uname = $pr->getUsername($img->user_id);
                 $img->username = json_decode($uname)[0]->username;
             }
             $content = $app['twig']->render('addMoreImages.twig', array(
@@ -194,7 +194,7 @@ class ImageController
             $response->headers->set('Content-Type', 'text/html');
             $response->setContent($content);
             return $response;
-        }else{
+        } else {
             return $result;
         }
     }

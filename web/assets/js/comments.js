@@ -16,7 +16,6 @@ function listeners() {
             removeComment(row);
         },
         'click .edit': function (e, value, row, index) {
-            console.log(row);
             openEditModal(row);
             //listenerChange(row,index);
             $('#changeComment').on('click',function (e) {
@@ -31,7 +30,6 @@ function listeners() {
                     url: '/commentedit',
                     data: {myData: JSON.stringify(object)},
                     success: function ($response){
-                        console.log(index);
                         $response = JSON.parse($response);
                         status_modal($response,row,index);
                     }
@@ -84,7 +82,6 @@ function fillTable() {
         type: 'post',
         url: '/getUserComments',
         success: function ($response) {
-           // console.log($response);
             list = (JSON).parse($response);
             if(list.length != 0) {
                 for (var i = 0; i < list.length; i++) {

@@ -63,7 +63,6 @@ function log_in( email, username, password){
         url: '/signin',
         data: {myData:stringData},
         success: function ($response) {
-            //console.log($response);
             $response = JSON.parse($response);
             user_logged = $response;
             status = $response.status;
@@ -103,14 +102,12 @@ $('#registerUser').click(function(e){
         if($image.cropper('getData').x!=0 && $image.cropper('getData').y!=0)reg.img = 1;
         if($image.cropper('getData').x==0 && $image.cropper('getData').y==0)reg.img = 0;
         reg.img_src = $('#newImage').attr('src');
-        console.log($image.cropper('getData'));
         var stringData = JSON.stringify(reg);
         $.ajax({
             type: 'post',
             url: '/signup',
             data: {myData:stringData},
             success: function ($response) {
-                console.log($response);
                 //Determinar resposta server
                 status_modal($response);
                 //Evitar que es faci shake quan es registra.
@@ -335,7 +332,6 @@ $("#inputImage").change(function(){
         }
     }
     img_path=1;
-    console.log("HOLA");
 });
 
 

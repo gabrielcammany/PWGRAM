@@ -45,6 +45,7 @@ $('#update_info').click(function (e) {
         reg.username = $('#inputNombreUsuario').val();
         reg.img = $('#newImage').attr('src');
         reg.id = $('#userName').attr('data-content');
+        reg.imgData = $image.cropper('getData');
         var stringData = JSON.stringify(reg);
         $.ajax({
             type: 'post',

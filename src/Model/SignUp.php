@@ -59,7 +59,7 @@ class SignUp
                 }
             }
             $vResult = $this->validation_user($username,$email);
-            if(!$vResult){
+            if($vResult){
                 if($this->validateDate($date)&&$this->validatePasswordRegistration($pass,$confirm_pass)){
                     $img_path= __DIR__.'/../../web/assets/img/tmp/'.$username.'.png';
                     $this->app['session']->set('username',$username);
@@ -97,7 +97,6 @@ class SignUp
                     $this->sendEmail($email,$username);
                 }
             }
-            //var_dump($this->status);
             return $this->status;
         }
     }
@@ -226,13 +225,11 @@ class SignUp
         //convert HTML into a basic plain-text alternative body
         //Replace the plain text body with one created manually
         $file = file_get_contents('assets/html/emailBody.html', true);
-        $mail->Body = str_replace("%BtnURL%","http://instagram.dev/validate/".$username."/".$token,str_replace("%UserName%",$username,$file));
+        $mail->Body = str_replace("%BtnURL%","http://grup4.com/validate/".$username."/".$token,str_replace("%UserName%",$username,$file));
         $mail->IsHTML(true);
         //send the message, check for errors
         if (!$mail->send()) {
             echo "Mailer Error: " . $mail->ErrorInfo;
         }
     }
-
-
-    }
+}

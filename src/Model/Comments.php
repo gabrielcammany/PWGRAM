@@ -82,28 +82,16 @@ class Comments
             $data = json_decode($_POST['data']);
             $sql = 'SELECT text,user_id,created_at,image_id FROM comment WHERE image_id = '.$data->image_id.'  ORDER BY created_at DESC LIMIT '.($data->size+1);
             $result = $this->app['db']->fetchAll($sql);
-           /* $db = new \PDO('mysql:host=localhost;dbname=pwgram', "root", "gabriel");
-            $stmt = $db->prepare('SELECT text,user_id,created_at,image_id FROM comment WHERE image_id = ?  ORDER BY created_at DESC LIMIT 3;');
-            $stmt->bindParam(1, $data->image_id, \PDO::PARAM_STR);
-            $stmt->execute();
-            $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);*/
+
             if(count($result) != 0) {
-                $query = str_repeat("?,", count($result) - 1) . "?";
-                //$sql = 'SELECT id,username,img_path FROM user WHERE id IN (' . $query . ');';
                 $sql = 'SELECT id,username,img_path FROM user WHERE id IN (?);';
                 $array = array();
-               // $stmt = $db->prepare('SELECT id,username,img_path FROM user WHERE id IN (' . $query . ');');
                 $limit = count($result);
-                //$j = 0;
                 for ($i = 0; $i < $limit; $i++) {
-                   // $stmt->bindParam($i, $result[$j]["user_id"], \PDO::PARAM_STR);
                     $array[$i] = $result[$i]["user_id"];
-                    //$j++;
                 }
                 $stmt = $this->app['db']->executeQuery($sql,array($array),array(Connection::PARAM_INT_ARRAY));
                 $result3 = $stmt->fetchAll();
-               // $stmt->execute();
-                //$result3 = $stmt->fetchAll(\PDO::FETCH_ASSOC);
                 for ($i = 0; $i < count($result); $i++) {
                     $index = array_search($result[$i]["user_id"], array_column($result3,"id"));
                     $result[$i]["username"] = $result3[$index]["username"];
@@ -120,24 +108,15 @@ class Comments
         $result = $this->app['db']->fetchAll($sql,array(
             $id
         ));
-        /*$db = new \PDO('mysql:host=localhost;dbname=pwgram', "root", "gabriel");
-        $stmt = $db->prepare('SELECT text,created_at,image_id FROM comment WHERE user_id = ? ORDER BY created_at DESC;');
-        $stmt->bindParam(1, $id, \PDO::PARAM_STR);
-        $stmt->execute();
-        $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);*/
-        //if(count($result) != 0) {
+
             for ($i = 0; $i < count($result); $i++) {
                 $sql = 'SELECT title FROM image WHERE id = ?';
                 $result2 = $this->app['db']->fetchColumn($sql,array(
                     $result[$i]["image_id"]
                 ));
-                /*$stmt = $db->prepare('SELECT title FROM image WHERE id = ?');
-                $stmt->bindParam(1, $result[$i]["image_id"] , \PDO::PARAM_STR);
-                $stmt->execute();
-                $result2 = $stmt->fetchAll(\PDO::FETCH_ASSOC);*/
+
                 $result[$i]["image_id"] = $result[$i]["image_id"]."_".$result2;
             }
-        //}
         return json_encode($result);
     }
 
@@ -204,9 +183,7 @@ class Comments
             $data = json_decode($_POST['data']);
             $sql = 'SELECT text,user_id,created_at,image_id FROM comment WHERE image_id = '.$data->image_id.' ORDER BY created_at DESC LIMIT '.$data->size.', '.($data->size+4);
             $result = $this->app['db']->fetchAll($sql);
-            //return "hOLA";
 
-           // var_dump($result);
             if(count($result) != 0) {
                 $sql = 'SELECT id,username,img_path FROM user WHERE id IN (?);';
                 $array = array();

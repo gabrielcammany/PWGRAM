@@ -51,11 +51,6 @@ class Confirm
                 )
             );
 
-
-
-            /*$stmt = $db->prepare('UPDATE user SET active=1 WHERE username=?');
-            $stmt->bindParam(1, $username, \PDO::PARAM_STR);
-            $stmt->execute();*/
             $this->status = 3;
             $this->app['session']->set('id',$result['id']);
             $this->app['session']->set('username',$result['username']);

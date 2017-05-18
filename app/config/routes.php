@@ -155,7 +155,7 @@ $app->post('/getFiveMoreRec','PwGram\\Controller\\ImageController::getFiveRec');
 $app->post('/signup','PwGram\\Controller\\RegistrationController::registrationController');
 $app->post('/signin','PwGram\\Controller\\LoginController::loginController');
 $app->get('/validate/{username}/{token}/','PwGram\\Controller\\ConfirmController::confirmController');
-$app->post('/upload','PwGram\\Controller\\RegistrationController::uploadImage');//Añadir imagen del usuario(FALTA)
+$app->post('/upload','PwGram\\Controller\\RegistrationController::uploadImage');
 
 /**
  * Rutas relacionadas con ver el perfil y editarlo

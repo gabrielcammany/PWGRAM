@@ -30,11 +30,38 @@ $('#add5MorePopular').on('click',function (e) {
                 $('#gallery_pop').append(result);
                 $('#gallery_pop img.likeImg').on('click',function(e){
                     e.preventDefault();
-                    setLikeListenerImage(this,'#gallery_pop','#gallery_recent');
+                    setLikeListenerImage(this,'gallery_pop','gallery_recent');
                 });
                 $('#gallery_pop #commentButton').on('click',function (e){
                     e.preventDefault();
-                    actionCommentListenerImage(this,'#gallery_pop','#gallery_recent');
+                    actionCommentListenerImage(this,'gallery_pop','gallery_recent');
+                });
+                $('#gallery_pop .moreCommentsBtn').on('click',function (e) {
+                    e.preventDefault();
+                    var dataSend = {};
+                    dataSend.image_id = $(this).attr('data-content');
+                    dataSend.size = ($("#comentaris"+$(this).attr('data-content')+"gallery_pop").children().size());
+                    $.ajax({
+                        type: 'post',
+                        url: '/moreCommentsBox',
+                        data: {data:JSON.stringify(dataSend)},
+                        success: function ($response) {
+                            var response = JSON.parse($response);
+                            for(var i = 0;i<response.length && i<3;i++){
+                                var comentari = new Array();
+                                comentari.push(new Array())
+                                comentari[0].push(response[i].username);
+                                comentari[0].push(response[i].text);
+                                comentari[0].push(response[i].img_path);
+                                comentari[0].push(response[i].created_at);
+                                var append = getImageComments(comentari,dataSend.image_id,true);
+                                $("#comentaris"+dataSend.image_id+"gallery_pop").append(append);
+                            }
+                            if(response.length < 4){
+                                $("#ulMoreCommentsBtn"+dataSend.image_id+"gallery_pop").hide();
+                            }
+                        }
+                    });
                 });
               //  popular = popular + 5;
             }else{
@@ -47,7 +74,6 @@ $('#add5MorePopular').on('click',function (e) {
 
 $('#add5MoreRecent').on('click',function (e) {
     e.preventDefault();
-    console.log($('#gallery_recent').children().length);
     $.ajax({
         type: 'post',
         url: '/getFiveMoreRec',
@@ -57,13 +83,39 @@ $('#add5MoreRecent').on('click',function (e) {
                 $('#gallery_recent').append(result);
                 $('#gallery_recent img.likeImg').on('click',function(e){
                     e.preventDefault();
-                    setLikeListenerImage(this,'#gallery_recent','#gallery_pop');
+                    setLikeListenerImage(this,'gallery_recent','gallery_pop');
                 });
                 $('#gallery_recent #commentButton').on('click',function (e){
                     e.preventDefault();
-                    actionCommentListenerImage(this,'#gallery_recent','#gallery_pop');
+                    actionCommentListenerImage(this,'gallery_recent','gallery_pop');
                 });
-
+                $('#gallery_recent .moreCommentsBtn').on('click',function (e) {
+                    e.preventDefault();
+                    var dataSend = {};
+                    dataSend.image_id = $(this).attr('data-content');
+                    dataSend.size = ($("#comentaris"+$(this).attr('data-content')+"gallery_recent").children().size());
+                    $.ajax({
+                        type: 'post',
+                        url: '/moreCommentsBox',
+                        data: {data:JSON.stringify(dataSend)},
+                        success: function ($response) {
+                            var response = JSON.parse($response);
+                            for(var i = 0;i<response.length && i<3;i++){
+                                var comentari = new Array();
+                                comentari.push(new Array())
+                                comentari[0].push(response[i].username);
+                                comentari[0].push(response[i].text);
+                                comentari[0].push(response[i].img_path);
+                                comentari[0].push(response[i].created_at);
+                                var append = getImageComments(comentari,dataSend.image_id,true);
+                                $("#comentaris"+dataSend.image_id+"gallery_recent").append(append);
+                            }
+                            if(response.length < 4){
+                                $("#ulMoreCommentsBtn"+dataSend.image_id+"gallery_recent").hide();
+                            }
+                        }
+                    });
+                });
                 //recent = recent + 5;
             }else{
                 $('#add5MoreRecent i').hide();
@@ -112,7 +164,6 @@ $('#gallery_pop .moreCommentsBtn').on('click',function (e) {
         url: '/moreCommentsBox',
         data: {data:JSON.stringify(dataSend)},
         success: function ($response) {
-            console.log($response);
             var response = JSON.parse($response);
             for(var i = 0;i<response.length && i<3;i++){
                 var comentari = new Array();

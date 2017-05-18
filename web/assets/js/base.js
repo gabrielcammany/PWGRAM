@@ -63,7 +63,6 @@ function setNumNotifications() {
                     url: '/getUserNotifications',
                     data: {"dropdown": 1},
                     success: function ($response) {
-              //          console.log($response);
                         var list = JSON.parse($response)
                         var noNotification = $('#noNotification');
                         addNotifications(list,false);
@@ -203,16 +202,13 @@ function actionCommentListenerImage(button,id_tag,div_tag_aux) {
         dataSend.image_id = $(button).attr('data-content');
         dataSend.text = $('#commentInput'+$(button).attr('data-content')+id_tag).val();
         dataSend.user_id = $('#commentInput'+$(button).attr('data-content')+id_tag).attr('data-content');
-        console.log(dataSend);
         if(dataSend.text != ""){
             $("#commentInput"+dataSend.image_id+id_tag).css('border-color','rgb(204, 204, 204)');
-            console.log("He passat pe22r aqui");
             $.ajax({
                 type: 'post',
                 url: '/addComment',
                 data: {data:JSON.stringify(dataSend)},
                 success: function ($response) {
-                    console.log("He passat per aqui");
                     var response = JSON.parse($response);
                     if(response[0]["COUNT(id)"] == "1"){
                         $("#commentInput"+dataSend.image_id+id_tag).css('border-color','red');
@@ -269,7 +265,6 @@ function setLikeListenerImage(image,div_tag,div_tag_aux) {
             url: '/incLike',
             data: {data:JSON.stringify(data)},
             success: function ($response) {
-                console.log($response);
                 result = JSON.parse($response);
                 if(result != -1){
                     $('#like'+data.image_id+div_tag).attr('src','../assets/img/icons/like_filled.png');
@@ -287,7 +282,6 @@ function setLikeListenerImage(image,div_tag,div_tag_aux) {
             data: {data:JSON.stringify(data)},
             success: function ($response) {
                 result = JSON.parse($response);
-                console.log(result);
                 if(result != -1) {
                     $('#like' + data.image_id+div_tag).attr('src', '../assets/img/icons/like.png')
                     $('#label_like' + data.image_id+div_tag).text('<label class="numLikes">Likes</label> '+result);
@@ -306,13 +300,11 @@ function setLikeListenerImage(image,div_tag,div_tag_aux) {
 if($('#gallery_pop').length!=0) {
     $('#gallery_pop img.likeImg').on('click', function (e) {
         e.preventDefault();
-        //console.log($(this).attr('data-content'));
         setLikeListenerImage(this, 'gallery_pop', 'gallery_recent');
     });
 
     $('#gallery_pop #commentButton').on('click', function (e) {
         e.preventDefault();
-        //console.log($('#gallery_pop #commentInput'+$(this).attr('data-content')).val());
         actionCommentListenerImage(this, 'gallery_pop', 'gallery_recent');
     });
 }
@@ -320,13 +312,11 @@ if($('#gallery_pop').length!=0) {
 if($('#content').length!=0){
     $('#content img.likeImg').on('click',function(e){
         e.preventDefault();
-        //console.log($(this).attr('data-content'));
         setLikeListenerImage(this,'content');
     });
 
     $('#content #commentButton').on('click',function (e){
         e.preventDefault();
-        //console.log($('#gallery_recent #commentInput'+$(this).attr('data-content')).val());
         actionCommentListenerImage(this,'content');
     });
 }
@@ -334,13 +324,11 @@ if($('#content').length!=0){
 if($('#gallery_recent').length!=0){
     $('#gallery_recent #commentButton').on('click',function (e){
     e.preventDefault();
-    //console.log($('#gallery_recent #commentInput'+$(this).attr('data-content')).val());
     actionCommentListenerImage(this,'gallery_recent','gallery_pop');
     });
 
     $('#gallery_recent img.likeImg').on('click',function(e){
         e.preventDefault();
-        //console.log($(this).attr('data-content'));
         setLikeListenerImage(this,'gallery_recent','gallery_pop');
     });
 }

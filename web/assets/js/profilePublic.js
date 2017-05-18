@@ -2,7 +2,6 @@ $('#sortingList li').on('click',function (e) {
     e.preventDefault();
     $('#dropdownButton').html($(this).attr('data-content') +' <span class="caret"></span>');
     var type= $(this).attr('data-content');
-    console.log($(this).attr('data-content'));
     switch (type){
         case 'Recientes':
             $('#galleryComments').css("display", "none");
