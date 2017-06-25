@@ -16,15 +16,15 @@ The frontpage structure has two categories, populars and recent. Both are organi
 
 ### Logged in
 ![Screenshot](WebPage/FrontPageLogged.PNG)
-----
 
+----
 ### Animation on mouse hover
 ![Screenshot](WebPage/AnimationImage.gif)
 
 ## Access
 ### Login
 Both the login and register are treated in popups, so the user doesn't have to visit another page to do it. 
-![Screenshot](WebPage/Login.gif
+![Screenshot](WebPage/Login.gif)
 
 ----
 ### Register
@@ -44,11 +44,13 @@ Dropdown menus for both notifications and user options.
 
 ![Screenshot](WebPage/Menu.gif)
 
+----
 ## Comments and likes
 
 Both likes and comments are updated on the two categories at the same time and in the photo itself. 
 
 ![Screenshot](WebPage/CommentsAndLikes.gif)
+----
 
 ## Pages
 ### Notifications
