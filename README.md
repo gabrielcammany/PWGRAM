@@ -6,9 +6,11 @@ Keep in mind, this was developed to work with a SSL certificate, so no password 
 
 Here is some screenshots/gifs:
 
-The frontpage structure has two categories, populars and recent. Both are organized in a grid layout. The information of each image is hidden and only visible when the user moves the mouse over. 
 
 ## Frontpage
+
+The frontpage structure has two categories, populars and recent. Both are organized in a grid layout. The information of each image is hidden and only visible when the user moves the mouse over. 
+
 ### No logged in
 ![Screenshot](WebPage/FrontPage.PNG)
 
