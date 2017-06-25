@@ -3,6 +3,8 @@
 This project is based on a Instagram style webpage, with the use of silex and MVC project structure. 
 Still some bugs in the edit profile page, but mostly done.  
 
+Here is some screenshots/gifs of the page:
+
 ### Frontpage (No logged in)
 
 ![Screenshot](WebPage/FrontPage.PNG)
